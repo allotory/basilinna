@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <style>
+        /* Loading Spinner */
+        
+        .spinner {
+            margin: 0;
+            width: 70px;
+            height: 18px;
+            margin: -35px 0 0 -9px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            text-align: center
+        }
+        
+        .spinner > div {
+            width: 18px;
+            height: 18px;
+            background-color: #333;
+            border-radius: 100%;
+            display: inline-block;
+            -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+            animation: bouncedelay 1.4s infinite ease-in-out;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both
+        }
+        
+        .spinner .bounce1 {
+            -webkit-animation-delay: -.32s;
+            animation-delay: -.32s
+        }
+        
+        .spinner .bounce2 {
+            -webkit-animation-delay: -.16s;
+            animation-delay: -.16s
+        }
+        
+        @-webkit-keyframes bouncedelay {
+            0%,
+            80%,
+            100% {
+                -webkit-transform: scale(0.0)
+            }
+            40% {
+                -webkit-transform: scale(1.0)
+            }
+        }
+        
+        @keyframes bouncedelay {
+            0%,
+            80%,
+            100% {
+                transform: scale(0.0);
+                -webkit-transform: scale(0.0)
+            }
+            40% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0)
+            }
+        }
+    </style>
+
+
+    <meta charset="UTF-8">
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+    <title> View profile </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" type="text/css" href="style/admin-all-demo.css" tppabs="https://agileui.com/demo/monarch/assets-minified/admin-all-demo.css">
+
+    <script type="text/javascript">
+        // $(window).load(function(){
+        //     setTimeout(function() {
+        //         $('#loading').fadeOut( 400, "linear" );
+        //     }, 300);
+        // });
+    </script>
+
+
+
+</head>
+
+
+<body>
+    <div id="sb-site">
+
+        <!-- <div id="loading">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div> -->
+
+        <div id="page-wrapper">
+            <div id="page-header" class="bg-gradient-9">
+                <div id="mobile-navigation">
+                    <button id="nav-toggle" class="collapsed" data-toggle="collapse" data-target="#page-sidebar"><span></span></button>
+                    <a href="index.html" tppabs="https://agileui.com/demo/monarch/demo/admin-template/index.html" class="logo-content-small"
+                        title="MonarchUI"></a>
+                </div>
+
+                <div id="header-nav-left">
+                    <div class="user-account-btn dropdown">
+                        <a href="#" title="My Account" class="user-profile clearfix" data-toggle="dropdown">
+                            <img width="28" src="image/gravatar.jpg.png" tppabs="https://agileui.com/demo/monarch/assets/image-resources/gravatar.jpg" alt="Profile image">
+                            <span>Thomas Barnes</span>
+                            <i class="glyph-icon icon-angle-down"></i>
+                        </a>
+                        <div class="dropdown-menu float-left">
+                            <div class="box-sm">
+                                <div class="login-box clearfix">
+                                    <div class="user-img">
+                                        <a href="#" title="" class="change-img">Change photo</a>
+                                        <img src="image/gravatar.jpg.png" tppabs="https://agileui.com/demo/monarch/assets/image-resources/gravatar.jpg" alt="">
+                                    </div>
+                                    <div class="user-info">
+                                        <span>
+                                            Thomas Barnes
+                                            <i>UX/UI developer</i>
+                                        </span>
+                                        <a href="#" title="Edit profile">Edit profile</a>
+                                        <a href="#" title="View notifications">View notifications</a>
+                                    </div>
+                                </div>
+                                <div class="divider"></div>
+                                <ul class="reset-ul mrg5B">
+                                    <li>
+                                        <a href="#">
+                                            <i class="glyph-icon float-right icon-caret-right"></i> View login page example
+
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="glyph-icon float-right icon-caret-right"></i> View lockscreen example
+
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="glyph-icon float-right icon-caret-right"></i> View account details
+
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="pad5A button-pane button-pane-alt text-center">
+                                    <a href="#" class="btn display-block font-normal btn-danger">
+                                        <i class="glyph-icon icon-power-off"></i> Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- #header-nav-left -->
+
+                <div id="header-nav-right">
+                    <a href="#" class="hdr-btn popover-button" title="Search" data-placement="bottom" data-id="#popover-search">
+                        <i class="glyph-icon icon-search"></i>
+                    </a>
+                    <div class="hide" id="popover-search">
+                        <div class="pad5A">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search terms here ...">
+                                <span class="input-group-btn">
+                        <a class="btn btn-primary" href="#">Search</a>
+                    </span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="hdr-btn" id="fullscreen-btn" title="Fullscreen">
+                        <i class="glyph-icon icon-arrows-alt"></i>
+                    </a>
+                    <a href="#" class="hdr-btn sb-toggle-left" id="chatbox-btn" title="Chat sidebar">
+                        <i class="glyph-icon icon-send"></i>
+                    </a>
+                    <div class="dropdown" id="notifications-btn">
+                        <a data-toggle="dropdown" href="#" title="">
+                            <span class="small-badge bg-yellow"></span>
+                            <i class="glyph-icon icon-home"></i>
+                        </a>
+                    </div>
+                    <div class="dropdown" id="notifications-btn">
+                        <a data-toggle="dropdown" href="#" title="">
+                            <span class="small-badge bg-yellow"></span>
+                            <i class="glyph-icon icon-bell"></i>
+                        </a>
+                    </div>
+                    <div class="dropdown" id="progress-btn">
+                        <a data-toggle="dropdown" href="#" title="">
+                            <span class="small-badge bg-azure"></span>
+                            <i class="glyph-icon icon-bullhorn"></i>
+                        </a>
+                    </div>
+                    <div class="dropdown" id="cloud-btn">
+                        <a href="#" data-placement="bottom" class="tooltip-button sb-toggle-right" title="Statistics Sidebar">
+                            <i class="glyph-icon icon-th"></i>
+                        </a>
+                    </div>
+                    <div class="dropdown" id="dashnav-btn">
+                        <a href="#" data-toggle="dropdown" data-placement="bottom" class="popover-button-header tooltip-button" title="Dashboard Quick Menu">
+                            <i class="glyph-icon icon-cog"></i>
+                        </a>
+                    </div>
+                    <a class="header-btn" id="logout-btn" href="lockscreen-3.html" tppabs="https://agileui.com/demo/monarch/demo/admin-template/lockscreen-3.html"
+                        title="Lockscreen page example">
+                        <i class="glyph-icon icon-power-off"></i>
+                    </a>
+
+                </div>
+                <!-- #header-nav-right -->
+
+            </div>
+            <div id="page-content-wrapper">
+                <div id="page-content">
+
+                    <div class="container">
+
+
+
+                        <div class="row mailbox-wrapper">
+                            <div class="col-md-4">
+
+                                <div class="panel-layout">
+                                    <div class="panel-box">
+
+                                        <div class="panel-content image-box">
+                                            <div class="ribbon">
+                                                <div class="bg-primary"><i class="glyph-icon icon-facebook"></i></div>
+                                            </div>
+                                            <div class="image-content font-white">
+
+                                                <div class="meta-box meta-box-bottom">
+                                                    <img src="image/gravatar.jpg.png" tppabs="https://agileui.com/demo/monarch/assets/image-resources/gravatar.jpg" alt="" class="meta-image img-bordered img-circle">
+                                                    <h3 class="meta-heading">Alex Rosenberg</h3>
+                                                    <h4 class="meta-subheading">Ultimate backend programmer</h4>
+                                                </div>
+
+                                            </div>
+                                            <img src="image/blurred-bg-2.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/blurred-bg/blurred-bg-13.jpg"
+                                                alt="">
+
+                                        </div>
+                                        <div class="panel-content pad15A bg-white radius-bottom-all-4">
+
+                                            <div class="clear profile-box">
+                                                <ul class="nav nav-pills nav-justified">
+                                                    <li>
+                                                        <a href="#" class="btn btn-sm bg-google">
+                                                            <span class="glyph-icon icon-separator">
+                                                                <i class="glyph-icon icon-google-plus"></i>
+                                                            </span>
+                                                            <span class="button-content">
+                                                                Google+
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="btn btn-sm bg-facebook">
+                                                            <span class="glyph-icon icon-separator">
+                                                                <i class="glyph-icon icon-facebook"></i>
+                                                            </span>
+                                                            <span class="button-content">
+                                                                Facebook
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="btn btn-sm bg-twitter">
+                                                            <span class="glyph-icon icon-separator">
+                                                                <i class="glyph-icon icon-twitter"></i>
+                                                            </span>
+                                                            <span class="button-content">
+                                                                Twitter
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="mrg15T mrg15B"></div>
+                                            <blockquote class="font-gray">
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere
+                                                    erat a ante.</p>
+                                                <small>
+                                                    Programmer at
+                                                    <cite title="Monarch">Monarch</cite>
+                                                </small>
+                                            </blockquote>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="content-box mrg15B">
+                                    <h3 class="content-box-header clearfix">
+                                        Friends online
+                                        <div class="font-size-11 float-right">
+                                            <a href="#" title="">
+                                                <i class="glyph-icon mrg5R opacity-hover icon-plus"></i>
+                                            </a>
+                                            <a href="#" title="">
+                                                <i class="glyph-icon opacity-hover icon-cog"></i>
+                                            </a>
+                                        </div>
+                                    </h3>
+                                    <div class="content-box-wrapper text-center clearfix">
+                                        <div class="status-badge mrg10A">
+                                            <img class="img-circle" width="40" src="image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial1.jpg"
+                                                alt="" />
+                                            <div class="small-badge bg-red"></div>
+                                        </div>
+                                        <div class="status-badge mrg10A">
+                                            <img class="img-circle" width="40" src="image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial2.jpg"
+                                                alt="" />
+                                            <div class="small-badge bg-orange"></div>
+                                        </div>
+                                        <div class="status-badge mrg10A">
+                                            <img class="img-circle" width="40" src="image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial3.jpg"
+                                                alt="" />
+                                            <div class="small-badge bg-red"></div>
+                                        </div>
+                                        <div class="status-badge mrg10A">
+                                            <img class="img-circle" width="40" src="image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial4.jpg"
+                                                alt="" />
+                                            <div class="small-badge bg-green"></div>
+                                        </div>
+                                        <div class="status-badge mrg10A">
+                                            <img class="img-circle" width="40" src="image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial5.jpg"
+                                                alt="" />
+                                            <div class="small-badge bg-orange"></div>
+                                        </div>
+                                        <div class="status-badge mrg10A">
+                                            <img class="img-circle" width="40" src="image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial6.jpg"
+                                                alt="" />
+                                            <div class="small-badge bg-red"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-8">
+
+
+
+                                <div class="content-box bg-white post-box">
+                                    <textarea name="" class="textarea-autosize" placeholder="你在做什么?"></textarea>
+                                    <div class="button-pane">
+                                        <a href="#" class="btn btn-md btn-link hover-white" title="">
+                                            <i class="glyph-icon icon-map-marker"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-md btn-link hover-white" title="">
+                                            <i class="glyph-icon icon-picture-o"></i>
+                                        </a>
+
+                                        <a href="#" class="btn btn-md btn-post float-right btn-success" title="">
+                                            Share it!
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <div class="panel">
+                                    <div class="panel-body">
+                                        <h3 class="title-hero">
+                                            Left timeline
+                                        </h3>
+                                        <div class="example-box-wrapper">
+                                            <div class="timeline-box timeline-box-left">
+                                                <div class="tl-row">
+                                                    <div class="tl-item float-right">
+                                                        <div class="tl-icon bg-red">
+                                                            <img class="img-circle" width="30" src="image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial1.jpg"
+                                                                alt="" />
+                                                        </div>
+                                                        <div class="popover right">
+                                                            <div class="arrow"></div>
+                                                            <div class="popover-content">
+                                                                <div class="tl-label bs-label label-info">Appointment</div>
+                                                                <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                                                                    Donec odio.Lorem ipsum dolor sit amet, consectetuer adipiscing
+                                                                    elit. Donec odio.Lorem ipsum dolor sit amet, consectetuer
+                                                                    adipiscing elit. Donec odio. </p>
+                                                                <div class="tl-time">
+                                                                    <i class="glyph-icon icon-clock-o"></i> a few seconds
+                                                                    ago
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tl-row">
+                                                    <div class="tl-item float-right">
+                                                        <div class="tl-icon bg-primary">
+                                                            <img class="img-circle" width="30" src="image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial1.jpg"
+                                                                alt="" />
+                                                        </div>
+                                                        <div class="popover right">
+                                                            <div class="arrow"></div>
+                                                            <div class="popover-content">
+                                                                <div class="tl-label bs-label bg-yellow">Teleconference</div>
+                                                                <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                                                                    Donec odio. </p>
+                                                                <div class="tl-time">
+                                                                    <i class="glyph-icon icon-clock-o"></i> a few seconds
+                                                                    ago
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tl-row">
+                                                    <div class="tl-item float-right">
+                                                        <div class="tl-icon bg-black">
+                                                            <i class="glyph-icon icon-headphones"></i>
+                                                        </div>
+                                                        <div class="popover right">
+                                                            <div class="arrow"></div>
+                                                            <div class="popover-content">
+                                                                <div class="tl-label bs-label label-danger">Meeting</div>
+                                                                <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                                                                    Donec odio. </p>
+                                                                <div class="tl-time">
+                                                                    <i class="glyph-icon icon-clock-o"></i> a few seconds
+                                                                    ago
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="panel">
+                                    <div class="panel-body">
+                                        <h3 class="title-hero">
+                                            Vertical
+                                        </h3>
+                                        <div class="example-box-wrapper">
+                                            <div class="timeline-box">
+                                                <div class="tl-row">
+                                                    <div class="tl-item">
+                                                        <div class="tl-bullet bg-red"></div>
+                                                        <div class="tl-panel">
+                                                            3:21 PM
+                                                        </div>
+                                                        <div class="popover left">
+                                                            <div class="arrow"></div>
+                                                            <div class="popover-content">
+                                                                <h3 class="tl-title">Lorem ipsum</h3>
+                                                                <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                                                                    Donec odio. Quisque volutpat mattis eros. Suspendisse
+                                                                    urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
+                                                                <div class="tl-time">
+                                                                    <i class="glyph-icon icon-clock-o"></i> a few seconds
+                                                                    ago
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tl-row">
+                                                    <div class="tl-item float-right">
+                                                        <div class="tl-bullet bg-black"></div>
+                                                        <div class="tl-panel">
+                                                            3:21 PM
+                                                        </div>
+                                                        <div class="popover right">
+                                                            <div class="arrow"></div>
+                                                            <div class="popover-content">
+                                                                <h3 class="tl-title">Lorem ipsum</h3>
+                                                                <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                                                                    Donec odio. Quisque volutpat mattis eros. Nullam malesuada
+                                                                    erat ut turpis pede.</p>
+                                                                <div class="tl-time">
+                                                                    <i class="glyph-icon icon-clock-o"></i> a few seconds
+                                                                    ago
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tl-row">
+                                                    <div class="tl-item">
+                                                        <div class="tl-bullet bg-blue"></div>
+                                                        <div class="tl-panel">
+                                                            3:21 PM
+                                                        </div>
+                                                        <div class="popover left">
+                                                            <div class="arrow"></div>
+                                                            <div class="popover-content">
+                                                                <h3 class="tl-title">Lorem ipsum</h3>
+                                                                <p class="tl-content">Donec odio. Quisque volutpat mattis eros. Nullam malesuada
+                                                                    erat ut turpis. Suspendisse urna nibh, viverra non, semper
+                                                                    suscipit, posuere a, pede.</p>
+                                                                <div class="tl-time">
+                                                                    <i class="glyph-icon icon-clock-o"></i> a few seconds
+                                                                    ago
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tl-row demo-margin">
+                                                    <div class="tl-item float-right">
+                                                        <div class="tl-bullet bg-green"></div>
+                                                        <div class="tl-panel">
+                                                            3:21 PM
+                                                        </div>
+                                                        <div class="popover right">
+                                                            <div class="arrow"></div>
+                                                            <div class="popover-content">
+                                                                <h3 class="tl-title">Lorem ipsum</h3>
+                                                                <p class="tl-content">Lorem ipsum dolor sit amet, volutpat mattis eros. Nullam
+                                                                    malesuada erat ut turpis. Suspendisse urna nibh, viverra
+                                                                    non, semper suscipit, posuere a, pede.</p>
+                                                                <div class="tl-time">
+                                                                    <i class="glyph-icon icon-clock-o"></i> a few seconds
+                                                                    ago
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- JS Demo -->
+        <script type="text/javascript" src="admin-all-demo.js" tppabs="https://agileui.com/demo/monarch/assets-minified/admin-all-demo.js"></script>
+
+
+    </div>
+</body>
+
+</html>
