@@ -33168,7 +33168,7 @@ ul.todo-box {
 }
 
 #header-logo .logo-content-big, .logo-content-small {
-    background: url(logo-admin.png)
+    background: url(../image/logo.png)
         /*tpa=https://agileui.com/demo/image-resources/logo-admin.png*/ left
         50% no-repeat;
     text-indent: -999em;
