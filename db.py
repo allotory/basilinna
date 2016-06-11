@@ -1,18 +1,25 @@
 # -*- coding: utf-8 -*-
 
 import mysql.connector
+import configparser
 
  
 class DB(object):
 
-    def __init__(self, DB_HOST, DB_PORT, DB_USER, DB_PWD, DB_NAME):
-        self.DB_HOST = DB_HOST  #设置MYSQL地址
-        self.DB_PORT = DB_PORT  #设置端口号
-        self.DB_USER = DB_USER  #设置用户名
-        self.DB_PWD = DB_PWD    #设置密码
-        self.DB_NAME = DB_NAME  #数据库名
+    def __init__(self, database):
+        
+        #读取配置文件
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+
+        self.DB_HOST = config.get(database, "host")  #设置MYSQL地址
+        self.DB_PORT = config.get(database, "port")  #设置端口号
+        self.DB_USER = config.get(database, "user")  #设置用户名
+        self.DB_PWD = config.get(database, "password")    #设置密码
+        self.DB_NAME = config.get(database, "database")  #数据库名
         
         self.conn = self.get_conn()
+        # self.conn.autocommit(True)
         self.cursor = self.conn.cursor()
  
     def get_conn(self):
@@ -51,5 +58,5 @@ class DB(object):
         self.conn.close()
  
 if __name__ == "__main__":
-    #db = DB('127.0.0.1',3306,'root','','wordpress')
-    #print db.query("show tables;")
+    db = DB('mysql')
+    print(db.DB_NAME)
