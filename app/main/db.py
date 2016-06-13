@@ -10,7 +10,7 @@ class DB(object):
         
         #读取配置文件
         config = configparser.ConfigParser()
-        config.read("config.cfg")
+        config.read("db.cfg")
 
         self.DB_HOST = config.get(database, "host")  #设置MYSQL地址
         self.DB_PORT = config.get(database, "port")  #设置端口号
