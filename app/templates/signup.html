@@ -64,7 +64,7 @@
     </style>
     <meta charset="UTF-8">
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
-    <title> Basilinna - Log In </title>
+    <title> Basilinna - Sign Up </title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
@@ -99,18 +99,30 @@
     <div class="center-vertical">
         <div class="center-content row">
             <form action="" id="login-validation" class="center-margin col-xs-11 col-sm-5" method="">
-                <h3 class="text-center pad25B font-gray font-size-23">Basilinna Log In <span class="opacity-80">v1.0</span></h3>
+                <h3 class="text-center pad25B font-gray font-size-23">Basilinna Sign Up <span class="opacity-80">v1.0</span></h3>
                 <div id="login-form" class="content-box">
                     <div class="content-box-wrapper pad20A">
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email:</label>
                             <div class="input-group input-group-lg">
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="登录及找回密码用，不会公开">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">昵称:</label>
+                            <div class="input-group input-group-lg">
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="常用网名，可使用真实姓名">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">密码:</label>
+                            <div class="input-group input-group-lg">
+                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="最少 6 个字符">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">确认密码:</label>
                             <div class="input-group input-group-lg">
                                 <input type="password" class="form-control" id="exampleInputPassword1" placeholder="">
                             </div>
@@ -119,16 +131,16 @@
                             <div class="checkbox-primary col-md-6" style="height: 20px;">
                                 <label>
                                 <input type="checkbox" id="loginCheckbox1" class="custom-checkbox">
-                                下次自动登录
+                                同意 <a href="#">服务条款</a> 及 <a href="#">隐私协议</a>
                             </label>
                             </div>
                             <div class="text-right col-md-6">
-                                <a href="#" class="switch-button" switch-target="#login-forgot" switch-parent="#login-form" title="Recover password">忘记密码了？</a>
+                                <a href="#" class="switch-button" switch-target="#login-forgot" switch-parent="#login-form" title="Recover password">已经有账号了？直接登录</a>
                             </div>
                         </div>
                     </div>
                     <div class="button-pane">
-                        <button type="submit" class="btn btn-block btn-primary">登陆</button>
+                        <button type="submit" class="btn btn-block btn-primary">注册</button>
                     </div>
                 </div>
 
