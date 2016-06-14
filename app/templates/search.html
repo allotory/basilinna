@@ -1,369 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
+{% block title %}Search{% endblock %}
 
-    <style>
-        /* Loading Spinner */
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block header_nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block siderbar %}
+<div class="col-md-4">
+
+    <div class="content-box  mrg15B">
         
-        .spinner {
-            margin: 0;
-            width: 70px;
-            height: 18px;
-            margin: -35px 0 0 -9px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            text-align: center
-        }
-        
-        .spinner > div {
-            width: 18px;
-            height: 18px;
-            background-color: #333;
-            border-radius: 100%;
-            display: inline-block;
-            -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
-            animation: bouncedelay 1.4s infinite ease-in-out;
-            -webkit-animation-fill-mode: both;
-            animation-fill-mode: both
-        }
-        
-        .spinner .bounce1 {
-            -webkit-animation-delay: -.32s;
-            animation-delay: -.32s
-        }
-        
-        .spinner .bounce2 {
-            -webkit-animation-delay: -.16s;
-            animation-delay: -.16s
-        }
-        
-        @-webkit-keyframes bouncedelay {
-            0%,
-            80%,
-            100% {
-                -webkit-transform: scale(0.0)
-            }
-            40% {
-                -webkit-transform: scale(1.0)
-            }
-        }
-        
-        @keyframes bouncedelay {
-            0%,
-            80%,
-            100% {
-                transform: scale(0.0);
-                -webkit-transform: scale(0.0)
-            }
-            40% {
-                transform: scale(1.0);
-                -webkit-transform: scale(1.0)
-            }
-        }
-    </style>
-
-
-    <meta charset="UTF-8">
-    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
-    <title> Search </title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-    <link rel="stylesheet" type="text/css" href="../static/style/admin-all-demo.css" tppabs="https://agileui.com/demo/monarch/assets-minified/admin-all-demo.css">
-
-    <script type="text/javascript">
-        // $(window).load(function(){
-        //     setTimeout(function() {
-        //         $('#loading').fadeOut( 400, "linear" );
-        //     }, 300);
-        // });
-    </script>
-
-
-
-</head>
-
-
-<body>
-    <div id="sb-site">
-
-        <!-- <div id="loading">
-            <div class="spinner">
-                <div class="bounce1"></div>
-                <div class="bounce2"></div>
-                <div class="bounce3"></div>
+        <div class="content-box-wrapper nav-list clearfix">
+            <div class="list-group" style="margin-top:10px;margin-bottom:10px">
+                <a href="#" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-red"></i>
+                    首页
+                </a>
+                <a href="#" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-green"></i>
+                    @提到我的(1)
+                </a>
+                <a href="#" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-blue"></i>
+                    私信
+                </a>
+                <a href="#" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-orange"></i>
+                    收藏
+                </a>
+                <a href="#" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-gray"></i>
+                    照片
+                </a>
             </div>
-        </div> -->
-
-        <div id="page-wrapper">
-            <div id="page-header" class="bg-gradient-9">
-                <div id="header-logo" class="logo-bg">
-                    <a href="index.html" class="logo-content-big" title="MonarchUI">
-                        Monarchsss <i>UI</i>
-                        <span>The perfect solution for user interfaces</span>
-                    </a>
-                </div>
-                <div id="header-nav-left">
-                    <a href="">
-                        <!-- <img src="image/slogan.png"> -->
-                    </a>
-                </div>
-                <!-- #header-nav-left -->
-
-                <div id="header-nav-right">
-                    <a href="#" class="hdr-btn popover-button" title="Search" data-placement="bottom" data-id="#popover-search">
-                        <i class="glyph-icon icon-search"></i>
-                    </a>
-                    <div class="hide" id="popover-search">
-                        <div class="pad5A">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search terms here ...">
-                                <span class="input-group-btn">
-                        <a class="btn btn-primary" href="#">Search</a>
-                    </span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="#" class="hdr-btn" id="fullscreen-btn" title="Fullscreen">
-                        <i class="glyph-icon icon-arrows-alt"></i>
-                    </a>
-                    <a href="#" class="hdr-btn sb-toggle-left" id="chatbox-btn" title="Chat sidebar">
-                        <i class="glyph-icon icon-send"></i>
-                    </a>
-                    <div class="dropdown" id="notifications-btn">
-                        <a data-toggle="dropdown" href="#" title="">
-                            <span class="small-badge bg-yellow"></span>
-                            <i class="glyph-icon icon-home"></i>
-                        </a>
-                    </div>
-                    <div class="dropdown" id="notifications-btn">
-                        <a data-toggle="dropdown" href="#" title="">
-                            <span class="small-badge bg-yellow"></span>
-                            <i class="glyph-icon icon-bell"></i>
-                        </a>
-                    </div>
-                    <div class="dropdown" id="progress-btn">
-                        <a data-toggle="dropdown" href="#" title="">
-                            <span class="small-badge bg-azure"></span>
-                            <i class="glyph-icon icon-bullhorn"></i>
-                        </a>
-                    </div>
-                    <div class="dropdown" id="cloud-btn">
-                        <a href="#" data-placement="bottom" class="tooltip-button sb-toggle-right" title="Statistics Sidebar">
-                            <i class="glyph-icon icon-th"></i>
-                        </a>
-                    </div>
-                    <div class="dropdown" id="dashnav-btn">
-                        <a href="#" data-toggle="dropdown" data-placement="bottom" class="popover-button-header tooltip-button" title="Dashboard Quick Menu">
-                            <i class="glyph-icon icon-cog"></i>
-                        </a>
-                    </div>
-                    <a class="header-btn" id="logout-btn" href="lockscreen-3.html" tppabs="https://agileui.com/demo/monarch/demo/admin-template/lockscreen-3.html"
-                        title="Lockscreen page example">
-                        <i class="glyph-icon icon-power-off"></i>
-                    </a>
-
-                </div>
-                <!-- #header-nav-right -->
-
+        </div>
+    </div>
+    <div class="content-box  mrg15B">
+        <h3 class="content-box-header clearfix">
+            热门话题
+            <small>(Available options)</small>
+            <div class="font-size-11 float-right">
+                <a href="#" title="">
+                    <i class="glyph-icon mrg5R opacity-hover icon-plus"></i>
+                </a>
+                <a href="#" title="">
+                    <i class="glyph-icon opacity-hover icon-cog"></i>
+                </a>
             </div>
-            <div id="page-content-wrapper">
-                <div id="page-content">
+        </h3>
+        <div class="content-box-wrapper nav-list clearfix">
+            <div class="list-group">
+                <a href="#" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-red"></i>
+                    泡饭
+                </a>
+                <a href="#" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-green"></i>
+                    @泡饭
+                </a>
+                <a href="#" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-blue"></i>
+                    泡饭
+                </a>
+                <a href="#" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-orange"></i>
+                    泡饭
+                </a>
+                <a href="#" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-gray"></i>
+                    泡饭
+                </a>
+            </div>
+        </div>
+    </div>
 
-                    <div class="container">
+</div>
+{% endblock %}
 
+{% block content %}
+<div class="col-md-8">
 
-
-                        <div class="row mailbox-wrapper">
-                            <div class="col-md-4">
-
-                                <div class="content-box  mrg15B">
+    <div class="panel">
+        <div class="panel-body">
+            <h3 class="title-hero">
+                全站搜索
+            </h3>
+            <div class="example-box-wrapper">
+                <form class="form-horizontal bordered-row">
+                    
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success" type="button">Go!</button>
+                                        </span>
+                                    </div>
                                     
-                                    <div class="content-box-wrapper nav-list clearfix">
-                                        <div class="list-group" style="margin-top:10px;margin-bottom:10px">
-                                            <a href="#" class="list-group-item" title="">
-                                                <i class="glyph-icon icon-circle-o float-left font-red"></i>
-                                                首页
-                                            </a>
-                                            <a href="#" class="list-group-item" title="">
-                                                <i class="glyph-icon icon-circle-o float-left font-green"></i>
-                                                @提到我的(1)
-                                            </a>
-                                            <a href="#" class="list-group-item" title="">
-                                                <i class="glyph-icon icon-circle-o float-left font-blue"></i>
-                                                私信
-                                            </a>
-                                            <a href="#" class="list-group-item" title="">
-                                                <i class="glyph-icon icon-circle-o float-left font-orange"></i>
-                                                收藏
-                                            </a>
-                                            <a href="#" class="list-group-item" title="">
-                                                <i class="glyph-icon icon-circle-o float-left font-gray"></i>
-                                                照片
-                                            </a>
-                                        </div>
-                                    </div>
                                 </div>
-                                <div class="content-box  mrg15B">
-                                    <h3 class="content-box-header clearfix">
-                                        热门话题
-                                        <small>(Available options)</small>
-                                        <div class="font-size-11 float-right">
-                                            <a href="#" title="">
-                                                <i class="glyph-icon mrg5R opacity-hover icon-plus"></i>
-                                            </a>
-                                            <a href="#" title="">
-                                                <i class="glyph-icon opacity-hover icon-cog"></i>
-                                            </a>
-                                        </div>
-                                    </h3>
-                                    <div class="content-box-wrapper nav-list clearfix">
-                                        <div class="list-group">
-                                            <a href="#" class="list-group-item" title="">
-                                                <i class="glyph-icon icon-circle-o float-left font-red"></i>
-                                                泡饭
-                                            </a>
-                                            <a href="#" class="list-group-item" title="">
-                                                <i class="glyph-icon icon-circle-o float-left font-green"></i>
-                                                @泡饭
-                                            </a>
-                                            <a href="#" class="list-group-item" title="">
-                                                <i class="glyph-icon icon-circle-o float-left font-blue"></i>
-                                                泡饭
-                                            </a>
-                                            <a href="#" class="list-group-item" title="">
-                                                <i class="glyph-icon icon-circle-o float-left font-orange"></i>
-                                                泡饭
-                                            </a>
-                                            <a href="#" class="list-group-item" title="">
-                                                <i class="glyph-icon icon-circle-o float-left font-gray"></i>
-                                                泡饭
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
-                            <div class="col-md-8">
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
 
-                                <div class="panel">
-                                    <div class="panel-body">
-                                        <h3 class="title-hero">
-                                            全站搜索
-                                        </h3>
-                                        <div class="example-box-wrapper">
-                                            <form class="form-horizontal bordered-row">
-                                                
-                                                <div class="form-group">
-                                                    <div class="col-sm-10 col-sm-offset-1">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="input-group">
-                                                                    <input type="text" class="form-control">
-                                                                    <span class="input-group-btn">
-                                                                        <button class="btn btn-success" type="button">Go!</button>
-                                                                    </span>
-                                                                </div>
-                                                                
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="panel">
-                                    <div class="panel-body">
-                                        <h3 class="title-hero">
-                                            最新动态
-                                        </h3>
-                                        <div class="example-box-wrapper">
-                                            <div class="timeline-box timeline-box-left">
-                                                <div class="tl-row">
-                                                    <div class="tl-item float-right">
-                                                        <div class="tl-icon bg-red">
-                                                            <img class="img-circle" width="30" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial1.jpg"
-                                                                alt="" />
-                                                        </div>
-                                                        <div class="popover right">
-                                                            <div class="arrow"></div>
-                                                            <div class="popover-content">
-                                                                <!-- <div class="tl-label bs-label label-info">Appointment</div> -->
-                                                                <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                                                                    Donec odio.Lorem ipsum dolor sit amet, consectetuer adipiscing
-                                                                    elit. Donec odio.Lorem ipsum dolor sit amet, consectetuer
-                                                                    adipiscing elit. Donec odio. 
-                                                                    </p>
-                                                                <p>
-                                                                    <a href="#" name="a"><img src="../static/image/testimonial1.jpg"></a>
-                                                                </p>
-                                                                <div class="tl-time">
-                                                                    <i class="glyph-icon icon-clock-o"></i> a few seconds
-                                                                    ago
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="tl-row">
-                                                    <div class="tl-item float-right">
-                                                        <div class="tl-icon bg-primary">
-                                                            <img class="img-circle" width="30" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial1.jpg"
-                                                                alt="" />
-                                                        </div>
-                                                        <div class="popover right">
-                                                            <div class="arrow"></div>
-                                                            <div class="popover-content">
-                                                                <div class="tl-label bs-label bg-yellow">Teleconference</div>
-                                                                <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                                                                    Donec odio. </p>
-                                                                <div class="tl-time">
-                                                                    <i class="glyph-icon icon-clock-o"></i> a few seconds
-                                                                    ago
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="tl-row">
-                                                    <div class="tl-item float-right">
-                                                        <div class="tl-icon bg-black">
-                                                            <i class="glyph-icon icon-headphones"></i>
-                                                        </div>
-                                                        <div class="popover right">
-                                                            <div class="arrow"></div>
-                                                            <div class="popover-content">
-                                                                <div class="tl-label bs-label label-danger">Meeting</div>
-                                                                <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                                                                    Donec odio. </p>
-                                                                <div class="tl-time">
-                                                                    <i class="glyph-icon icon-clock-o"></i> a few seconds
-                                                                    ago
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+    <div class="panel">
+        <div class="panel-body">
+            <h3 class="title-hero">
+                最新动态
+            </h3>
+            <div class="example-box-wrapper">
+                <div class="timeline-box timeline-box-left">
+                    <div class="tl-row">
+                        <div class="tl-item float-right">
+                            <div class="tl-icon bg-red">
+                                <img class="img-circle" width="30" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial1.jpg"
+                                    alt="" />
+                            </div>
+                            <div class="popover right">
+                                <div class="arrow"></div>
+                                <div class="popover-content">
+                                    <!-- <div class="tl-label bs-label label-info">Appointment</div> -->
+                                    <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                                        Donec odio.Lorem ipsum dolor sit amet, consectetuer adipiscing
+                                        elit. Donec odio.Lorem ipsum dolor sit amet, consectetuer
+                                        adipiscing elit. Donec odio. 
+                                        </p>
+                                    <p>
+                                        <a href="#" name="a"><img src="../static/image/testimonial1.jpg"></a>
+                                    </p>
+                                    <div class="tl-time">
+                                        <i class="glyph-icon icon-clock-o"></i> a few seconds
+                                        ago
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-
+                    <div class="tl-row">
+                        <div class="tl-item float-right">
+                            <div class="tl-icon bg-primary">
+                                <img class="img-circle" width="30" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial1.jpg"
+                                    alt="" />
+                            </div>
+                            <div class="popover right">
+                                <div class="arrow"></div>
+                                <div class="popover-content">
+                                    <div class="tl-label bs-label bg-yellow">Teleconference</div>
+                                    <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                                        Donec odio. </p>
+                                    <div class="tl-time">
+                                        <i class="glyph-icon icon-clock-o"></i> a few seconds
+                                        ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tl-row">
+                        <div class="tl-item float-right">
+                            <div class="tl-icon bg-black">
+                                <i class="glyph-icon icon-headphones"></i>
+                            </div>
+                            <div class="popover right">
+                                <div class="arrow"></div>
+                                <div class="popover-content">
+                                    <div class="tl-label bs-label label-danger">Meeting</div>
+                                    <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                                        Donec odio. </p>
+                                    <div class="tl-time">
+                                        <i class="glyph-icon icon-clock-o"></i> a few seconds
+                                        ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
-</body>
-
-</html>
+</div>
+{% endblock %}
