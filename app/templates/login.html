@@ -98,21 +98,21 @@
     </style>
     <div class="center-vertical">
         <div class="center-content row">
-            <form action="" id="login-validation" class="center-margin col-xs-11 col-sm-5" method="">
+            <form action="/login" method="POST" id="login-validation" class="center-margin col-xs-11 col-sm-5">
                 <h3 class="text-center pad25B font-gray font-size-23">Basilinna Log In <span class="opacity-80">v1.0</span></h3>
                 <div id="login-form" class="content-box">
                     <div class="content-box-wrapper pad20A">
-
+                        <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email:</label>
                             <div class="input-group input-group-lg">
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                                <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">密码:</label>
                             <div class="input-group input-group-lg">
-                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="">
+                                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="">
                             </div>
                         </div>
                         <div class="row">

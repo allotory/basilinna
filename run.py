@@ -4,6 +4,6 @@
 
 __author__ = 'Ellery'
 
-from app.app import app
+from app import applications
 
-app.run(debug = True)
+applications.app.run(debug = True)
