@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <style>
+        /* Loading Spinner */
+        
+        .spinner {
+            margin: 0;
+            width: 70px;
+            height: 18px;
+            margin: -35px 0 0 -9px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            text-align: center
+        }
+        
+        .spinner > div {
+            width: 18px;
+            height: 18px;
+            background-color: #333;
+            border-radius: 100%;
+            display: inline-block;
+            -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+            animation: bouncedelay 1.4s infinite ease-in-out;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both
+        }
+        
+        .spinner .bounce1 {
+            -webkit-animation-delay: -.32s;
+            animation-delay: -.32s
+        }
+        
+        .spinner .bounce2 {
+            -webkit-animation-delay: -.16s;
+            animation-delay: -.16s
+        }
+        
+        @-webkit-keyframes bouncedelay {
+            0%,
+            80%,
+            100% {
+                -webkit-transform: scale(0.0)
+            }
+            40% {
+                -webkit-transform: scale(1.0)
+            }
+        }
+        
+        @keyframes bouncedelay {
+            0%,
+            80%,
+            100% {
+                transform: scale(0.0);
+                -webkit-transform: scale(0.0)
+            }
+            40% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0)
+            }
+        }
+    </style>
+
+
+    <meta charset="UTF-8">
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+    <title> Setting </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" type="text/css" href="../static/style/admin-all-demo.css" tppabs="https://agileui.com/demo/monarch/assets-minified/admin-all-demo.css">
+
+    <script type="text/javascript" src="../static/js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        // $(window).load(function(){
+        //     setTimeout(function() {
+        //         $('#loading').fadeOut( 400, "linear" );
+        //     }, 300);
+        // });
+    </script>
+
+
+
+</head>
+
+
+<body>
+    <div id="sb-site">
+
+        <!-- <div id="loading">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div> -->
+
+        <div id="page-wrapper">
+            <div id="page-header" class="bg-gradient-9">
+                <div id="header-logo" class="logo-bg">
+                    <a href="index.html" class="logo-content-big" title="MonarchUI">
+                        Monarchsss <i>UI</i>
+                        <span>The perfect solution for user interfaces</span>
+                    </a>
+                </div>
+                <div id="header-nav-left">
+                    <a href="">
+                        <!-- <img src="image/slogan.png"> -->
+                    </a>
+                </div>
+                <!-- #header-nav-left -->
+
+                <div id="header-nav-right">
+                    <a href="#" class="hdr-btn popover-button" title="Search" data-placement="bottom" data-id="#popover-search">
+                        <i class="glyph-icon icon-search"></i>
+                    </a>
+                    <div class="hide" id="popover-search">
+                        <div class="pad5A">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search terms here ...">
+                                <span class="input-group-btn">
+                        <a class="btn btn-primary" href="#">Search</a>
+                    </span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="hdr-btn" id="fullscreen-btn" title="Fullscreen">
+                        <i class="glyph-icon icon-arrows-alt"></i>
+                    </a>
+                    <a href="#" class="hdr-btn sb-toggle-left" id="chatbox-btn" title="Chat sidebar">
+                        <i class="glyph-icon icon-send"></i>
+                    </a>
+                    <div class="dropdown" id="notifications-btn">
+                        <a data-toggle="dropdown" href="#" title="">
+                            <span class="small-badge bg-yellow"></span>
+                            <i class="glyph-icon icon-home"></i>
+                        </a>
+                    </div>
+                    <div class="dropdown" id="notifications-btn">
+                        <a data-toggle="dropdown" href="#" title="">
+                            <span class="small-badge bg-yellow"></span>
+                            <i class="glyph-icon icon-bell"></i>
+                        </a>
+                    </div>
+                    <div class="dropdown" id="progress-btn">
+                        <a data-toggle="dropdown" href="#" title="">
+                            <span class="small-badge bg-azure"></span>
+                            <i class="glyph-icon icon-bullhorn"></i>
+                        </a>
+                    </div>
+                    <div class="dropdown" id="cloud-btn">
+                        <a href="#" data-placement="bottom" class="tooltip-button sb-toggle-right" title="Statistics Sidebar">
+                            <i class="glyph-icon icon-th"></i>
+                        </a>
+                    </div>
+                    <div class="dropdown" id="dashnav-btn">
+                        <a href="#" data-toggle="dropdown" data-placement="bottom" class="popover-button-header tooltip-button" title="Dashboard Quick Menu">
+                            <i class="glyph-icon icon-cog"></i>
+                        </a>
+                    </div>
+                    <a class="header-btn" id="logout-btn" href="lockscreen-3.html" tppabs="https://agileui.com/demo/monarch/demo/admin-template/lockscreen-3.html"
+                        title="Lockscreen page example">
+                        <i class="glyph-icon icon-power-off"></i>
+                    </a>
+
+                </div>
+                <!-- #header-nav-right -->
+
+            </div>
+            <div id="page-content-wrapper">
+                <div id="page-content">
+
+                    <div class="container">
+
+                        <div class="row mailbox-wrapper">
+                            <div>
+
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#basic" aria-controls="basic" role="tab" data-toggle="tab">基本信息</a></li>
+                                    <li role="presentation"><a href="#hobby" aria-controls="hobby" role="tab" data-toggle="tab">兴趣爱好</a></li>
+                                    <li role="presentation"><a href="#account" aria-controls="account" role="tab" data-toggle="tab">账号密码</a></li>
+                                    <li role="presentation"><a href="#privacy" aria-controls="privacy" role="tab" data-toggle="tab">隐私</a></li>
+                                    <li role="presentation"><a href="#notification" aria-controls="notification" role="tab" data-toggle="tab">通知</a></li>
+                                    <li role="presentation"><a href="#template" aria-controls="template" role="tab" data-toggle="tab">模板</a></li>
+                                    <li role="presentation"><a href="#sync" aria-controls="sync" role="tab" data-toggle="tab">同步</a></li>
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="basic">
+                                        <div class="panel">
+                                            <div class="panel-body">
+                                                <h3 class="title-hero">
+                                                    设定个人信息
+                                                </h3>
+                                                <div class="example-box-wrapper">
+                                                    <form class="form-horizontal bordered-row">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">昵称</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" id="" placeholder="Example placeholder...">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">个性域名</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" id="" placeholder="Example placeholder...">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">性别</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="form-control">
+                                                                    <option>男</option>
+                                                                    <option>女</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">生日</label>
+                                                            <div class="col-sm-2">
+                                                                <input type="text" class="form-control" id="" placeholder="年">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <select class="form-control">
+                                                                    <option>1</option>
+                                                                    <option>2</option>
+                                                                    <option>3</option>
+                                                                    <option>4</option>
+                                                                    <option>5</option>
+                                                                    <option>6</option>
+                                                                    <option>7</option>
+                                                                    <option>8</option>
+                                                                    <option>9</option>
+                                                                    <option>10</option>
+                                                                    <option>11</option>
+                                                                    <option>12</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <select class="form-control">
+                                                                    <option>1</option>
+                                                                    <option>2</option>
+                                                                    <option>3</option>
+                                                                    <option>4</option>
+                                                                    <option>5</option>
+                                                                    <option>6</option>
+                                                                    <option>7</option>
+                                                                    <option>8</option>
+                                                                    <option>9</option>
+                                                                    <option>10</option>
+                                                                    <option>11</option>
+                                                                    <option>12</option>
+                                                                    <option>13</option>
+                                                                    <option>14</option>
+                                                                    <option>15</option>
+                                                                    <option>16</option>
+                                                                    <option>17</option>
+                                                                    <option>18</option>
+                                                                    <option>19</option>
+                                                                    <option>20</option>
+                                                                    <option>21</option>
+                                                                    <option>22</option>
+                                                                    <option>23</option>
+                                                                    <option>24</option>
+                                                                    <option>25</option>
+                                                                    <option>26</option>
+                                                                    <option>27</option>
+                                                                    <option>28</option>
+                                                                    <option>29</option>
+                                                                    <option>30</option>
+                                                                    <option>31</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">所在地</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="form-control">
+                                                                    <option>男</option>
+                                                                    <option>女</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">家乡</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="form-control">
+                                                                    <option>男</option>
+                                                                    <option>女</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">个人网址</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" id="" placeholder="(你可以把网站添加到你的博客)">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">自述</label>
+                                                            <div class="col-sm-6">
+                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <a href="#" class="btn btn-primary" title="">保存</a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="hobby">
+                                        <div class="panel">
+                                            <div class="panel-body">
+                                                <h3 class="title-hero">
+                                                    设定兴趣爱好
+                                                </h3>
+                                                <div class="example-box-wrapper">
+                                                    <form class="form-horizontal bordered-row">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">兴趣爱好</label>
+                                                            <div class="col-sm-6">
+                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">喜欢的音乐</label>
+                                                            <div class="col-sm-6">
+                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">喜欢的电影</label>
+                                                            <div class="col-sm-6">
+                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">喜欢的书</label>
+                                                            <div class="col-sm-6">
+                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">喜欢的运动</label>
+                                                            <div class="col-sm-6">
+                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">欣赏的人</label>
+                                                            <div class="col-sm-6">
+                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <a href="#" class="btn btn-primary" title="">保存</a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="account">
+                                        <div class="panel">
+                                            <div class="panel-body">
+                                                <h3 class="title-hero">
+                                                    修改邮件地址
+                                                </h3>
+                                                <div class="example-box-wrapper">
+                                                    <form class="form-horizontal bordered-row">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">旧Email</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" id="" disabled="" placeholder="xxx@xxx.com">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">新Email</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" id="" placeholder="Example placeholder...">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <a href="#" class="btn btn-primary" title="">修改Email</a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <h3 class="title-hero">
+                                                    修改密码
+                                                </h3>
+                                                <div class="example-box-wrapper">
+                                                    <form class="form-horizontal bordered-row">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">旧密码</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" id="" placeholder="Example placeholder...">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">新密码</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" id="" placeholder="Example placeholder...">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">重复新密码</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control" id="" placeholder="Example placeholder...">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <a href="#" class="btn btn-primary" title="">修改密码</a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <h3 class="title-hero">
+                                                    注销账户
+                                                </h3>
+                                                <div class="example-box-wrapper">
+                                                    <form class="form-horizontal bordered-row">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <a href="#" class="btn btn-primary" title="">注销账户</a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="privacy">
+                                        <div class="panel">
+                                            <div class="panel-body">
+                                                <h3 class="title-hero">
+                                                    隐私设定
+                                                </h3>
+                                                <div class="example-box-wrapper">
+                                                    <form class="form-horizontal bordered-row">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" value="">
+                                                                        需要我批准才能查看我的消息
+                                                                    </label>
+                                                                </div>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" value="">
+                                                                        只接收我关注的人发的私信
+                                                                    </label>
+                                                                </div>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" value="">
+                                                                        知道我的 MSN/Gtalk/QQ 或 Email 也没法找到我
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <a href="#" class="btn btn-primary" title="">保存</a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="notification">
+                                        <div class="panel">
+                                            <div class="panel-body">
+                                                <h3 class="title-hero">
+                                                    通知设定
+                                                </h3>
+                                                <div class="example-box-wrapper">
+                                                    <form class="form-horizontal bordered-row">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" value="" checked="">
+                                                                        当有新私信时，发 Email 通知我 (每天最多一封)
+                                                                    </label>
+                                                                </div>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" value="" checked="">
+                                                                        当有人关注我时，发 Email 通知我
+                                                                    </label>
+                                                                </div>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" value="" checked="">
+                                                                        当网站发布最新动态时，发 Email 通知我 (一个月最多一封)
+                                                                    </label>
+                                                                </div>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" value="" checked="">
+                                                                        我关注别人时通知关注我的人
+                                                                    </label>
+                                                                </div>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" value="" checked="">
+                                                                        在首页消息列表中显示关注消息
+                                                                    </label>
+                                                                </div>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" value="" checked="">
+                                                                        将非法登陆尝试通过私信发给我
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <a href="#" class="btn btn-primary" title="">保存更改</a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="template">模板</div>
+                                    <div role="tabpanel" class="tab-pane" id="sync">
+                                        <div class="panel">
+                                            <div class="panel-body">
+                                                <h3 class="title-hero">
+                                                    同步到其他网站(测试)
+                                                </h3>
+                                                <div class="example-box-wrapper">
+                                                    <form class="form-horizontal bordered-row">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                同步功能暂停服务.
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
