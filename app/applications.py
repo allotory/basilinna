@@ -3,8 +3,6 @@
 ' a test module '
 
 __author__ = 'Ellery'
-import sys
-print(sys.path)
 
 from flask import Flask, render_template, request, session, abort
 import app.main.csrf_token as csrf_token
