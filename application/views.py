@@ -5,11 +5,7 @@
 __author__ = 'Ellery'
 
 from flask import Flask, render_template, request, session, abort
-import app.main.csrf_token as csrf_token
-
-app = Flask(__name__)
-app.config.from_pyfile('config.py')
-app.jinja_env.globals['csrf_token'] = csrf_token.generate_csrf_token
+from application import app
  
 @app.before_request
 def csrf_protect():
