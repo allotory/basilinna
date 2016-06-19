@@ -4,6 +4,9 @@
 
 __author__ = 'Ellery'
 
+import sys
+print(sys.path)
+
 from app import app
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -20,5 +23,5 @@ Base.query = db_session.query_property()
 def init_db():
     # 在这里导入定义模型所需要的所有模块，这样它们就会正确的注册在
     # 元数据上。否则你就必须在调用 init_db() 之前导入它们。
-    import models
+    from app import models
     Base.metadata.create_all(bind=db_engine)

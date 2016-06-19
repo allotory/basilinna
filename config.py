@@ -14,6 +14,6 @@ MYSQL_POST = 3306
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://%s:%s@%s:%s/%s?charset=utf8" % (MYSQL_USER, MYSQL_PASSWD, MYSQL_HOST, MYSQL_POST, MYSQL_DB)
-SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'migrations')
+# SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'migrations')
 # print(basedir)
 # print(SQLALCHEMY_DATABASE_URI)

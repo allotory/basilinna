@@ -30,4 +30,6 @@ def login():
         return render_template('index.html')
     else:
         # show the login form
+        from app.database import init_db
+        init_db()
         return render_template('login.html')
