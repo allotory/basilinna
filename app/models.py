@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Integer, String
-from app.database import Base
+from app import db
 
-class User(Base):
+class User(db.Model):
 
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True)
-    email = Column(String(120), unique=True)
+    id = db.Column(db.Integer, primary_key = True)
+    nickname = db.Column(db.String(64), index = True, unique = True)
+    email = db.Column(db.String(120), index = True, unique = True)
+    e = db.Column(db.String(120), index = True, unique = True)
 
-    def __init__(self, name=None, email=None):
-        self.name = name
+    def __init__(self, nickname=None, email=None, e=None):
+        self.nickname = nickname
         self.email = email
+        self.e = e
 
     def __repr__(self):
-        return '<User %r>' % (self.name)
+        return '<User %r>' % (self.nickname)
