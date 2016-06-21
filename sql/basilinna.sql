@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS user (
     email varchar(128) NOT NULL,                /* 邮箱*/
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,       /* 创建时间（时间戳） */
     last_login_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  /* 最近一次登录时间（时间戳）*/
-    last_login_ip varchar(15) NOT NULL,         /* 最近登录的IP地址 */
+    last_login_ip varchar(16) NOT NULL,         /* 最近登录的IP地址 */
     status tinyint(1) unsigned NOT NULL,        /* 启用状态：0-表示禁用，1-表示启用 */
     remark varchar(256) DEFAULT NULL,           /* 备注信息 */
     invent varchar(256) NOT NULL,               /* 邀请链接 */
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS member (
     description varchar(256) DEFAULT NULL,          /* 个人描述 */
     autograph varchar(128) DEFAULT NULL,            /* 签名 */
     personality_url varchar(64) DEFAULT NULL,       /* 个性网址 */
-    is_emailactive int(11) NOT NULL DEFAULT '0',    /* 邮箱是否激活 0：否， 1：是 */
+    is_email_actived int(11) NOT NULL DEFAULT '0',    /* 邮箱是否激活 0：否， 1：是 */
     user_id int NOT NULL DEFAULT '0',               /* 用户ID */
     PRIMARY KEY (id)
 );
@@ -95,8 +95,8 @@ CREATE TABLE IF NOT EXISTS collection (
  */
 CREATE TABLE IF NOT EXISTS block (
     id int(11) NOT NULL AUTO_INCREMENT,     /* 屏蔽表ID（唯一标识） */
-    member_id int(11) NOT NULL,             /* 当前用户ID */
     blocked_id int(11) NOT NULL,            /* 被屏蔽用户ID */
+    member_id int(11) NOT NULL,             /* 当前用户ID */
     PRIMARY KEY (id)
 );
 
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS emailme (
     allow_follow_me int(11) NOT NULL DEFAULT '0',       /* 当有人关注我时，发 Email 通知我 */
     allow_new_trend int(11) NOT NULL DEFAULT '0',       /* 当发布最新动态时，发 Email 通知我 (一个月最多一封) */
     allow_follow_care int(11) NOT NULL DEFAULT '0',     /* 我关注别人时通知关注我的人 */
-    allow_show_followmsg int(11) NOT NULL DEFAULT '0',  /* 在首页消息列表中显示关注消息 */
+    allow_show_follow_msg int(11) NOT NULL DEFAULT '0',  /* 在首页消息列表中显示关注消息 */
     allow_illegal_login int(11) NOT NULL DEFAULT '0',   /* 将非法登陆尝试通过私信发给我 */
     member_id int(11) NOT NULL,                         /* 当前用户ID */
     PRIMARY KEY (id)
