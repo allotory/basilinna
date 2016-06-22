@@ -9,10 +9,9 @@ class User(db.Model):
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key = True, nullable = False)
-    username = db.Column(db.String(32), index = True, unique = True, nullable = False)
+    email = db.Column(db.String(128), nullable = False)
     password = db.Column(db.String(256), nullable = False)
     salt = db.Column(db.String(128), nullable = False)
-    email = db.Column(db.String(128), nullable = False)
     create_time = db.Column(db.DateTime(), nullable = False, server_default = str(datetime.now()))
     last_login_time = db.Column(db.DateTime(), nullable = False, server_default = str(datetime.now()))
     last_login_ip = db.Column(db.String(16), nullable = False)
@@ -20,13 +19,12 @@ class User(db.Model):
     remark = db.Column(db.String(256), server_default = '')
     invent = db.Column(db.String(256), nullable = False)
 
-    def __init__(self, username, password, salt, email, 
+    def __init__(self, password, salt, email, 
                 create_time, last_login_time, last_login_ip,
                 status, remark, invent):
-        self.username = username
+        self.email = email
         self.password = password
         self.salt = salt
-        self.email = email
         self.create_time = create_time
         self.last_login_time = last_login_time
         self.last_login_ip = last_login_ip

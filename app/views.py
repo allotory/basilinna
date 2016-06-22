@@ -18,6 +18,16 @@ def csrf_protect():
 def index():
     return render_template('space.html')
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'GET':
+        # show the signup form
+        return render_template('signup.html')
+    elif request.method == 'POST':
+        pass
+    else:
+        pass
+
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -33,3 +43,11 @@ def login():
         from app.database import init_db
         init_db()
         return render_template('login.html')
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error_404.html'), 404
+
+@app.errorhandler(500)
+def server_syntax_error(error):
+    return render_template('error_500.html'), 500

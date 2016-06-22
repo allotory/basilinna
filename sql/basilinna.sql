@@ -7,10 +7,8 @@ use basilinna;
  */
 CREATE TABLE IF NOT EXISTS user (
     id int unsigned NOT NULL AUTO_INCREMENT,    /* 用户 ID（唯一标识） */
-    username varchar(32) NOT NULL,              /* 用户名 */
-    password varchar(256) NOT NULL,             /* 密码 */
-    salt varchar(128) NOT NULL,                 /* 密码加密盐 */
     email varchar(128) NOT NULL,                /* 邮箱*/
+    salt varchar(128) NOT NULL,                 /* 密码加密盐 */
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,       /* 创建时间（时间戳） */
     last_login_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  /* 最近一次登录时间（时间戳）*/
     last_login_ip varchar(16) NOT NULL,         /* 最近登录的IP地址 */
