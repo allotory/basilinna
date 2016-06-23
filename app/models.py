@@ -53,14 +53,14 @@ class Member(db.Model):
     is_email_actived = db.Column(db.Integer, nullable = False, server_default = '0')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    relationships = db.relationship('Relationship', backref='member',
-                                lazy='dynamic')
-    blogs = db.relationship('Blogs', backref='member',
-                                lazy='dynamic')
+    # relations= db.relationship('Relation', backref='member', 
+    #             lazy='dynamic')
+    blogs = db.relationship('Blog', backref='member',
+                lazy='dynamic')
     collections = db.relationship('Collection', backref='member',
-                                lazy='dynamic')
-    blocks = db.relationship('Block', backref='member',
-                                lazy='dynamic')
+                lazy='dynamic')
+    # blocks = db.relationship('Block', backref='member',
+    #             lazy='dynamic')
 
     def __init__(self, fullname, gender, avatar_path, location, 
                 hometown, description, autograph, 
@@ -78,13 +78,16 @@ class Member(db.Model):
 
 
 # 用户关注表
-class Relationship(db.Model):
+class Relation(db.Model):
 
-    __tablename__ = 'relationship'
+    __tablename__ = 'relation'
 
     id = db.Column(db.Integer, primary_key = True, nullable = False)
     member_id = db.Column(db.Integer, db.ForeignKey('member.id'))
     followee_id = db.Column(db.Integer, db.ForeignKey('member.id'))
+
+    member = db.relationship('Member', foreign_keys=[member_id])
+    followee = db.relationship('Member', foreign_keys=[followee_id])
 
     def __init__(self, member_id, followee_id):
         self.member_id = member_id
@@ -140,6 +143,9 @@ class Block(db.Model):
     id = db.Column(db.Integer, primary_key = True, nullable = False)
     blocked_id = db.Column(db.Integer, db.ForeignKey('member.id'))
     member_id = db.Column(db.Integer, db.ForeignKey('member.id'))
+
+    blocked = db.relationship('Member', foreign_keys=[blocked_id])
+    member = db.relationship('Member', foreign_keys=[member_id])
     
     def __init__(self, blocked_id, member_id):
         self.blocked_id = blocked_id

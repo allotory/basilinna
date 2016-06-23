@@ -19,10 +19,11 @@ function setMsg(id, msg) {
 function validate(func, error_alert, sid, error_msg) {
     if(func) {
         hiddenItem(error_alert);
-        // setMsg(sid, "form-group has-success");
+        return true;
     }else {
         showItem(error_alert);
         setMsg(sid, error_msg);
+        return false;
     }
 }
 
@@ -75,4 +76,19 @@ function check_confirmPass(id, cid) {
 function check_terms(id) {
     var terms = document.getElementById(id);
     return terms.checked;
+}
+
+// 提交校验
+function validateSubmit() {
+    var isEmailChecked = validate(check_email("email"), "validate_error", "error_msg", "邮件地址不正确");
+    var isNicknameChecked = validate(check_name('nickname'), 'validate_error', 'error_msg', '昵称长度应大于2个字符，小于20个字符');
+    var isPasswordChecked = validate(check_pass('password'), 'validate_error', 'error_msg', '请输入6-128位，以字母及_开头的密码');
+    var isConfirmPassChecked = validate(check_confirmPass('password', 'confirm_password'), 'validate_error', 'error_msg', '两次密码输入不一致');
+    var isTermsChecked = validate(check_terms('terms'), 'validate_error', 'error_msg', '需同意隐私协议及服务条款');
+    
+    if(!(isNicknameChecked && isEmailChecked && isPasswordChecked 
+        && isConfirmPassChecked && isTermsChecked)) {
+        return false;
+    }
+    return true;
 }

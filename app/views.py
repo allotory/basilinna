@@ -6,6 +6,7 @@ __author__ = 'Ellery'
 
 from flask import Flask, render_template, request, session, abort
 from app import app
+from app.main import valid_account
  
 @app.before_request
 def csrf_protect():
@@ -24,7 +25,14 @@ def signup():
         # show the signup form
         return render_template('signup.html')
     elif request.method == 'POST':
-        pass
+        # do the signup
+        email = request.form['email']
+        nickname = request.form['nickname']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        valid_account.valid_email_exist(email)
+        return email
+        # return render_template('index.html')
     else:
         pass
 
@@ -40,8 +48,6 @@ def login():
         return render_template('index.html')
     else:
         # show the login form
-        from app.database import init_db
-        init_db()
         return render_template('login.html')
 
 @app.errorhandler(404)
