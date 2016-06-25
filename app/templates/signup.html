@@ -107,6 +107,7 @@
                     <p>{{ error_message }}</p>
                 </div>
                 {% endif %}
+
                 <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
                 <h3 class="text-center pad25B font-gray font-size-23">Basilinna Sign Up <span class="opacity-80"></span></h3>
                 <div id="login-form" class="content-box">
@@ -115,13 +116,21 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email:</label>
                             <div class="input-group input-group-lg">
-                                <input type="text" id="email" name="email" onblur="validate(check_email('email'), 'validate_error', 'error_msg', '邮件地址不正确');" class="form-control" placeholder="登录及找回密码用，不会公开">
+                                {% if signup_form %}
+                                    <input type="text" id="email" name="email" onblur="validate(check_email('email'), 'validate_error', 'error_msg', '邮件地址不正确');" class="form-control" placeholder="登录及找回密码用，不会公开" value="{{ signup_form['email'] }}">
+                                {% else %}
+                                    <input type="text" id="email" name="email" onblur="validate(check_email('email'), 'validate_error', 'error_msg', '邮件地址不正确');" class="form-control" placeholder="登录及找回密码用，不会公开">
+                                {% endif %}
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">昵称:</label>
                             <div class="input-group input-group-lg">
-                                <input type="text" id="nickname" name="nickname" onblur="validate(check_name('nickname'), 'validate_error', 'error_msg', '昵称长度应大于2个字符，小于20个字符');" class="form-control" placeholder="常用网名，可使用真实姓名">
+                                {% if signup_form %}
+                                    <input type="text" id="nickname" name="nickname" onblur="validate(check_name('nickname'), 'validate_error', 'error_msg', '昵称长度应大于2个字符，小于20个字符');" class="form-control" placeholder="常用网名，可使用真实姓名" value="{{ signup_form['nickname'] }}">
+                                {% else %}
+                                    <input type="text" id="nickname" name="nickname" onblur="validate(check_name('nickname'), 'validate_error', 'error_msg', '昵称长度应大于2个字符，小于20个字符');" class="form-control" placeholder="常用网名，可使用真实姓名">
+                                {% endif %}
                             </div>
                         </div>
                         <div class="form-group">
@@ -150,25 +159,6 @@
                     </div>
                     <div class="button-pane">
                         <button type="submit" onclick="return validateSubmit();" class="btn btn-block btn-primary">注册</button>
-                    </div>
-                </div>
-
-                <div id="login-forgot" class="content-box modal-content hide">
-                    <div class="content-box-wrapper pad20A">
-
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Email address:</label>
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-addon addon-inside bg-white font-primary">
-                                <i class="glyph-icon icon-envelope-o"></i>
-                            </span>
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="button-pane text-center">
-                        <button type="submit" class="btn btn-md btn-primary">Recover Password</button>
-                        <a href="#" class="btn btn-md btn-link switch-button" switch-target="#login-form" switch-parent="#login-forgot" title="Cancel">Cancel</a>
                     </div>
                 </div>
 

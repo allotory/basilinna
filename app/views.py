@@ -30,7 +30,12 @@ def signup():
         nickname = request.form['nickname']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
-        valid_account.valid_email_exist(email)
+
+        is_exist = valid_account.valid_email_exist(email)
+        if is_exist:
+            return render_template('signup.html', 
+                error_message='该email地址已被注册',
+                signup_form=request.form)
         return email
         # return render_template('index.html')
     else:
