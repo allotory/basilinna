@@ -5,8 +5,9 @@
 __author__ = 'Ellery'
 
 from flask import Flask, render_template, request, session, abort
-from app import app
-from app.main import valid_account
+from app import app, models
+from app.main import valid_account, encryption, invitation, db_service
+from datetime import datetime
  
 @app.before_request
 def csrf_protect():
@@ -31,13 +32,39 @@ def signup():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
 
+        # whether the email address is exist
         is_exist = valid_account.valid_email_exist(email)
         if is_exist:
             return render_template('signup.html', 
                 error_message='该email地址已被注册',
                 signup_form=request.form)
-        return email
-        # return render_template('index.html')
+        else:
+            if password != confirm_password:
+                return render_template('signup.html', 
+                    error_message='两次密码输入不一致',
+                    signup_form=request.form)
+
+            # encryption password
+            new_password, salt = encryption.encrypt_pass(password)
+
+            # ip address
+            ip = request.remote_addr
+
+            # Invitation link
+            invite_link = invitation.invite_url()
+
+            # initial user and member db data
+            u = models.User(email=email, password=new_password, salt=salt,
+                create_time=str(datetime.now()), last_login_time=str(datetime.now()),
+                last_login_ip=ip, status=1, remark='user', invent=invite_link)
+            db_service.insert_user(u)
+            
+
+            # set cookie
+
+            # render index page with data
+
+            return render_template('index.html')
     else:
         pass
 
