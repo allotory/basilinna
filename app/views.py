@@ -57,8 +57,14 @@ def signup():
             u = models.User(email=email, password=new_password, salt=salt,
                 create_time=str(datetime.now()), last_login_time=str(datetime.now()),
                 last_login_ip=ip, status=1, remark='user', invent=invite_link)
-            db_service.insert_user(u)
+            db_service.db_insert(u)
+            db_service.db_commit()
             
+            m = models.Member(fullname=nickname, gender=None, avatar_path=None,
+                location=None, hometown=None, description=None, autograph=None,
+                personality_url=None, is_email_actived=None, user_id=u.id)
+            db_service.db_insert(m)
+            db_service.db_commit()
 
             # set cookie
 
