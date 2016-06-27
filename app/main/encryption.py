@@ -7,7 +7,7 @@ __author__ = 'Ellery'
 import hashlib
 import app.main.csrf_token as csrf_token
 
-def encrypt_pass(password):
+def encrypt_pass_salt(password):
 
     salt = csrf_token.random_string()
 
@@ -15,3 +15,9 @@ def encrypt_pass(password):
     new_pass = hashlib.sha256(temp).hexdigest()
 
     return new_pass, salt
+
+def encrypt_pass(password, salt):
+    temp = (password + salt).encode('utf-8')
+    new_pass = hashlib.sha256(temp).hexdigest()
+
+    return new_pass

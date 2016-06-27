@@ -4,7 +4,7 @@
 
 __author__ = 'Ellery'
 
-from flask import Flask, render_template, request, session, abort
+from flask import Flask, render_template, request, session, abort, redirect, url_for
 from app import app, models
 from app.main import valid_account, encryption, invitation, db_service
 from datetime import datetime
@@ -45,7 +45,7 @@ def signup():
                     signup_form=request.form)
 
             # encryption password
-            new_password, salt = encryption.encrypt_pass(password)
+            new_password, salt = encryption.encrypt_pass_salt(password)
 
             # ip address
             ip = request.remote_addr
@@ -66,27 +66,33 @@ def signup():
             db_service.db_insert(m)
             db_service.db_commit()
 
-            # set cookie
-
-            # render index page with data
-
-            return render_template('index.html')
+            return redirect(url_for('login', info='注册成功，请先登录'))
     else:
         pass
 
 @app.route('/login', methods = ['GET', 'POST'])
-def login():
+@app.route('/login/<info>', methods = ['GET', 'POST'])
+def login(info=None):
     if request.method == 'POST':
         # do the login
-        username = request.form['email']
+        email = request.form['email']
         password = request.form['password']
-        print(username)
-        print(password)
-        print('haha')
+
+        # encrypt password with salt
+        u = models.User.query.filter_by(email=email).first()
+        new_pass = encryption.encrypt_pass(password, u.salt)
+        if u.password != new_pass:
+            return render_template('login.html', error_message='邮件地址或密码错误')
+
+        # set cookie
+
+        # render index page with data
+
+        # return (email + password + u.salt + u.password + new_pass)
         return render_template('index.html')
     else:
         # show the login form
-        return render_template('login.html')
+        return render_template('login.html', info=info)
 
 @app.errorhandler(404)
 def page_not_found(error):

@@ -92,3 +92,13 @@ function validateSubmit() {
     }
     return true;
 }
+
+// 登陆提交校验
+function validateLogin() {
+    var isEmailChecked = validate(check_email('email'), 'validate_error', 'error_msg', '邮件地址不正确');
+    var isPasswordChecked = validate(check_pass('password'), 'validate_error', 'error_msg', '请输入6-128位，以字母及_开头的密码');
+    if(!(isEmailChecked && isPasswordChecked)) {
+        return false;
+    }
+    return true;
+}
