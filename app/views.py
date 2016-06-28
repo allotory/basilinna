@@ -27,10 +27,10 @@ def signup():
         return render_template('signup.html')
     elif request.method == 'POST':
         # do the signup
-        email = request.form['email']
-        nickname = request.form['nickname']
-        password = request.form['password']
-        confirm_password = request.form['confirm_password']
+        email = request.form.get('email')
+        nickname = request.form.get('nickname')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
 
         # whether the email address is exist
         is_exist = valid_account.valid_email_exist(email)
@@ -75,8 +75,8 @@ def signup():
 def login(info=None):
     if request.method == 'POST':
         # do the login
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get('email')
+        password = request.form.get('password')
         rememberme = request.form.get('rememberme')
 
         # encrypt password with salt
