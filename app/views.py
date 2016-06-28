@@ -112,6 +112,11 @@ def login(info=None):
         password = request.cookies.get('password')
         return render_template('login.html', info=info, email=email, password=password)
 
+@app.route('/logout', methods = ['GET'])
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('login', info='注销成功，请重新登录'))
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error_404.html'), 404
