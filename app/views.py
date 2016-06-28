@@ -4,7 +4,7 @@
 
 __author__ = 'Ellery'
 
-from flask import Flask, render_template, request, session, abort, redirect, url_for
+from flask import Flask, render_template, request, session, abort, redirect, url_for, make_response
 from app import app, models
 from app.main import valid_account, encryption, invitation, db_service
 from datetime import datetime
@@ -77,6 +77,7 @@ def login(info=None):
         # do the login
         email = request.form['email']
         password = request.form['password']
+        rememberme = request.form.get('rememberme')
 
         # encrypt password with salt
         u = models.User.query.filter_by(email=email).first()
@@ -84,15 +85,22 @@ def login(info=None):
         if u.password != new_pass:
             return render_template('login.html', error_message='邮件地址或密码错误')
 
-        # set cookie
-
         # render index page with data
 
-        # return (email + password + u.salt + u.password + new_pass)
-        return render_template('index.html')
+        # set cookie
+        response = make_response(render_template('index.html'))
+        if rememberme:
+            response.set_cookie('email', email)
+            response.set_cookie('password', password)
+        else:
+            response.delete_cookie('email')
+            response.delete_cookie('password')
+        return response
     else:
         # show the login form
-        return render_template('login.html', info=info)
+        email = request.cookies.get('email')
+        password = request.cookies.get('password')
+        return render_template('login.html', info=info, email=email, password=password)
 
 @app.errorhandler(404)
 def page_not_found(error):
