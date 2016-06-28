@@ -24,7 +24,9 @@
 
                     <div class="meta-box meta-box-bottom">
                         <img src="../static/image/gravatar.jpg.png" tppabs="https://agileui.com/demo/monarch/assets/image-resources/gravatar.jpg" alt="" class="meta-image img-bordered img-circle">
-                        <h3 class="meta-heading">Alex Rosenberg</h3>
+                        {% if member %}
+                        <h3 class="meta-heading">{{ member.fullname }}</h3>
+                        {% endif %}
                         <h4 class="meta-subheading">Ultimate backend programmer</h4>
                     </div>
 

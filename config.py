@@ -4,7 +4,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 CSRF_ENABLED = True
-SECRET_KEY = 'HCIECLGPSCLBKTJSLVORKFDJGYHX'
+SECRET_KEY = 'UsTd+_P&kv#jdQ!3Oc.Kb$yd,ey/B2i-aM8em'
 
 MYSQL_DB = 'basilinna'
 MYSQL_USER = 'root'

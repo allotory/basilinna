@@ -10,5 +10,6 @@ config = app.config.from_object('config')
 db = SQLAlchemy(app)
 
 app.jinja_env.globals['csrf_token'] = csrf_token.generate_csrf_token
+app.secret_key = app.config.get('SECRET_KEY')
 
 from app import views, models

@@ -18,7 +18,10 @@ def csrf_protect():
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('space.html')
+    if 'user_id' in session:
+        return render_template(index.html)
+        # return 'Logged in as %s' % escape(session['username'])
+    return redirect(url_for('login', info='访问当前内容，请先登录'))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -81,14 +84,21 @@ def login(info=None):
 
         # encrypt password with salt
         u = models.User.query.filter_by(email=email).first()
+        
+        # email not exist
+        if u is None:
+            return render_template('login.html', error_message='当前邮件账户不存在')
+
         new_pass = encryption.encrypt_pass(password, u.salt)
         if u.password != new_pass:
             return render_template('login.html', error_message='邮件地址或密码错误')
 
         # render index page with data
+        m = models.Member.query.filter_by(user_id=u.id).first()
+        session['user_id'] = u.id
 
         # set cookie
-        response = make_response(render_template('index.html'))
+        response = make_response(render_template('index.html', user=u, member=m))
         if rememberme:
             response.set_cookie('email', email)
             response.set_cookie('password', password)
