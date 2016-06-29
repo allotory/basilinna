@@ -176,20 +176,21 @@
 <div class="col-md-8">
 
     <div class="content-box bg-white post-box">
-        <textarea name="" class="textarea-autosize" placeholder="你在做什么?"></textarea>
-        <div class="button-pane">
-            <a href="#" class="btn btn-md btn-link hover-white" title="">
-                <i class="glyph-icon icon-map-marker"></i>
-            </a>
-            <a href="#" class="btn btn-md btn-link hover-white" title="">
-                <i class="glyph-icon icon-picture-o"></i>
-            </a>
-
-            <a href="#" class="btn btn-md btn-post float-right btn-success" title="">
-                Share it!
-            </a>
-
-        </div>
+        <form name="post_form" action="/post" method="POST">
+            <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
+            <textarea name="content" class="textarea-autosize" placeholder="你在做什么?"></textarea>
+            <div class="button-pane">
+                <a href="#" class="btn btn-md btn-link hover-white" title="">
+                    <i class="glyph-icon icon-map-marker"></i>
+                </a>
+                <a href="#" class="btn btn-md btn-link hover-white" title="">
+                    <i class="glyph-icon icon-picture-o"></i>
+                </a>
+                <a href="javascript:document.post_form.submit();" class="btn btn-md btn-post float-right btn-success" title="">
+                    Share it!
+                </a>
+            </div>
+        </form>
     </div>
 
     <div class="panel">

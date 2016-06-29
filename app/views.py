@@ -95,7 +95,7 @@ def login(info=None):
 
         # render index page with data
         m = models.Member.query.filter_by(user_id=u.id).first()
-        session['user_id'] = u.id
+        session['member_id'] = m.id
 
         # set cookie
         response = make_response(render_template('index.html', user=u, member=m))
@@ -116,6 +116,20 @@ def login(info=None):
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('login', info='注销成功，请重新登录'))
+
+@app.route('/post', methods = ['POST'])
+def post():
+    content = request.form.get('content')
+    member_id = session['member_id']
+
+    b = models.Blog(content=content, create_time=str(datetime.now()),
+        post_type='NORMAL', via='Web', exist_pic=0, pic_path=None,
+        location=None, member_id=member_id)
+    db_service.db_insert(b)
+    db_service.db_commit()
+
+    return str(member_id) + content
+
 
 @app.errorhandler(404)
 def page_not_found(error):
