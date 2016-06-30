@@ -17,10 +17,15 @@ def csrf_protect():
             abort(403)
 
 @app.route('/', methods=['GET'])
+@app.route('/index', methods=['GET'])
 def index():
-    if 'user_id' in session:
-        return render_template(index.html)
-        # return 'Logged in as %s' % escape(session['username'])
+    if 'member_id' in session:
+        member_id = session['member_id']
+        m = models.Member.query.filter_by(id=member_id).first()
+        if m is None:
+            redirect(url_for('error'))
+        return render_template('index.html', member=m)
+
     return redirect(url_for('login', info='访问当前内容，请先登录'))
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -63,7 +68,8 @@ def signup():
             db_service.db_insert(u)
             db_service.db_commit()
             
-            m = models.Member(fullname=nickname, gender=None, avatar_path=None,
+            avatar_path = '../static/image/avatar/avatar.png'
+            m = models.Member(fullname=nickname, gender=None, avatar_path=avatar_path,
                 location=None, hometown=None, description=None, autograph=None,
                 personality_url=None, is_email_actived=None, user_id=u.id)
             db_service.db_insert(m)
@@ -98,7 +104,7 @@ def login(info=None):
         session['member_id'] = m.id
 
         # set cookie
-        response = make_response(render_template('index.html', user=u, member=m))
+        response = make_response(redirect(url_for('index')))
         if rememberme:
             response.set_cookie('email', email)
             response.set_cookie('password', password)
@@ -130,6 +136,9 @@ def post():
 
     return str(member_id) + content
 
+@app.route('/error', methods = ['GET'])
+def sys_error():
+    return render_template('error_sys.html')
 
 @app.errorhandler(404)
 def page_not_found(error):

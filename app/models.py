@@ -33,7 +33,7 @@ class User(db.Model):
         self.invent = invent
 
     def __repr__(self):
-        return '<User %r>' % (self.username)
+        return '<User %r>' % (self.email)
 
 
 # 用户信息表
