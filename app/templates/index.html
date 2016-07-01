@@ -203,71 +203,40 @@
             </h3>
             <div class="example-box-wrapper">
                 <div class="timeline-box timeline-box-left">
-                    <div class="tl-row">
-                        <div class="tl-item float-right">
-                            <div class="tl-icon bg-red">
-                                <img class="img-circle" width="30" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial1.jpg"
-                                    alt="" />
-                            </div>
-                            <div class="popover right">
-                                <div class="arrow"></div>
-                                <div class="popover-content">
-                                    <!-- <div class="tl-label bs-label label-info">Appointment</div> -->
-                                    <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                                        Donec odio.Lorem ipsum dolor sit amet, consectetuer adipiscing
-                                        elit. Donec odio.Lorem ipsum dolor sit amet, consectetuer
-                                        adipiscing elit. Donec odio. 
+                    {% if blog_list %}
+                        {% for blog in blog_list %}
+                        <div class="tl-row">
+                            <div class="tl-item float-right">
+                                {% if blog.post_type == 'NORMAL' %}
+                                <div class="tl-icon bg-primary">
+                                {% elif blog.post_type == 'REPEAT' %}
+                                <div class="tl-icon bg-red">
+                                {% elif blog.post_type == 'REPLAY' %}
+                                <div class="tl-icon bg-black">
+                                {% endif %}
+                                    <img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="" />
+                                </div>
+                                <div class="popover right">
+                                    <div class="arrow"></div>
+                                    <div class="popover-content">
+                                        <!-- <div class="tl-label bs-label label-info">Appointment</div> -->
+                                        <p class="tl-content">
+                                            {{ blog.content }}
                                         </p>
-                                    <p>
-                                        <a href="#" name="a"><img src="../static/image/testimonial1.jpg"></a>
-                                    </p>
-                                    <div class="tl-time">
-                                        <i class="glyph-icon icon-clock-o"></i> a few seconds
-                                        ago
+                                        {% if exist_pic != 0 %}
+                                            <p>
+                                                <a href="#" name="a"><img src="{{ blog.pic_path }}"></a>
+                                            </p>
+                                        {% endif %}
+                                        <div class="tl-time">
+                                            <i class="glyph-icon icon-clock-o"></i> {{ blog.create_time }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="tl-row">
-                        <div class="tl-item float-right">
-                            <div class="tl-icon bg-primary">
-                                <img class="img-circle" width="30" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial1.jpg"
-                                    alt="" />
-                            </div>
-                            <div class="popover right">
-                                <div class="arrow"></div>
-                                <div class="popover-content">
-                                    <div class="tl-label bs-label bg-yellow">Teleconference</div>
-                                    <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                                        Donec odio. </p>
-                                    <div class="tl-time">
-                                        <i class="glyph-icon icon-clock-o"></i> a few seconds
-                                        ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tl-row">
-                        <div class="tl-item float-right">
-                            <div class="tl-icon bg-black">
-                                <i class="glyph-icon icon-headphones"></i>
-                            </div>
-                            <div class="popover right">
-                                <div class="arrow"></div>
-                                <div class="popover-content">
-                                    <div class="tl-label bs-label label-danger">Meeting</div>
-                                    <p class="tl-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                                        Donec odio. </p>
-                                    <div class="tl-time">
-                                        <i class="glyph-icon icon-clock-o"></i> a few seconds
-                                        ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>

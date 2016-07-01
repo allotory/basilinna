@@ -24,7 +24,11 @@ def index():
         m = models.Member.query.filter_by(id=member_id).first()
         if m is None:
             redirect(url_for('error'))
-        return render_template('index.html', member=m)
+
+        blog_list = models.Blog.query.filter_by(member_id=member_id).all()
+
+        # return blog_list[0].content
+        return render_template('index.html', member=m, blog_list=blog_list)
 
     return redirect(url_for('login', info='访问当前内容，请先登录'))
 
