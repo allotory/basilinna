@@ -180,8 +180,8 @@
 
     <div class="content-box bg-white post-box">
         <form name="post_form" action="/post" method="POST">
-            <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
-            <textarea name="content" class="textarea-autosize" placeholder="你在做什么?"></textarea>
+            <input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+            <textarea id="content" name="content" class="textarea-autosize" placeholder="你在做什么?"></textarea>
             <div class="button-pane">
                 <a href="#" class="btn btn-md btn-link hover-white" title="">
                     <i class="glyph-icon icon-map-marker"></i>
@@ -189,7 +189,10 @@
                 <a href="#" class="btn btn-md btn-link hover-white" title="">
                     <i class="glyph-icon icon-picture-o"></i>
                 </a>
-                <a href="javascript:document.post_form.submit();" class="btn btn-md btn-post float-right btn-success" title="">
+                <!-- <a id="share" href="javascript:document.post_form.submit();" class="btn btn-md btn-post float-right btn-success" title="">
+                    Share it!
+                </a> -->
+                <a id="share" href="#" class="btn btn-md btn-post float-right btn-success" title="">
                     Share it!
                 </a>
             </div>
@@ -236,6 +239,10 @@
                             </div>
                         </div>
                         {% endfor %}
+                    {% else %}
+                        <div class="tl-row">
+                            当前没有动态，为什么不发一条呢？
+                        </div>
                     {% endif %}
                 </div>
             </div>

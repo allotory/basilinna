@@ -4,17 +4,17 @@
 
 __author__ = 'Ellery'
 
-from flask import Flask, render_template, request, session, abort, redirect, url_for, make_response
-from app import app, models
+from flask import Flask, render_template, request, session, abort, redirect, url_for, make_response, json
+from app import app, models, csrf
 from app.main import valid_account, encryption, invitation, db_service
 from datetime import datetime
  
-@app.before_request
-def csrf_protect():
-    if request.method == "POST":
-        token = session.pop('_csrf_token', None)
-        if not token or token != request.form.get('_csrf_token'):
-            abort(403)
+# @app.before_request
+# def csrf_protect():
+#     if request.method == "POST":
+#         token = session.pop('_csrf_token', None)
+#         if not token or token != request.form.get('_csrf_token'):
+#             abort(403)
 
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
@@ -129,16 +129,19 @@ def logout():
 
 @app.route('/post', methods = ['POST'])
 def post():
-    content = request.form.get('content')
-    member_id = session['member_id']
+    # content = request.form.get('content')
+    # member_id = session['member_id']
 
-    b = models.Blog(content=content, create_time=str(datetime.now()),
-        post_type='NORMAL', via='Web', exist_pic=0, pic_path=None,
-        location=None, member_id=member_id)
-    db_service.db_insert(b)
-    db_service.db_commit()
+    data = json.loads(request.form.get('data'))
+    ss = data['content']
 
-    return str(member_id) + content
+    # b = models.Blog(content=content, create_time=str(datetime.now()),
+    #     post_type='NORMAL', via='Web', exist_pic=0, pic_path=None,
+    #     location=None, member_id=member_id)
+    # db_service.db_insert(b)
+    # db_service.db_commit()
+
+    return str(ss)
 
 @app.route('/error', methods = ['GET'])
 def sys_error():
@@ -151,3 +154,7 @@ def page_not_found(error):
 @app.errorhandler(500)
 def server_syntax_error(error):
     return render_template('error_500.html'), 500
+
+@csrf.error_handler
+def csrf_error(reason):
+    return render_template('error_csrf.html', reason=reason), 400

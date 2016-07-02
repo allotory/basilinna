@@ -71,14 +71,48 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet" type="text/css" href="../static/style/admin-all-demo.css" tppabs="https://agileui.com/demo/monarch/assets-minified/admin-all-demo.css">
-
+    <link rel="stylesheet" type="text/css" href="../static/style/admin-all-demo.css">
+    
+    <script type="text/javascript" src="../static/js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript">
-        // $(window).load(function(){
-        //     setTimeout(function() {
-        //         $('#loading').fadeOut( 400, "linear" );
-        //     }, 300);
+        
+        // $(function(){
+        //     $("#share").click(function(){
+        //         alert($("#content").val())
+        //         alert($("#_csrf_token").val())
+        //     });
         // });
+
+        $(function(){
+        
+            var csrftoken = "{{ csrf_token() }}"
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                }
+            });
+
+            $("#share").click(function(){
+
+                var data = {
+                    data: JSON.stringify({
+                        "content": $("#content").val()
+                    })
+                };
+                
+                $.ajax({
+                    url:"/post",
+                    type: 'POST',
+                    data: data,
+                    success: function(msg){
+                                alert(msg);
+                            }
+                });
+            });
+        });
     </script>
 
     {% endblock %}
