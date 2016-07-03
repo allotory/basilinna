@@ -4,10 +4,11 @@
 
 __author__ = 'Ellery'
 
-from flask import Flask, render_template, request, session, abort, redirect, url_for, make_response, json
+from flask import Flask, render_template, request, session, abort, redirect, url_for, make_response
 from app import app, models, csrf
 from app.main import valid_account, encryption, invitation, db_service
 from datetime import datetime
+import json
  
 # @app.before_request
 # def csrf_protect():
@@ -25,7 +26,7 @@ def index():
         if m is None:
             redirect(url_for('error'))
 
-        blog_list = models.Blog.query.filter_by(member_id=member_id).all()
+        blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
 
         # return blog_list[0].content
         return render_template('index.html', member=m, blog_list=blog_list)
@@ -130,18 +131,22 @@ def logout():
 @app.route('/post', methods = ['POST'])
 def post():
     # content = request.form.get('content')
-    # member_id = session['member_id']
+    member_id = session['member_id']
 
     data = json.loads(request.form.get('data'))
-    ss = data['content']
+    content = data['content']
 
-    # b = models.Blog(content=content, create_time=str(datetime.now()),
-    #     post_type='NORMAL', via='Web', exist_pic=0, pic_path=None,
-    #     location=None, member_id=member_id)
-    # db_service.db_insert(b)
-    # db_service.db_commit()
+    b = models.Blog(content=content, create_time=str(datetime.now()),
+        post_type='NORMAL', via='Web', exist_pic=0, pic_path=None,
+        location=None, member_id=member_id)
+    db_service.db_insert(b)
+    db_service.db_commit()
 
-    return str(ss)
+    blog_dict = dict(id=b.id, content=b.content, create_time=str(b.create_time),
+        post_type=b.post_type, exist_pic=b.exist_pic, pic_path=b.pic_path)
+    temp = json.dumps(blog_dict)
+
+    return temp
 
 @app.route('/error', methods = ['GET'])
 def sys_error():

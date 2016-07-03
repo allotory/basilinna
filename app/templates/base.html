@@ -74,46 +74,6 @@
     <link rel="stylesheet" type="text/css" href="../static/style/admin-all-demo.css">
     
     <script type="text/javascript" src="../static/js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript">
-        
-        // $(function(){
-        //     $("#share").click(function(){
-        //         alert($("#content").val())
-        //         alert($("#_csrf_token").val())
-        //     });
-        // });
-
-        $(function(){
-        
-            var csrftoken = "{{ csrf_token() }}"
-
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
-                    }
-                }
-            });
-
-            $("#share").click(function(){
-
-                var data = {
-                    data: JSON.stringify({
-                        "content": $("#content").val()
-                    })
-                };
-                
-                $.ajax({
-                    url:"/post",
-                    type: 'POST',
-                    data: data,
-                    success: function(msg){
-                                alert(msg);
-                            }
-                });
-            });
-        });
-    </script>
 
     {% endblock %}
 

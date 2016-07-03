@@ -4,6 +4,77 @@
 
 {% block head %}
     {{ super() }}
+    <script type="text/javascript">
+
+        $(function(){
+        
+            var csrftoken = "{{ csrf_token() }}";
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+            $("#share").click(function(){
+                var data = {
+                    data: JSON.stringify({
+                        "content": $("#content").val()
+                    })
+                };
+                
+                $.ajax({
+                    url:"/post",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('提交失败,请重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        var blog = jQuery.parseJSON(results); 
+                        // alert(blog.content);
+
+                        var post_style = 'bg-primary';
+                        if(blog.post_type == 'REPEAT') {
+                            post_style = 'bg-red';
+                        } else if(blog.post_type == 'REPLAY') {
+                            post_style = 'bg-black';
+                        } else {
+                            post_style = 'bg-primary';
+                        }
+
+                        var image_block = ''
+                        if (blog.exist_pic != 0) {
+                            image_block = '<p><a href="#" name="a"><img src="' + blog.pic_path + '"></a></p>'
+                        }
+
+                        time_line = 
+                        '<div class="tl-row">' +
+                            '<div class="tl-item float-right">' +
+                                '<div class="tl-icon ' + post_style + '">' +
+                                    '<img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="" />' +
+                                '</div>' +
+                                '<div class="popover right">' +
+                                    '<div class="arrow"></div>' +
+                                    '<div class="popover-content">' +
+                                        '<p class="tl-content">' + blog.content + '</p>' +
+                                        image_block +
+                                        '<div class="tl-time">' +
+                                            '<i class="glyph-icon icon-clock-o"></i> ' + blog.create_time +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>'
+                        $("#ajax_tl_row").html(time_line);
+                        $("#content").val('');
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block header_nav %}
@@ -206,6 +277,7 @@
             </h3>
             <div class="example-box-wrapper">
                 <div class="timeline-box timeline-box-left">
+                    <div id="ajax_tl_row"></div>
                     {% if blog_list %}
                         {% for blog in blog_list %}
                         <div class="tl-row">
@@ -244,6 +316,7 @@
                             当前没有动态，为什么不发一条呢？
                         </div>
                     {% endif %}
+
                 </div>
             </div>
         </div>
