@@ -63,6 +63,7 @@
                                         image_block +
                                         '<div class="tl-time">' +
                                             '<i class="glyph-icon icon-clock-o"></i> ' + blog.create_time +
+                                            '  通过 ' + blog.via +
                                         '</div>' +
                                     '</div>' +
                                 '</div>' +
@@ -304,7 +305,8 @@
                                             </p>
                                         {% endif %}
                                         <div class="tl-time">
-                                            <i class="glyph-icon icon-clock-o"></i> {{ blog.create_time }}
+                                            <i class="glyph-icon icon-clock-o"></i> {{ blog.create_time }} 
+                                            通过 {{ blog.via }}
                                         </div>
                                     </div>
                                 </div>

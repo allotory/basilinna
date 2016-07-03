@@ -4,10 +4,10 @@
 
 __author__ = 'Ellery'
 
-import app.main.csrf_token as csrf_token
+import app.main.generate_string
 from app import app
 
 def invite_url():
-    link = csrf_token.random_string()
+    link = generate_string.random_string()
     url = app.config.get('HOST') + link
     return url

@@ -9,30 +9,8 @@ from app import app, models, csrf
 from app.main import valid_account, encryption, invitation, db_service
 from datetime import datetime
 import json
- 
-# @app.before_request
-# def csrf_protect():
-#     if request.method == "POST":
-#         token = session.pop('_csrf_token', None)
-#         if not token or token != request.form.get('_csrf_token'):
-#             abort(403)
 
-@app.route('/', methods=['GET'])
-@app.route('/index', methods=['GET'])
-def index():
-    if 'member_id' in session:
-        member_id = session['member_id']
-        m = models.Member.query.filter_by(id=member_id).first()
-        if m is None:
-            redirect(url_for('error'))
-
-        blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
-
-        # return blog_list[0].content
-        return render_template('index.html', member=m, blog_list=blog_list)
-
-    return redirect(url_for('login', info='访问当前内容，请先登录'))
-
+# 注册
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'GET':
@@ -84,6 +62,7 @@ def signup():
     else:
         pass
 
+# 登录
 @app.route('/login', methods = ['GET', 'POST'])
 @app.route('/login/<info>', methods = ['GET', 'POST'])
 def login(info=None):
@@ -123,31 +102,102 @@ def login(info=None):
         password = request.cookies.get('password')
         return render_template('login.html', info=info, email=email, password=password)
 
-@app.route('/logout', methods = ['GET'])
-def logout():
-    session.pop('user_id', None)
-    return redirect(url_for('login', info='注销成功，请重新登录'))
+# 主页
+@app.route('/', methods=['GET'])
+@app.route('/index', methods=['GET'])
+def index():
+    if 'member_id' in session:
+        member_id = session['member_id']
+        m = models.Member.query.filter_by(id=member_id).first()
+        if m is None:
+            redirect(url_for('error'))
 
+        blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
+
+        return render_template('index.html', member=m, blog_list=blog_list)
+
+    return redirect(url_for('login', info='访问当前内容，请先登录'))
+
+# 发布
 @app.route('/post', methods = ['POST'])
 def post():
-    # content = request.form.get('content')
     member_id = session['member_id']
 
+    # get blog content from ajax data
     data = json.loads(request.form.get('data'))
     content = data['content']
 
+    # insert blog
     b = models.Blog(content=content, create_time=str(datetime.now()),
         post_type='NORMAL', via='Web', exist_pic=0, pic_path=None,
         location=None, member_id=member_id)
     db_service.db_insert(b)
     db_service.db_commit()
 
+    # build a blog dict for json
     blog_dict = dict(id=b.id, content=b.content, create_time=str(b.create_time),
-        post_type=b.post_type, exist_pic=b.exist_pic, pic_path=b.pic_path)
+        post_type=b.post_type, exist_pic=b.exist_pic, pic_path=b.pic_path, via=b.via)
     temp = json.dumps(blog_dict)
 
     return temp
 
+# 空间
+@app.route('/space', methods = ['GET', 'POST'])
+def space():
+    if request.method == 'GET':
+        return render_template('space.html')
+    elif request.method == 'POST':
+        pass
+    else:
+        return redirect(url_for('error'))
+
+# 私信
+@app.route('/messages', methods = ['GET', 'POST'])
+def messages():
+    if request.method == 'GET':
+        return render_template('messages.html')
+    elif request.method == 'POST':
+        pass
+    else:
+        return redirect(url_for('error'))
+
+# 随便看看
+@app.route('/explore', methods = ['GET', 'POST'])
+def explore():
+    if request.method == 'GET':
+        return render_template('explore.html')
+    elif request.method == 'POST':
+        pass
+    else:
+        return redirect(url_for('error'))
+
+# 搜索
+@app.route('/search', methods = ['GET', 'POST'])
+def search():
+    if request.method == 'GET':
+        return render_template('search.html')
+    elif request.method == 'POST':
+        pass
+    else:
+        return redirect(url_for('error'))
+
+# 设置
+@app.route('/setting', methods = ['GET', 'POST'])
+def setting():
+    if request.method == 'GET':
+        return render_template('setting.html')
+    elif request.method == 'POST':
+        pass
+    else:
+        return redirect(url_for('error'))
+
+# 注销
+@app.route('/logout', methods = ['GET'])
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('login', info='注销成功，请重新登录'))
+
+# 错误设置
 @app.route('/error', methods = ['GET'])
 def sys_error():
     return render_template('error_sys.html')
