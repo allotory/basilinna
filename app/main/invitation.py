@@ -4,10 +4,8 @@
 
 __author__ = 'Ellery'
 
-import app.main.generate_string
-from app import app
+import app.main.generate_string as generate
 
 def invite_url():
-    link = generate_string.random_string()
-    url = app.config.get('HOST') + link
-    return url
+    link = generate.random_string()
+    return link

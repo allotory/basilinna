@@ -42,7 +42,8 @@ def signup():
             ip = request.remote_addr
 
             # Invitation link
-            invite_link = invitation.invite_url()
+            invite_string = invitation.invite_url()
+            invite_link = app.config.get('HOST') + invite_string
 
             # initial user and member db data
             u = models.User(email=email, password=new_password, salt=salt,
@@ -54,7 +55,7 @@ def signup():
             avatar_path = '../static/image/avatar/avatar.png'
             m = models.Member(fullname=nickname, gender=None, avatar_path=avatar_path,
                 location=None, hometown=None, description=None, autograph=None,
-                personality_url=None, is_email_actived=None, user_id=u.id)
+                personality_url=invite_string, is_email_actived=None, user_id=u.id)
             db_service.db_insert(m)
             db_service.db_commit()
 
@@ -142,12 +143,33 @@ def post():
     return temp
 
 # 空间
-@app.route('/space', methods = ['GET', 'POST'])
-def space():
+@app.route('/space', methods = ['GET'])
+@app.route('/space/<url>', methods = ['GET'])
+def space(url=None):
     if request.method == 'GET':
-        return render_template('space.html')
-    elif request.method == 'POST':
-        pass
+        # current member
+        member_id = session['member_id']
+        m = models.Member.query.filter_by(id=member_id).first()
+        if m is None:
+            redirect(url_for('error'))
+
+        if url:
+            if url != m.personality_url:
+                # selected member space
+                selected_member = models.Member.query.filter_by(personality_url=url).first()
+                blog_list = models.Blog.query.filter_by(member_id=selected_member.id).order_by(models.Blog.id.desc()).all()
+
+                return render_template('space.html', member=selected_member, blog_list=blog_list, not_myspace=True)
+            else :
+                # my space
+                blog_list = models.Blog.query.filter_by(member_id=m.id).order_by(models.Blog.id.desc()).all()
+                return render_template('space.html', member=m, blog_list=blog_list)
+        else:
+            # my space
+            blog_list = models.Blog.query.filter_by(member_id=m.id).order_by(models.Blog.id.desc()).all()
+            return render_template('space.html', member=m, blog_list=blog_list)
+
+        return redirect(url_for('error'))
     else:
         return redirect(url_for('error'))
 
