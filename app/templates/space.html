@@ -4,6 +4,70 @@
 
 {% block head %}
     {{ super() }}
+    <script type="text/javascript">
+
+        $(function(){
+        
+            var csrftoken = "{{ csrf_token() }}";
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+            $("#follow").click(function(){
+
+                var followee_id = "{{ member.id }}";
+                var follow_flag = $("#follow_flag").val();
+
+                if(follow_flag == "unfollowed") {
+                    var data = {
+                        data: JSON.stringify({
+                            "followee_id": followee_id
+                        })
+                    };
+                    
+                    $.ajax({
+                        url: "/follow",
+                        type: "POST",
+                        data: data,
+                        error: function(){
+                            alert('提交失败,请重试!');
+                        },
+                        success: function(results){
+                            // alert(results);
+                            $("#follow_flag").val("following");
+                            $("#follow_content").html("取消关注");
+                        }
+                    });
+                } else if (follow_flag == "following") {
+                    var data = {
+                        data: JSON.stringify({
+                            "followee_id": followee_id
+                        })
+                    };
+                    
+                    $.ajax({
+                        url: "/unfollow",
+                        type: "POST",
+                        data: data,
+                        error: function(){
+                            alert('提交失败,请重试!');
+                        },
+                        success: function(results){
+                            // alert(results);
+                            $("#follow_flag").val("unfollowed");
+                            $("#follow_content").html("关注此人");
+                        }
+                    });
+                } else {
+                    alert("follow error!")
+                }
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block header_nav %}
@@ -45,10 +109,17 @@
                 <div class="clear profile-box">
                     <ul class="nav nav-pills nav-justified">
                         <li>
-                            <a href="#" class="btn btn-sm bg-google">
-                                <span class="button-content">
-                                    关注此人
-                                </span>
+                            <input type="hidden" id="follow_flag" value="{{ follow }}">
+                            <a id="follow" class="btn btn-sm bg-google">
+                                {% if follow == 'unfollowed' %}
+                                    <span id="follow_content" class="button-content">
+                                        关注此人
+                                    </span>
+                                {% elif follow == 'following' %}
+                                    <span id="follow_content" class="button-content">
+                                        取消关注
+                                    </span>
+                                {% endif %}
                             </a>
                         </li>
                         <li>

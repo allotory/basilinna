@@ -5,12 +5,13 @@
 __author__ = 'Ellery'
 
 from flask import Flask, render_template, request, session, abort, redirect, url_for, make_response
+from sqlalchemy import and_
 from app import app, models, csrf
 from app.main import valid_account, encryption, invitation, db_service
 from datetime import datetime
 import json
 
-# 注册
+# register page
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'GET':
@@ -63,7 +64,8 @@ def signup():
     else:
         pass
 
-# 登录
+
+# login page
 @app.route('/login', methods = ['GET', 'POST'])
 @app.route('/login/<info>', methods = ['GET', 'POST'])
 def login(info=None):
@@ -103,7 +105,8 @@ def login(info=None):
         password = request.cookies.get('password')
         return render_template('login.html', info=info, email=email, password=password)
 
-# 主页
+
+# index page
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def index():
@@ -119,7 +122,8 @@ def index():
 
     return redirect(url_for('login', info='访问当前内容，请先登录'))
 
-# 发布
+
+# post blog
 @app.route('/post', methods = ['POST'])
 def post():
     member_id = session['member_id']
@@ -142,7 +146,8 @@ def post():
 
     return temp
 
-# 空间
+
+# space page
 @app.route('/space', methods = ['GET'])
 @app.route('/space/<url>', methods = ['GET'])
 def space(url=None):
@@ -159,7 +164,12 @@ def space(url=None):
                 selected_member = models.Member.query.filter_by(personality_url=url).first()
                 blog_list = models.Blog.query.filter_by(member_id=selected_member.id).order_by(models.Blog.id.desc()).all()
 
-                return render_template('space.html', member=selected_member, blog_list=blog_list, not_myspace=True)
+                # following or not
+                r = models.Relation.query.filter(and_(models.Relation.member_id==m.id, models.Relation.followee_id==selected_member.id)).first()
+                if r is None:
+                    return render_template('space.html', member=selected_member, blog_list=blog_list, not_myspace=True, follow='unfollowed')
+
+                return render_template('space.html', member=selected_member, blog_list=blog_list, not_myspace=True, follow='following')
             else :
                 # my space
                 blog_list = models.Blog.query.filter_by(member_id=m.id).order_by(models.Blog.id.desc()).all()
@@ -173,7 +183,50 @@ def space(url=None):
     else:
         return redirect(url_for('error'))
 
-# 私信
+
+# follow people
+@app.route('/follow', methods = ['POST'])
+def follow():
+    if request.method == 'POST':
+        member_id = session['member_id']
+
+        # # get followee id from ajax data
+        data = json.loads(request.form.get('data'))
+        followee_id = data['followee_id']
+
+        # insert relation
+        r = models.Relation(member_id=member_id, followee_id=followee_id)
+        db_service.db_insert(r)
+        db_service.db_commit()
+
+        return 'followsuccess'
+    else:
+        return redirect(url_for('error'))
+
+
+# unfollow people
+@app.route('/unfollow', methods = ['POST'])
+def unfollow():
+    if request.method == 'POST':
+        member_id = session['member_id']
+
+        # # get followee id from ajax data
+        data = json.loads(request.form.get('data'))
+        followee_id = data['followee_id']
+
+        # delete relation
+        r = models.Relation.query.filter(and_(models.Relation.member_id==member_id, models.Relation.followee_id==followee_id)).first()
+        if r is None:
+            redirect(url_for('error'))
+        db_service.db_delete(r)
+        db_service.db_commit()
+
+        return 'unfollowsuccess'
+    else:
+        return redirect(url_for('error'))
+
+
+# private message
 @app.route('/messages', methods = ['GET', 'POST'])
 def messages():
     if request.method == 'GET':
@@ -183,7 +236,7 @@ def messages():
     else:
         return redirect(url_for('error'))
 
-# 随便看看
+# explore
 @app.route('/explore', methods = ['GET', 'POST'])
 def explore():
     if request.method == 'GET':
@@ -193,7 +246,7 @@ def explore():
     else:
         return redirect(url_for('error'))
 
-# 搜索
+# search
 @app.route('/search', methods = ['GET', 'POST'])
 def search():
     if request.method == 'GET':
@@ -203,7 +256,7 @@ def search():
     else:
         return redirect(url_for('error'))
 
-# 设置
+# setting
 @app.route('/setting', methods = ['GET', 'POST'])
 def setting():
     if request.method == 'GET':
@@ -213,13 +266,13 @@ def setting():
     else:
         return redirect(url_for('error'))
 
-# 注销
+# logout
 @app.route('/logout', methods = ['GET'])
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('login', info='注销成功，请重新登录'))
 
-# 错误设置
+# error
 @app.route('/error', methods = ['GET'])
 def sys_error():
     return render_template('error_sys.html')

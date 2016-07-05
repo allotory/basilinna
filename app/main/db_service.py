@@ -10,5 +10,8 @@ from datetime import datetime
 def db_insert(model):
     db.session.add(model)
 
+def db_delete(model):
+    db.session.delete(model)
+
 def db_commit():
     db.session.commit()
