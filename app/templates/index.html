@@ -115,11 +115,11 @@
 
                     <ul class="center-content list-group list-group-separator row mrg0A">
                         <li class="col-md-4">
-                            <b>1,456</b>
+                            <b>{{ following_count }}</b>
                             <p class="font-gray">我关注的人</p>
                         </li>
                         <li class="col-md-4">
-                            <b>593</b>
+                            <b>{{ fans_count }}</b>
                             <p class="font-gray">关注我的人</p>
                         </li>
                         <li class="col-md-4">
@@ -212,33 +212,27 @@
         </h3>
         <div class="content-box-wrapper text-center clearfix">
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial1.jpg"
-                    alt="" />
+                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
                 <div class="small-badge bg-red"></div>
             </div>
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial2.jpg"
-                    alt="" />
+                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg"  alt="" />
                 <div class="small-badge bg-orange"></div>
             </div>
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial3.jpg"
-                    alt="" />
+                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
                 <div class="small-badge bg-red"></div>
             </div>
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial4.jpg"
-                    alt="" />
+                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg"  alt="" />
                 <div class="small-badge bg-green"></div>
             </div>
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial5.jpg"
-                    alt="" />
+                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
                 <div class="small-badge bg-orange"></div>
             </div>
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" tppabs="https://agileui.com/demo/monarch/assets/image-resources/people/testimonial6.jpg"
-                    alt="" />
+                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
                 <div class="small-badge bg-red"></div>
             </div>
         </div>
@@ -306,7 +300,12 @@
                                         {% endif %}
                                         <div class="tl-time">
                                             <i class="glyph-icon icon-clock-o"></i> {{ blog.create_time }} 
-                                            通过 {{ blog.via }}
+                                            via {{ blog.via }}
+                                            <div style="display:inline;float:right; font-style:normal;font-size:12px;"> 
+                                                <span><i class="glyph-icon icon-star"></i> <a href="#">收藏</a> </span>
+                                                <span><i class="glyph-icon icon-share"></i> <a href="#">转发</a> </span>
+                                                <span><i class="glyph-icon icon-remove"></i> <a href="#">删除</a> </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
