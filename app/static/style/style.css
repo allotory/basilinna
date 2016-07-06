@@ -1,0 +1,11 @@
+
+.blog_operate {
+    display: inline;
+    float: right; 
+    font-style: normal;
+    font-size: 12px;
+}
+
+.operate_content {
+    margin-right: 5px;
+}
