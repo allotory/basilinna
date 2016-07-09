@@ -74,8 +74,53 @@
                     }
                 });
             });
-
         });
+
+        function collect(blog_id) {
+                
+                var link = $("#blog_collect_" + blog_id);
+                var collect_flag = $("#collect_flag_" + blog_id).val();
+
+                var data = {
+                    data: JSON.stringify({
+                        "blog_id": blog_id
+                    })
+                };
+
+                if (collect_flag == "uncollect") {
+                    $.ajax({
+                        url:"/collect",
+                        type: "POST",
+                        data: data,
+                        error: function(){
+                            alert('提交失败,请重试!');
+                        },
+                        success: function(results){
+                            // alert(results);
+                            $("#collect_flag_" + blog_id).val("collecting");
+                            link.html("取消收藏");
+                        }
+                    });
+                } else if (collect_flag == "collecting") {
+                    $.ajax({
+                        url:"/uncollect",
+                        type: "POST",
+                        data: data,
+                        error: function(){
+                            alert('提交失败,请重试!');
+                        },
+                        success: function(results){
+                            // alert(results);
+                            $("#collect_flag_" + blog_id).val("uncollect");
+                            link.html("收藏");
+                        }
+                    });
+                } else {
+                    alert("收藏失败，请稍后重试。");
+                }
+                
+                
+        }
     </script>
 {% endblock %}
 
@@ -278,52 +323,69 @@
                         {% for blog in blog_list %}
                         <div class="tl-row">
                             <div class="tl-item float-right">
-                                {% if blog.post_type == 'NORMAL' %}
+                                {% if blog.get('blog').post_type == 'NORMAL' %}
                                 <div class="tl-icon bg-primary">
-                                {% elif blog.post_type == 'REPEAT' %}
+                                {% elif blog.get('blog').post_type == 'REPEAT' %}
                                 <div class="tl-icon bg-red">
-                                {% elif blog.post_type == 'REPLAY' %}
+                                {% elif blog.get('blog').post_type == 'REPLAY' %}
                                 <div class="tl-icon bg-black">
                                 {% endif %}
                                     <img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="" />
                                 </div>
                                 <div class="popover right">
                                     <div class="arrow"></div>
-                                    <div id="blog_detail_{{ blog.id }}" class="popover-content">
+                                    <div id="blog_detail_{{ blog.get('blog').id }}" class="popover-content">
                                         <!-- <div class="tl-label bs-label bg-yellow" style="float:right;">
                                             <a href="" style="color:white;"><i class="glyph-icon icon-star"></i></a>
                                         </div> -->
                                         <p class="tl-content">
-                                            {{ blog.content }}
+                                            {{ blog.get('blog').content }}
                                         </p>
-                                        {% if exist_pic != 0 %}
+                                        {% if blog.get('blog').exist_pic != 0 %}
                                             <p>
-                                                <a href="#" name="a"><img src="{{ blog.pic_path }}"></a>
+                                                <a href="#" name="a"><img src="{{ blog.get('blog').pic_path }}"></a>
                                             </p>
                                         {% endif %}
                                         <div class="tl-time">
-                                            <i class="glyph-icon icon-clock-o"></i> {{ blog.create_time }} 
-                                            via {{ blog.via }}
+                                            <i class="glyph-icon icon-clock-o"></i> {{ blog.get('blog').create_time }} 
+                                            via {{ blog.get('blog').via }}
 
                                             <script type="text/javascript">
                                                 $(function(){
                                                     // inital hide
-                                                    $("#blog_operate_{{ blog.id }}").hide();
+                                                    $("#blog_operate_{{ blog.get('blog').id }}").hide();
 
                                                     // hover
-                                                    $("#blog_detail_{{ blog.id }}").hover(function(){
-                                                        $("#blog_operate_{{ blog.id }}").show();
+                                                    $("#blog_detail_{{ blog.get('blog').id }}").hover(function(){
+                                                        $("#blog_operate_{{ blog.get('blog').id }}").show();
                                                     },
                                                     function(){
-                                                        $("#blog_operate_{{ blog.id }}").hide();
+                                                        $("#blog_operate_{{ blog.get('blog').id }}").hide();
                                                     }); 
                                                 });
                                             </script>
 
-                                            <div id="blog_operate_{{ blog.id }}" class="blog_operate"> 
-                                                <span class="operate_content"><i class="glyph-icon icon-star"></i> <a href="#">收藏</a> </span>
-                                                <span class="operate_content"><i class="glyph-icon icon-share"></i> <a href="#">转发</a> </span>
-                                                <span class="operate_content"><i class="glyph-icon icon-remove"></i> <a href="#">删除</a> </span>
+                                            <div id="blog_operate_{{ blog.get('blog').id }}" class="blog_operate"> 
+                                                <input id="collect_flag_{{ blog.get('blog').id }}" type="hidden" value="{{ blog.get('collection') }}">
+                                                
+                                                <span class="operate_content">
+                                                    <i class="glyph-icon icon-star"></i> 
+                                                    {% if blog.get('collection') == 'uncollect' %}
+                                                        <a id="blog_collect_{{ blog.get('blog').id }}" onclick="collect({{ blog.get('blog').id }});" style="cursor:pointer;">收藏</a> 
+                                                    {% elif blog.get('collection') == 'collecting' %}
+                                                        <a id="blog_collect_{{ blog.get('blog').id }}" onclick="collect({{ blog.get('blog').id }});" style="cursor:pointer;">取消收藏</a> 
+                                                    {% else %}
+                                                        系统错误
+                                                    {% endif %}
+                                                </span>
+                                                <span class="operate_content">
+                                                    <i class="glyph-icon icon-share"></i> 
+                                                    <a href="#">转发</a> 
+                                                </span>
+                                                <span class="operate_content">
+                                                    <i class="glyph-icon icon-remove"></i> 
+                                                    <a href="#">删除</a> 
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

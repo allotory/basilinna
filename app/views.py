@@ -119,11 +119,22 @@ def index():
         # blog detail
         blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
 
+        blog_info_list = []
+
+        # blog collected
+        for blog in blog_list:
+            c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog.id)).first()
+            if c is None:
+                blog_dict = dict(blog=blog, collection='uncollect')
+            else:
+                blog_dict = dict(blog=blog, collection='collecting')
+            blog_info_list.append(blog_dict)
+
         # follow detail
         following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
         fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
 
-        return render_template('index.html', member=m, blog_list=blog_list, 
+        return render_template('index.html', member=m, blog_list=blog_info_list, 
             following_count=following_count, fans_count=fans_count)
 
     return redirect(url_for('login', info='访问当前内容，请先登录'))
@@ -228,6 +239,48 @@ def unfollow():
         db_service.db_commit()
 
         return 'unfollowsuccess'
+    else:
+        return redirect(url_for('error'))
+
+
+# blog collect
+@app.route('/collect', methods = ['POST'])
+def collect():
+    if request.method == 'POST':
+        member_id = session['member_id']
+
+        # get blog id
+        data = json.loads(request.form.get('data'))
+        blog_id = data['blog_id']
+
+        # insert collection
+        c = models.Collection(blog_id=blog_id, member_id=member_id)
+        db_service.db_insert(c)
+        db_service.db_commit()
+
+        return 'collectsuccess'
+    else:
+        return redirect(url_for('error'))
+
+
+# blog uncollect
+@app.route('/uncollect', methods = ['POST'])
+def uncollect():
+    if request.method == 'POST':
+        member_id = session['member_id']
+
+        # get blog id
+        data = json.loads(request.form.get('data'))
+        blog_id = data['blog_id']
+
+        # delete collection
+        c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog_id)).first()
+        if c is None:
+            redirect(url_for('error'))
+        db_service.db_delete(c)
+        db_service.db_commit()
+
+        return 'uncollectsuccess'
     else:
         return redirect(url_for('error'))
 
