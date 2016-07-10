@@ -152,7 +152,7 @@ def post():
     # insert blog
     b = models.Blog(content=content, create_time=str(datetime.now()),
         post_type='NORMAL', via='Web', exist_pic=0, pic_path=None,
-        location=None, member_id=member_id)
+        location=None, member_id=member_id, re_from=None, re_member_id=None)
     db_service.db_insert(b)
     db_service.db_commit()
 
@@ -284,6 +284,43 @@ def uncollect():
     else:
         return redirect(url_for('error'))
 
+# blog collections
+@app.route('/collections', methods = ['GET', 'POST'])
+def collections():
+    if request.method == 'GET':
+        member_id = session['member_id']
+        m = models.Member.query.filter_by(id=member_id).first()
+        if m is None:
+            redirect(url_for('error'))
+
+        # collections detail
+        collection_list = models.Collection.query.filter_by(member_id=member_id).order_by(models.Collection.id.desc()).all()
+
+        blog_list = []
+
+        # blog collected
+        for collection in collection_list:
+            b = models.Blog.query.filter_by(id=collection.blog_id).first()
+            
+            # blog author
+            collect_member = None
+            if b.member_id != m.id:
+                # not mine
+                collect_member = modles.Member.query.filter_by(id=b.member_id).first()
+            else:
+                collect_member = m
+            blog_dict = dict(blog=b, collect_member=collect_member)
+
+            blog_list.append(blog_dict)
+
+        # follow detail
+        following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
+        fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
+
+        return render_template('collections.html', member=m, blog_list=blog_list, 
+            following_count=following_count, fans_count=fans_count)
+    elif request.method == 'POST':
+        return 'hah'
 
 # private message
 @app.route('/messages', methods = ['GET', 'POST'])

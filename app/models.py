@@ -55,8 +55,8 @@ class Member(db.Model):
 
     # relations= db.relationship('Relation', backref='member', 
     #             lazy='dynamic')
-    blogs = db.relationship('Blog', backref='member',
-                lazy='dynamic')
+    # blogs = db.relationship('Blog', backref='member',
+    #             lazy='dynamic')
     collections = db.relationship('Collection', backref='member',
                 lazy='dynamic')
     # blocks = db.relationship('Block', backref='member',
@@ -111,8 +111,12 @@ class Blog(db.Model):
     re_from = db.Column(db.Integer, db.ForeignKey('blog.id'))
     re_member_id = db.Column(db.Integer, db.ForeignKey('member.id'))
 
+    re_member = db.relationship('Member', foreign_keys=[re_member_id])
+    member = db.relationship('Member', foreign_keys=[member_id])
+
     def __init__(self, content, create_time, post_type, 
-                via, exist_pic, pic_path, location, member_id):
+                via, exist_pic, pic_path, location, member_id,
+                re_from, re_member_id):
         self.content = content
         self.create_time = create_time
         self.post_type = post_type
@@ -121,6 +125,8 @@ class Blog(db.Model):
         self.pic_path = pic_path
         self.location = location
         self.member_id = member_id
+        self.re_from = re_from
+        self.re_member_id = re_member_id
 
 
 # 收藏表
