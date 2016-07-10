@@ -108,6 +108,8 @@ class Blog(db.Model):
     pic_path = db.Column(db.String(256), server_default = '')
     location = db.Column(db.String(256), server_default = '')
     member_id = db.Column(db.Integer, db.ForeignKey('member.id'))
+    re_from = db.Column(db.Integer, db.ForeignKey('blog.id'))
+    re_member_id = db.Column(db.Integer, db.ForeignKey('member.id'))
 
     def __init__(self, content, create_time, post_type, 
                 via, exist_pic, pic_path, location, member_id):

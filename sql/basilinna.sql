@@ -71,6 +71,8 @@ CREATE TABLE IF NOT EXISTS blog (
     content text DEFAULT NULL,                  /* 微博内容表 */
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  /* 更新时间 */
     post_type  varchar(256) NOT NULL,           /* 微博类型：正常NORMAL，转发REPEAT， 回复REPLAY */
+    re_from int(11) DEFAULT NULL,               /* 被转发、回复的blog id */
+    re_member_id int(11) DEFAULT NULL,          /* 被转发、回复的用户id */
     via varchar(256) NOT NULL,                  /* 提交方式 */
     exist_pic int(11) NOT NULL DEFAULT '0',     /* 是否有图片 */
     pic_path varchar(256) DEFAULT NULL,         /* 图片路径 */
