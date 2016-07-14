@@ -78,48 +78,50 @@
 
         function collect(blog_id) {
                 
-                var link = $("#blog_collect_" + blog_id);
-                var collect_flag = $("#collect_flag_" + blog_id).val();
+            var link = $("#blog_collect_" + blog_id);
+            var collect_flag = $("#collect_flag_" + blog_id).val();
 
-                var data = {
-                    data: JSON.stringify({
-                        "blog_id": blog_id
-                    })
-                };
+            var data = {
+                data: JSON.stringify({
+                    "blog_id": blog_id
+                })
+            };
 
-                if (collect_flag == "uncollect") {
-                    $.ajax({
-                        url:"/collect",
-                        type: "POST",
-                        data: data,
-                        error: function(){
-                            alert('提交失败,请重试!');
-                        },
-                        success: function(results){
-                            // alert(results);
-                            $("#collect_flag_" + blog_id).val("collecting");
-                            link.html("取消收藏");
-                        }
-                    });
-                } else if (collect_flag == "collecting") {
-                    $.ajax({
-                        url:"/uncollect",
-                        type: "POST",
-                        data: data,
-                        error: function(){
-                            alert('提交失败,请重试!');
-                        },
-                        success: function(results){
-                            // alert(results);
-                            $("#collect_flag_" + blog_id).val("uncollect");
-                            link.html("收藏");
-                        }
-                    });
-                } else {
-                    alert("收藏失败，请稍后重试。");
-                }
-                
-                
+            if (collect_flag == "uncollect") {
+                $.ajax({
+                    url:"/collect",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('提交失败,请重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#collect_flag_" + blog_id).val("collecting");
+                        link.html("取消收藏");
+                    }
+                });
+            } else if (collect_flag == "collecting") {
+                $.ajax({
+                    url:"/uncollect",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('提交失败,请重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#collect_flag_" + blog_id).val("uncollect");
+                        link.html("收藏");
+                    }
+                });
+            } else {
+                alert("收藏失败，请稍后重试。");
+            }
+        }
+
+        function repeat(blog_id) {
+            
         }
     </script>
 {% endblock %}
@@ -373,7 +375,7 @@
                                                 </span>
                                                 <span class="operate_content">
                                                     <i class="glyph-icon icon-share"></i> 
-                                                    <a href="#">转发</a> 
+                                                    <a id="blog_repeat_{{ blog.get('blog').id }}" onclick="repeat({{ blog.get('blog').id }});" style="cursor:pointer;">转发</a> 
                                                 </span>
                                                 <span class="operate_content">
                                                     <i class="glyph-icon icon-remove"></i> 
@@ -388,7 +390,7 @@
                         {% endfor %}
                     {% else %}
                         <div class="tl-row">
-                            当前没有动态，为什么不发一条呢？
+                            当前没有收藏，为什么不到处看看呢？
                         </div>
                     {% endif %}
 

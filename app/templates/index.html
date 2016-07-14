@@ -7,6 +7,16 @@
     <script type="text/javascript">
 
         $(function(){
+
+            // hide repeat form
+            // $("#repeat_header").hide();
+            // $("#re_from_content_p").hide();
+            // $("#content_divider").hide();
+            $("#cancel_repeat").click(function(){
+                $("#repeat_header").hide(350);
+                $("#re_from_content_p").hide(350);
+                $("#content_divider").hide(350);
+            });
         
             var csrftoken = "{{ csrf_token() }}";
             $.ajaxSetup({
@@ -18,9 +28,16 @@
             });
 
             $("#share").click(function(){
+
+                alert($("#re_from").val());
+                alert($("#re_member_id").val());
+
                 var data = {
                     data: JSON.stringify({
-                        "content": $("#content").val()
+                        "content": $("#content").val(),
+                        "re_from": $("#re_from").val(),
+                        "re_member_id": $("#re_member_id").val(),
+                        "post_type": $("#post_type").val()
                     })
                 };
                 
@@ -71,56 +88,98 @@
                         '</div>'
                         $("#ajax_tl_row").html(time_line);
                         $("#content").val('');
+
+                        $("#repeat_header").hide();
+                        $("#re_from_content_p").hide();
+                        $("#content_divider").hide();
                     }
                 });
             });
+
         });
 
         function collect(blog_id) {
                 
-                var link = $("#blog_collect_" + blog_id);
-                var collect_flag = $("#collect_flag_" + blog_id).val();
+            var link = $("#blog_collect_" + blog_id);
+            var collect_flag = $("#collect_flag_" + blog_id).val();
 
-                var data = {
-                    data: JSON.stringify({
-                        "blog_id": blog_id
-                    })
-                };
+            var data = {
+                data: JSON.stringify({
+                    "blog_id": blog_id
+                })
+            };
 
-                if (collect_flag == "uncollect") {
-                    $.ajax({
-                        url:"/collect",
-                        type: "POST",
-                        data: data,
-                        error: function(){
-                            alert('提交失败,请重试!');
-                        },
-                        success: function(results){
-                            // alert(results);
-                            $("#collect_flag_" + blog_id).val("collecting");
-                            link.html("取消收藏");
-                        }
-                    });
-                } else if (collect_flag == "collecting") {
-                    $.ajax({
-                        url:"/uncollect",
-                        type: "POST",
-                        data: data,
-                        error: function(){
-                            alert('提交失败,请重试!');
-                        },
-                        success: function(results){
-                            // alert(results);
-                            $("#collect_flag_" + blog_id).val("uncollect");
-                            link.html("收藏");
-                        }
-                    });
-                } else {
-                    alert("收藏失败，请稍后重试。");
-                }
-                
-                
+            if (collect_flag == "uncollect") {
+                $.ajax({
+                    url:"/collect",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('提交失败,请重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#collect_flag_" + blog_id).val("collecting");
+                        link.html("取消收藏");
+                    }
+                });
+            } else if (collect_flag == "collecting") {
+                $.ajax({
+                    url:"/uncollect",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('提交失败,请重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#collect_flag_" + blog_id).val("uncollect");
+                        link.html("收藏");
+                    }
+                });
+            } else {
+                alert("收藏失败，请稍后重试。");
+            }
         }
+
+        function repeat(blog_id, content, re_member_id, 
+                exist_pic, fullname, p_url) {
+            alert(blog_id+ fullname + p_url);
+            var pic_path = arguments[6] || "=";
+            alert(content +"-"+ re_member_id +"-"+ exist_pic + "=" +pic_path)
+            
+            $("#content")[0].focus();
+            // $("#content").text("hehe");
+            $("#re_from").val(blog_id);
+            $("#re_member_id").val(re_member_id);
+            $("#post_type").val("REPEAT");
+
+            var repeat_content = "<a href='/space/" + p_url + "' name=''>@" + fullname + "</a> : " + content;
+            var repeat_pic = "";
+            if (exist_pic != 0) {
+                repeat_pic = "<p>" +
+                    "<a href='#' name='a'><img src='"+ pic_path +"'></a>" +
+                "</p>";
+                $("#re_from_content_p").html(repeat_content + repeat_pic);
+            } else {
+                $("#re_from_content_p").html(repeat_content);
+            }
+
+
+            
+
+
+            $("#repeat_header").show(350);
+            $("#re_from_content_p").show(350);
+            $("#content_divider").show(350);
+            $("#content").attr("placeholder", "转发理由");
+            $("#all_content").click(function(){
+                location.href ="/blog_detail";
+            });
+        }
+
+        
+
     </script>
 {% endblock %}
 
@@ -291,9 +350,33 @@
 <div class="col-md-8">
 
     <div class="content-box bg-white post-box">
+
         <form name="post_form" action="/post" method="POST">
+
             <input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-            <textarea id="content" name="content" class="textarea-autosize" placeholder="你在做什么?"></textarea>
+            <input id="re_from" name="re_from" type="hidden" value="0">
+            <input id="re_member_id" name="re_member_id" type="hidden" value="0">
+            <input id="post_type" name="post_type" type="hidden" value="NORMAL">
+
+            <h3 id="repeat_header" style="display: none;" class="content-box-header bg-default">
+                转发
+                <div class="header-buttons-separator">
+                    <a id="all_content" class="icon-separator refresh-button" data-style="light" data-theme="bg-black" data-opacity="40" style="cursor:pointer;">
+                        <i class="glyph-icon icon-chevron-right"></i>
+                    </a>
+                    <a id="cancel_repeat" class="icon-separator refresh-button" data-style="light" data-theme="bg-black" data-opacity="40" style="cursor:pointer;">
+                        <i class="glyph-icon icon-times"></i>
+                    </a>
+                </div>
+            </h3>
+            <div id="re_from_content" class="content-box-wrapper bg-default">
+                <p id="re_from_content_p" style="display: none;"></p>
+                <div id="content_divider" style="display: none;" class="divider"></div>
+                <p>
+                    <textarea id="content" name="content" class="textarea-no-resize" style="padding:0px;" placeholder="你在做什么?"></textarea>
+                </p>
+            </div>
+                
             <div class="button-pane">
                 <a href="#" class="btn btn-md btn-link hover-white" title="">
                     <i class="glyph-icon icon-map-marker"></i>
@@ -301,9 +384,6 @@
                 <a href="#" class="btn btn-md btn-link hover-white" title="">
                     <i class="glyph-icon icon-picture-o"></i>
                 </a>
-                <!-- <a id="share" href="javascript:document.post_form.submit();" class="btn btn-md btn-post float-right btn-success" title="">
-                    Share it!
-                </a> -->
                 <a id="share" class="btn btn-md btn-post float-right btn-success" title="">
                     Share it!
                 </a>
@@ -378,9 +458,16 @@
                                                         系统错误
                                                     {% endif %}
                                                 </span>
+
                                                 <span class="operate_content">
                                                     <i class="glyph-icon icon-share"></i> 
-                                                    <a href="#">转发</a> 
+                                                    {% if blog.get('blog').exist_pic != 0 %}
+                                                        <a id="blog_repeat_{{ blog.get('blog').id }}" 
+                                                            onclick="repeat({{ blog.get('blog').id }}, '{{ blog.get('blog').content }}', {{ blog.get('blog_member').id}}, {{blog.get('blog').exist_pic}}, '{{ blog.get('blog_member').fullname}}', '{{ blog.get('blog_member').personality_url}}', '{{blog.get('blog').pic_path}}');" style="cursor:pointer;">转发</a> 
+                                                    {% else %}
+                                                        <a id="blog_repeat_{{ blog.get('blog').id }}" 
+                                                            onclick="repeat({{ blog.get('blog').id }}, '{{ blog.get('blog').content }}', {{ blog.get('blog_member').id}}, {{blog.get('blog').exist_pic}}, '{{ blog.get('blog_member').fullname}}', '{{ blog.get('blog_member').personality_url}}');" style="cursor:pointer;">转发</a> 
+                                                    {% endif %}
                                                 </span>
                                                 <span class="operate_content">
                                                     <i class="glyph-icon icon-remove"></i> 

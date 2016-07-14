@@ -125,9 +125,9 @@ def index():
         for blog in blog_list:
             c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog.id)).first()
             if c is None:
-                blog_dict = dict(blog=blog, collection='uncollect')
+                blog_dict = dict(blog=blog, collection='uncollect', blog_member=m)
             else:
-                blog_dict = dict(blog=blog, collection='collecting')
+                blog_dict = dict(blog=blog, collection='collecting', blog_member=m)
             blog_info_list.append(blog_dict)
 
         # follow detail
@@ -148,11 +148,19 @@ def post():
     # get blog content from ajax data
     data = json.loads(request.form.get('data'))
     content = data['content']
+    re_from = int(data['re_from'])
+    re_member_id = int(data['re_member_id'])
+    post_type = data['post_type']
+
+    if re_from == 0:
+        re_from = None
+    if re_member_id == 0:
+        re_member_id = None
 
     # insert blog
     b = models.Blog(content=content, create_time=str(datetime.now()),
-        post_type='NORMAL', via='Web', exist_pic=0, pic_path=None,
-        location=None, member_id=member_id, re_from=None, re_member_id=None)
+        post_type=post_type, via='Web', exist_pic=0, pic_path=None,
+        location=None, member_id=member_id, re_from=re_from, re_member_id=re_member_id)
     db_service.db_insert(b)
     db_service.db_commit()
 
