@@ -128,6 +128,30 @@ def index():
                 blog_dict = dict(blog=blog, collection='uncollect', blog_member=m)
             else:
                 blog_dict = dict(blog=blog, collection='collecting', blog_member=m)
+
+
+            re_list = []
+            if blog.post_type == 'REPEAT':
+                re_from = None
+                re_member_id = None
+                
+                re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
+                re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
+                re_list.append(dict(blog=re_blog, blog_member=re_member))
+
+                re_from = re_blog.re_from    
+                re_member_id = re_blog.re_member_id
+
+                while re_from :
+                    re_blog_t = models.Blog.query.filter_by(id=re_from).first()
+                    re_member_t = models.Member.query.filter_by(id=re_member_id).first()
+                    re_list.append(dict(blog=re_blog_t, blog_member=re_member_t))
+                    
+                    re_from = re_blog_t.re_from
+                    re_member_id = re_blog_t.re_member_id
+
+                blog_dict['re_list'] = re_list
+
             blog_info_list.append(blog_dict)
 
         # follow detail

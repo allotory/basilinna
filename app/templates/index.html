@@ -9,9 +9,6 @@
         $(function(){
 
             // hide repeat form
-            // $("#repeat_header").hide();
-            // $("#re_from_content_p").hide();
-            // $("#content_divider").hide();
             $("#cancel_repeat").click(function(){
                 $("#repeat_header").hide(350);
                 $("#re_from_content_p").hide(350);
@@ -165,10 +162,6 @@
                 $("#re_from_content_p").html(repeat_content);
             }
 
-
-            
-
-
             $("#repeat_header").show(350);
             $("#re_from_content_p").show(350);
             $("#content_divider").show(350);
@@ -177,8 +170,6 @@
                 location.href ="/blog_detail";
             });
         }
-
-        
 
     </script>
 {% endblock %}
@@ -418,13 +409,28 @@
                                         <!-- <div class="tl-label bs-label bg-yellow" style="float:right;">
                                             <a href="" style="color:white;"><i class="glyph-icon icon-star"></i></a>
                                         </div> -->
-                                        <p class="tl-content">
-                                            {{ blog.get('blog').content }}
-                                        </p>
-                                        {% if blog.get('blog').exist_pic != 0 %}
-                                            <p>
-                                                <a href="#" name="a"><img src="{{ blog.get('blog').pic_path }}"></a>
+                                        {% if blog.get('blog').post_type == 'NORMAL' %}
+                                            <p class="tl-content">
+                                                {{ blog.get('blog').content }}
                                             </p>
+                                            {% if blog.get('blog').exist_pic != 0 %}
+                                                <p>
+                                                    <a href="#" name="a"><img src="{{ blog.get('blog').pic_path }}"></a>
+                                                </p>
+                                            {% endif %}
+                                        {% elif blog.get('blog').post_type == 'REPEAT' %}
+                                            
+                                            <p class="tl-content">
+                                                {{ blog.get('blog').content }}
+                                                {% for re_dict in blog.get('re_list') %}
+                                                    //<a href="/space/{{re_dict.get('blog_member').personality_url}}" name=''>@{{re_dict.get('blog_member').fullname}}</a> : {{re_dict.get('blog').content}}
+                                                {% endfor %}
+                                            </p>
+                                            {% if blog.get('blog').exist_pic != 0 %}
+                                                <p>
+                                                    <a href="{{ blog.get('blog').pic_path }}" name="a">查看图片</a>
+                                                </p>
+                                            {% endif %}
                                         {% endif %}
                                         <div class="tl-time">
                                             <i class="glyph-icon icon-clock-o"></i> {{ blog.get('blog').create_time }} 
