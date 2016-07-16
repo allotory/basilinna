@@ -354,6 +354,29 @@ def collections():
     elif request.method == 'POST':
         return 'hah'
 
+
+# blog delete
+@app.route('/delpost', methods = ['POST'])
+def delpost():
+    if request.method == 'POST':
+        member_id = session['member_id']
+
+        # get blog id
+        data = json.loads(request.form.get('data'))
+        blog_id = data['blog_id']
+
+        # delete post
+        b = models.Blog.query.filter_by(id=blog_id).first()
+        if b is None:
+            redirect(url_for('error'))
+        db_service.db_delete(b)
+        db_service.db_commit()
+
+        return 'delpostsuccess'
+    else:
+        return redirect(url_for('error'))
+
+
 # private message
 @app.route('/messages', methods = ['GET', 'POST'])
 def messages():
