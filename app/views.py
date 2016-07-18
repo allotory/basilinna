@@ -129,8 +129,9 @@ def index():
             else:
                 blog_dict = dict(blog=blog, collection='collecting', blog_member=m)
 
-
+            # a blog repeat list
             re_list = []
+
             if blog.post_type == 'REPEAT':
                 re_from = None
                 re_member_id = None
@@ -142,6 +143,7 @@ def index():
                 re_from = re_blog.re_from    
                 re_member_id = re_blog.re_member_id
 
+                # exist reblog
                 while re_from :
                     re_blog_t = models.Blog.query.filter_by(id=re_from).first()
                     re_member_t = models.Member.query.filter_by(id=re_member_id).first()
@@ -213,20 +215,143 @@ def space(url=None):
                 selected_member = models.Member.query.filter_by(personality_url=url).first()
                 blog_list = models.Blog.query.filter_by(member_id=selected_member.id).order_by(models.Blog.id.desc()).all()
 
-                # following or not
-                r = models.Relation.query.filter(and_(models.Relation.member_id==m.id, models.Relation.followee_id==selected_member.id)).first()
-                if r is None:
-                    return render_template('space.html', member=selected_member, blog_list=blog_list, not_myspace=True, follow='unfollowed')
+                blog_info_list = []
 
-                return render_template('space.html', member=selected_member, blog_list=blog_list, not_myspace=True, follow='following')
+                # blog collected
+                for blog in blog_list:
+                    c = models.Collection.query.filter(and_(models.Collection.member_id==selected_member.id, models.Collection.blog_id==blog.id)).first()
+                    if c is None:
+                        blog_dict = dict(blog=blog, collection='uncollect', blog_member=selected_member)
+                    else:
+                        blog_dict = dict(blog=blog, collection='collecting', blog_member=selected_member)
+
+                    # a blog repeat list
+                    re_list = []
+
+                    if blog.post_type == 'REPEAT':
+                        re_from = None
+                        re_member_id = None
+                        
+                        re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
+                        re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
+                        re_list.append(dict(blog=re_blog, blog_member=re_member))
+
+                        re_from = re_blog.re_from    
+                        re_member_id = re_blog.re_member_id
+
+                        # exist reblog
+                        while re_from :
+                            re_blog_t = models.Blog.query.filter_by(id=re_from).first()
+                            re_member_t = models.Member.query.filter_by(id=re_member_id).first()
+                            re_list.append(dict(blog=re_blog_t, blog_member=re_member_t))
+                            
+                            re_from = re_blog_t.re_from
+                            re_member_id = re_blog_t.re_member_id
+
+                        blog_dict['re_list'] = re_list
+
+                    blog_info_list.append(blog_dict)
+
+                # follow detail
+                following_count = models.Relation.query.filter(models.Relation.member_id == selected_member.id).count()
+                fans_count = models.Relation.query.filter(models.Relation.followee_id == selected_member.id).count()
+
+                return render_template('space.html', member=selected_member, blog_list=blog_info_list, 
+                    following_count=following_count, fans_count=fans_count)
             else :
                 # my space
-                blog_list = models.Blog.query.filter_by(member_id=m.id).order_by(models.Blog.id.desc()).all()
-                return render_template('space.html', member=m, blog_list=blog_list)
+                blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
+
+                blog_info_list = []
+
+                # blog collected
+                for blog in blog_list:
+                    c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog.id)).first()
+                    if c is None:
+                        blog_dict = dict(blog=blog, collection='uncollect', blog_member=m)
+                    else:
+                        blog_dict = dict(blog=blog, collection='collecting', blog_member=m)
+
+                    # a blog repeat list
+                    re_list = []
+
+                    if blog.post_type == 'REPEAT':
+                        re_from = None
+                        re_member_id = None
+                        
+                        re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
+                        re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
+                        re_list.append(dict(blog=re_blog, blog_member=re_member))
+
+                        re_from = re_blog.re_from    
+                        re_member_id = re_blog.re_member_id
+
+                        # exist reblog
+                        while re_from :
+                            re_blog_t = models.Blog.query.filter_by(id=re_from).first()
+                            re_member_t = models.Member.query.filter_by(id=re_member_id).first()
+                            re_list.append(dict(blog=re_blog_t, blog_member=re_member_t))
+                            
+                            re_from = re_blog_t.re_from
+                            re_member_id = re_blog_t.re_member_id
+
+                        blog_dict['re_list'] = re_list
+
+                    blog_info_list.append(blog_dict)
+
+                # follow detail
+                following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
+                fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
+
+                return render_template('space.html', member=m, blog_list=blog_info_list, 
+                    following_count=following_count, fans_count=fans_count)
         else:
             # my space
-            blog_list = models.Blog.query.filter_by(member_id=m.id).order_by(models.Blog.id.desc()).all()
-            return render_template('space.html', member=m, blog_list=blog_list)
+            blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
+
+            blog_info_list = []
+
+            # blog collected
+            for blog in blog_list:
+                c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog.id)).first()
+                if c is None:
+                    blog_dict = dict(blog=blog, collection='uncollect', blog_member=m)
+                else:
+                    blog_dict = dict(blog=blog, collection='collecting', blog_member=m)
+
+                # a blog repeat list
+                re_list = []
+
+                if blog.post_type == 'REPEAT':
+                    re_from = None
+                    re_member_id = None
+                    
+                    re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
+                    re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
+                    re_list.append(dict(blog=re_blog, blog_member=re_member))
+
+                    re_from = re_blog.re_from    
+                    re_member_id = re_blog.re_member_id
+
+                    # exist reblog
+                    while re_from :
+                        re_blog_t = models.Blog.query.filter_by(id=re_from).first()
+                        re_member_t = models.Member.query.filter_by(id=re_member_id).first()
+                        re_list.append(dict(blog=re_blog_t, blog_member=re_member_t))
+                        
+                        re_from = re_blog_t.re_from
+                        re_member_id = re_blog_t.re_member_id
+
+                    blog_dict['re_list'] = re_list
+
+                blog_info_list.append(blog_dict)
+
+            # follow detail
+            following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
+            fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
+
+            return render_template('space.html', member=m, blog_list=blog_info_list, 
+                following_count=following_count, fans_count=fans_count)
 
         return redirect(url_for('error'))
     else:
