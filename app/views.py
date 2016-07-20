@@ -454,40 +454,131 @@ def uncollect():
         return redirect(url_for('error'))
 
 # blog collections
-@app.route('/collections', methods = ['GET', 'POST'])
-def collections():
+@app.route('/collections', methods = ['GET'])
+@app.route('/collections/<url>', methods = ['GET'])
+def collections(url=None):
     if request.method == 'GET':
+
         member_id = session['member_id']
         m = models.Member.query.filter_by(id=member_id).first()
         if m is None:
             redirect(url_for('error'))
 
-        # collections detail
-        collection_list = models.Collection.query.filter_by(member_id=member_id).order_by(models.Collection.id.desc()).all()
+        if url and url != m.personality_url:
+            # selected collections
+            # collections detail
+            selected_member = models.Member.query.filter_by(personality_url=url).first()
+            collection_list = models.Collection.query.filter_by(member_id=selected_member.id).order_by(models.Collection.id.desc()).all()
 
-        blog_list = []
+            blog_info_list = []
 
-        # blog collected
-        for collection in collection_list:
-            b = models.Blog.query.filter_by(id=collection.blog_id).first()
-            
-            # blog author
-            collect_member = None
-            if b.member_id != m.id:
-                # not mine
-                collect_member = models.Member.query.filter_by(id=b.member_id).first()
-            else:
-                collect_member = m
-            blog_dict = dict(blog=b, collect_member=collect_member)
+            # blog collected
+            for collection in collection_list:
+                blog = models.Blog.query.filter_by(id=collection.blog_id).first()
+                
+                # blog author
+                collect_member = None
+                if blog.member_id != m.id:
+                    # not mine
+                    collect_member = models.Member.query.filter_by(id=blog.member_id).first()
+                else:
+                    collect_member = m
+                blog_dict = dict(blog=blog, collection='collecting', collect_member=collect_member)
 
-            blog_list.append(blog_dict)
+                # a blog repeat list
+                re_list = []
 
-        # follow detail
-        following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
-        fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
+                if blog.post_type == 'REPEAT':
+                    re_from = None
+                    re_member_id = None
+                    
+                    re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
+                    re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
+                    re_list.append(dict(blog=re_blog, blog_member=re_member))
 
-        return render_template('collections.html', member=m, blog_list=blog_list, 
-            following_count=following_count, fans_count=fans_count)
+                    re_from = re_blog.re_from    
+                    re_member_id = re_blog.re_member_id
+
+                    # exist reblog
+                    while re_from :
+                        re_blog_t = models.Blog.query.filter_by(id=re_from).first()
+                        re_member_t = models.Member.query.filter_by(id=re_member_id).first()
+                        re_list.append(dict(blog=re_blog_t, blog_member=re_member_t))
+                        
+                        re_from = re_blog_t.re_from
+                        re_member_id = re_blog_t.re_member_id
+
+                    blog_dict['re_list'] = re_list
+
+                blog_info_list.append(blog_dict)
+
+            # follow detail
+            following_count = models.Relation.query.filter(models.Relation.member_id == selected_member.id).count()
+            fans_count = models.Relation.query.filter(models.Relation.followee_id == selected_member.id).count()
+
+            # blog count 
+            blog_count = models.Blog.query.filter(models.Blog.member_id == selected_member.id).count()
+
+            return render_template('collections.html', member=selected_member, blog_list=blog_info_list, 
+                following_count=following_count, fans_count=fans_count, not_me=True, blog_count = blog_count)
+    
+        else:
+            # my collections
+            # collections detail
+            collection_list = models.Collection.query.filter_by(member_id=member_id).order_by(models.Collection.id.desc()).all()
+
+            blog_info_list = []
+
+            # blog collected
+            for collection in collection_list:
+                blog = models.Blog.query.filter_by(id=collection.blog_id).first()
+                
+                # blog author
+                collect_member = None
+                if blog.member_id != m.id:
+                    # not mine
+                    collect_member = models.Member.query.filter_by(id=blog.member_id).first()
+                else:
+                    collect_member = m
+                blog_dict = dict(blog=blog, collection='collecting', collect_member=collect_member)
+
+                # a blog repeat list
+                re_list = []
+
+                if blog.post_type == 'REPEAT':
+                    re_from = None
+                    re_member_id = None
+                    
+                    re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
+                    re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
+                    re_list.append(dict(blog=re_blog, blog_member=re_member))
+
+                    re_from = re_blog.re_from    
+                    re_member_id = re_blog.re_member_id
+
+                    # exist reblog
+                    while re_from :
+                        re_blog_t = models.Blog.query.filter_by(id=re_from).first()
+                        re_member_t = models.Member.query.filter_by(id=re_member_id).first()
+                        re_list.append(dict(blog=re_blog_t, blog_member=re_member_t))
+                        
+                        re_from = re_blog_t.re_from
+                        re_member_id = re_blog_t.re_member_id
+
+                    blog_dict['re_list'] = re_list
+
+                blog_info_list.append(blog_dict)
+
+            # follow detail
+            following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
+            fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
+
+            # blog count 
+            blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
+
+            return render_template('collections.html', member=m, blog_list=blog_info_list, 
+                following_count=following_count, fans_count=fans_count, blog_count = blog_count)
+    
     elif request.method == 'POST':
         return 'hah'
 

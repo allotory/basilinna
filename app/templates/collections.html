@@ -4,9 +4,16 @@
 
 {% block head %}
     {{ super() }}
-    <script type="text/javascript">
+<script type="text/javascript">
 
         $(function(){
+
+            // hide repeat form
+            $("#cancel_repeat").click(function(){
+                $("#repeat_header").hide(350);
+                $("#re_from_content_p").hide(350);
+                $("#content_divider").hide(350);
+            });
         
             var csrftoken = "{{ csrf_token() }}";
             $.ajaxSetup({
@@ -18,9 +25,21 @@
             });
 
             $("#share").click(function(){
+
+                alert($("#re_from").val());
+                alert($("#re_member_id").val());
+
+                var re_from_id = $("#re_from").val();
+                var origin_post_type = $("#origin_post_type_"+re_from_id).val();
+                var re_member_fullname = $("#re_member_fullname_" +re_from_id).val();
+                var re_member_personality_url = $("#re_member_personality_url_" + re_from_id).val();
+
                 var data = {
                     data: JSON.stringify({
-                        "content": $("#content").val()
+                        "content": $("#content").val(),
+                        "re_from": $("#re_from").val(),
+                        "re_member_id": $("#re_member_id").val(),
+                        "post_type": $("#post_type").val()
                     })
                 };
                 
@@ -37,8 +56,24 @@
                         // alert(blog.content);
 
                         var post_style = 'bg-primary';
+                        var repeat_content = blog.content;
                         if(blog.post_type == 'REPEAT') {
-                            post_style = 'bg-red';
+                            post_style = 'bg-yellow';
+                            if(origin_post_type == "REPEAT") {
+                                //repeat_content = blog.content + "//" +@被转发的用户名 +$("#repeat_content_"+re_from_id).html();
+                                var re_member_link = "<a href='/space/"+re_member_personality_url+"' name=''>@"+re_member_fullname+"</a> :";
+                                repeat_content = blog.content + " //" + re_member_link + $("#repeat_content_"+re_from_id).html();                           
+                            } else if(origin_post_type == "NORMAL") {
+                                var re_member_link = "<a href='/space/"+re_member_personality_url+"' name=''>@"+re_member_fullname+"</a> :";
+                                var normal_exist_pic = $("#normal_exist_pic_"+re_from_id).val();
+                                var normal_pic_path = $("#normal_pic_path_"+re_from_id).val();
+                                
+                                var pic_link = "";
+                                if (typeof(normal_exist_pic)!="undefined" && normal_exist_pic != "") {
+                                    pic_link = "<a href='" + normal_pic_path + "' name=''>查看图片</a>";
+                                }
+                                repeat_content = blog.content + " //" + re_member_link + $("#repeat_content_"+re_from_id).html() + pic_link;
+                            } 
                         } else if(blog.post_type == 'REPLAY') {
                             post_style = 'bg-black';
                         } else {
@@ -50,6 +85,8 @@
                             image_block = '<p><a href="#" name="a"><img src="' + blog.pic_path + '"></a></p>'
                         }
 
+
+
                         time_line = 
                         '<div class="tl-row">' +
                             '<div class="tl-item float-right">' +
@@ -59,7 +96,7 @@
                                 '<div class="popover right">' +
                                     '<div class="arrow"></div>' +
                                     '<div class="popover-content">' +
-                                        '<p class="tl-content">' + blog.content + '</p>' +
+                                        '<p class="tl-content">' + repeat_content + '</p>' +
                                         image_block +
                                         '<div class="tl-time">' +
                                             '<i class="glyph-icon icon-clock-o"></i> ' + blog.create_time +
@@ -71,9 +108,14 @@
                         '</div>'
                         $("#ajax_tl_row").html(time_line);
                         $("#content").val('');
+
+                        $("#repeat_header").hide();
+                        $("#re_from_content_p").hide();
+                        $("#content_divider").hide();
                     }
                 });
             });
+
         });
 
         function collect(blog_id) {
@@ -120,9 +162,61 @@
             }
         }
 
-        function repeat(blog_id) {
+        function repeat(blog_id, content, re_member_id, 
+                exist_pic, fullname, p_url) {
+            alert(blog_id+ fullname + p_url);
+            var pic_path = arguments[6] || "=";
+            alert(content +"-"+ re_member_id +"-"+ exist_pic + "=" +pic_path)
             
+            $("#content")[0].focus();
+            // $("#content").text("hehe");
+            $("#re_from").val(blog_id);
+            $("#re_member_id").val(re_member_id);
+            $("#post_type").val("REPEAT");
+
+            var repeat_content = "<a href='/space/" + p_url + "' name=''>@" + fullname + "</a> : " + content;
+            var repeat_pic = "";
+            if (exist_pic != 0) {
+                repeat_pic = "<p>" +
+                    "<a href='#' name='a'><img src='"+ pic_path +"'></a>" +
+                "</p>";
+                $("#re_from_content_p").html(repeat_content + repeat_pic);
+            } else {
+                $("#re_from_content_p").html(repeat_content);
+            }
+
+            $("#repeat_header").show(350);
+            $("#re_from_content_p").show(350);
+            $("#content_divider").show(350);
+            $("#content").attr("placeholder", "转发理由");
+            $("#all_content").click(function(){
+                location.href ="/blog_detail";
+            });
         }
+
+        function delpost(blog_id) {
+            var data = {
+                data: JSON.stringify({
+                    "blog_id": blog_id
+                })
+            };
+            if(confirm("你确定删除这条消息吗？")){
+                $.ajax({
+                    url:"/delpost",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('删除失败,请稍后重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#blog_tl_"+blog_id).remove();
+                    }
+                });
+            }
+
+        }
+
     </script>
 {% endblock %}
 
@@ -171,7 +265,7 @@
                             <p class="font-gray">关注我的人</p>
                         </li>
                         <li class="col-md-4">
-                            <b>593</b>
+                            <b>{{ blog_count }}</b>
                             <p class="font-gray">消息</p>
                         </li>
                     </ul>
@@ -197,7 +291,7 @@
                     <i class="glyph-icon icon-circle-o float-left font-blue"></i>
                     私信
                 </a>
-                <a href="/collections" class="list-group-item active" title="">
+                <a href="/collections/{{ member.personality_url }}" class="list-group-item active" title="">
                     <i class="glyph-icon icon-circle-o float-left font-orange"></i>
                     收藏
                 </a>
@@ -292,10 +386,35 @@
 {% block content %}
 <div class="col-md-8">
 
+    {% if not not_me %}
     <div class="content-box bg-white post-box">
+
         <form name="post_form" action="/post" method="POST">
+
             <input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-            <textarea id="content" name="content" class="textarea-autosize" placeholder="你在做什么?"></textarea>
+            <input id="re_from" name="re_from" type="hidden" value="0">
+            <input id="re_member_id" name="re_member_id" type="hidden" value="0">
+            <input id="post_type" name="post_type" type="hidden" value="NORMAL">
+
+            <h3 id="repeat_header" style="display: none;" class="content-box-header bg-default">
+                转发
+                <div class="header-buttons-separator">
+                    <a id="all_content" class="icon-separator refresh-button" data-style="light" data-theme="bg-black" data-opacity="40" style="cursor:pointer;">
+                        <i class="glyph-icon icon-chevron-right"></i>
+                    </a>
+                    <a id="cancel_repeat" class="icon-separator refresh-button" data-style="light" data-theme="bg-black" data-opacity="40" style="cursor:pointer;">
+                        <i class="glyph-icon icon-times"></i>
+                    </a>
+                </div>
+            </h3>
+            <div id="re_from_content" class="content-box-wrapper bg-default">
+                <p id="re_from_content_p" style="display: none;"></p>
+                <div id="content_divider" style="display: none;" class="divider"></div>
+                <p>
+                    <textarea id="content" name="content" class="textarea-no-resize" style="padding:0px;" placeholder="你在做什么?"></textarea>
+                </p>
+            </div>
+                
             <div class="button-pane">
                 <a href="#" class="btn btn-md btn-link hover-white" title="">
                     <i class="glyph-icon icon-map-marker"></i>
@@ -309,42 +428,68 @@
             </div>
         </form>
     </div>
+    {% endif %}
 
     <div class="panel">
         <div class="panel-body">
             <h3 class="title-hero">
-                最新动态
+                全部收藏
             </h3>
             <div class="example-box-wrapper">
                 <div class="timeline-box timeline-box-left">
                     <div id="ajax_tl_row"></div>
                     {% if blog_list %}
                         {% for blog in blog_list %}
-                        <div class="tl-row">
+                        <div class="tl-row" id="blog_tl_{{ blog.get('blog').id }}">
                             <div class="tl-item float-right">
                                 {% if blog.get('blog').post_type == 'NORMAL' %}
-                                <div class="tl-icon bg-primary">
+                                    <div class="tl-icon bg-primary">
                                 {% elif blog.get('blog').post_type == 'REPEAT' %}
-                                <div class="tl-icon bg-red">
+                                    <div class="tl-icon bg-yellow">
                                 {% elif blog.get('blog').post_type == 'REPLAY' %}
-                                <div class="tl-icon bg-black">
+                                    <div class="tl-icon bg-black">
                                 {% endif %}
-                                    <img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="" />
-                                </div>
+                                        <input type="hidden" id="origin_post_type_{{ blog.get('blog').id }}" name="origin_post_type_{{ blog.get('blog').id }}" value="{{blog.get('blog').post_type}}">
+                                        <img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="" />
+                                    </div>
                                 <div class="popover right">
                                     <div class="arrow"></div>
                                     <div id="blog_detail_{{ blog.get('blog').id }}" class="popover-content">
-                                        {% if blog.get('collect_member') %}
+                                        {% if blog.get('blog').post_type == 'NORMAL' %}
                                             <div class="tl-label bs-label bg-primary">
-                                                <a href="" style="color:white;">{{ blog.get('collect_member').fullname }}</a>
-                                            </div>
+                                        {% elif blog.get('blog').post_type == 'REPEAT' %}
+                                            <div class="tl-label bs-label bg-yellow">
+                                        {% elif blog.get('blog').post_type == 'REPLAY' %}
+                                            <div class="tl-label bs-label bg-black">
                                         {% endif %}
-                                        <p class="tl-content">
-                                            {{ blog.get('blog').content }}
-                                        </p>
-                                        {% if blog.get('blog').exist_pic != 0 %}
-                                            <p>
-                                                <a href="#" name="a"><img src="{{ blog.get('blog').pic_path }}"></a>
+                                            <a href="/space/{{blog.get('collect_member').personality_url}}" style="color:white;">{{ blog.get('collect_member').fullname }}</a>
+                                        </div>
+                                        {% if blog.get('blog').post_type == 'NORMAL' %}
+                                            <p class="tl-content" id="repeat_content_{{ blog.get('blog').id }}">
+                                                {{ blog.get('blog').content }}
+                                            </p>
+                                            {% if blog.get('blog').exist_pic != 0 %}
+                                                <p>
+                                                    <input id="normal_exist_pic_{{ blog.get('blog').id }}" type="hidden" value="{{blog.get('blog').exist_pic}}">
+                                                    <input id="normal_pic_path_{{ blog.get('blog').id }}" type="hidden" value="{{ blog.get('blog').pic_path }}">
+                                                    <a href="#" name="a"><img src="{{ blog.get('blog').pic_path }}"></a>
+                                                </p>
+                                            {% endif %}
+                                        {% elif blog.get('blog').post_type == 'REPEAT' %}
+                                            
+                                            <p class="tl-content" id="repeat_content_{{ blog.get('blog').id }}">
+                                                {{ blog.get('blog').content }}
+
+                                                {% if blog.get('blog').exist_pic != 0 %}
+                                                    <a href="{{ blog.get('blog').pic_path }}" name="a">查看图片</a>
+                                                {% endif %}
+
+                                                {% for re_dict in blog.get('re_list') %}
+                                                    //<a href="/space/{{re_dict.get('blog_member').personality_url}}" name=''>@{{re_dict.get('blog_member').fullname}}</a> : {{re_dict.get('blog').content}}
+                                                    {% if re_dict.get('blog').exist_pic != 0 %}
+                                                        <a href="{{ re_dict.get('blog').pic_path }}" name="a">查看图片</a>
+                                                    {% endif %}
+                                                {% endfor %}
                                             </p>
                                         {% endif %}
                                         <div class="tl-time">
@@ -367,19 +512,34 @@
                                             </script>
 
                                             <div id="blog_operate_{{ blog.get('blog').id }}" class="blog_operate"> 
-                                                <input id="collect_flag_{{ blog.get('blog').id }}" type="hidden" value="collecting">
+                                                <input id="collect_flag_{{ blog.get('blog').id }}" type="hidden" value="{{ blog.get('collection') }}">
                                                 
                                                 <span class="operate_content">
                                                     <i class="glyph-icon icon-star"></i> 
-                                                    <a id="blog_collect_{{ blog.get('blog').id }}" onclick="collect({{ blog.get('blog').id }});" style="cursor:pointer;">取消收藏</a> 
+                                                    {% if blog.get('collection') == 'uncollect' %}
+                                                        <a id="blog_collect_{{ blog.get('blog').id }}" onclick="collect({{ blog.get('blog').id }});" style="cursor:pointer;">收藏</a> 
+                                                    {% elif blog.get('collection') == 'collecting' %}
+                                                        <a id="blog_collect_{{ blog.get('blog').id }}" onclick="collect({{ blog.get('blog').id }});" style="cursor:pointer;">取消收藏</a> 
+                                                    {% else %}
+                                                        系统错误
+                                                    {% endif %}
                                                 </span>
+
                                                 <span class="operate_content">
                                                     <i class="glyph-icon icon-share"></i> 
-                                                    <a id="blog_repeat_{{ blog.get('blog').id }}" onclick="repeat({{ blog.get('blog').id }});" style="cursor:pointer;">转发</a> 
+                                                    {% if blog.get('blog').exist_pic != 0 %}
+                                                        <a id="blog_repeat_{{ blog.get('blog').id }}" 
+                                                            onclick="repeat({{ blog.get('blog').id }}, '{{ blog.get('blog').content }}', {{ blog.get('blog_member').id}}, {{blog.get('blog').exist_pic}}, '{{ blog.get('blog_member').fullname}}', '{{ blog.get('blog_member').personality_url}}', '{{blog.get('blog').post_type}}', '{{blog.get('blog').pic_path}}');" style="cursor:pointer;">转发</a> 
+                                                    {% else %}
+                                                        <a id="blog_repeat_{{ blog.get('blog').id }}" 
+                                                            onclick="repeat({{ blog.get('blog').id }}, '{{ blog.get('blog').content }}', {{ blog.get('blog_member').id}}, {{blog.get('blog').exist_pic}}, '{{ blog.get('blog_member').fullname}}', '{{ blog.get('blog_member').personality_url}}', '{{blog.get('blog').post_type}}');" style="cursor:pointer;">转发</a> 
+                                                    {% endif %}
+                                                    <input type="hidden" id="re_member_fullname_{{ blog.get('blog').id }}" name="re_member_fullname_{{ blog.get('blog').id }}" value="{{ blog.get('blog_member').fullname}}">
+                                                    <input type="hidden" id="re_member_personality_url_{{ blog.get('blog').id }}" name="re_member_personality_url_{{ blog.get('blog').id }}" value="{{ blog.get('blog_member').personality_url}}">
                                                 </span>
                                                 <span class="operate_content">
                                                     <i class="glyph-icon icon-remove"></i> 
-                                                    <a href="#">删除</a> 
+                                                    <a id="del_blog_{{ blog.get('blog').id }}" onclick="delpost({{ blog.get('blog').id }});" style="cursor:pointer;">删除</a> 
                                                 </span>
                                             </div>
                                         </div>
