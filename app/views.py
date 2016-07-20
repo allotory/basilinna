@@ -219,7 +219,7 @@ def space(url=None):
 
                 # blog collected
                 for blog in blog_list:
-                    c = models.Collection.query.filter(and_(models.Collection.member_id==selected_member.id, models.Collection.blog_id==blog.id)).first()
+                    c = models.Collection.query.filter(and_(models.Collection.member_id==m.id, models.Collection.blog_id==blog.id)).first()
                     if c is None:
                         blog_dict = dict(blog=blog, collection='uncollect', blog_member=selected_member)
                     else:
@@ -257,7 +257,7 @@ def space(url=None):
                 fans_count = models.Relation.query.filter(models.Relation.followee_id == selected_member.id).count()
 
                 return render_template('space.html', member=selected_member, blog_list=blog_info_list, 
-                    following_count=following_count, fans_count=fans_count)
+                    following_count=following_count, fans_count=fans_count, not_me=True)
             else :
                 # my space
                 blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()

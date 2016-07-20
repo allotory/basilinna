@@ -7,13 +7,6 @@
     <script type="text/javascript">
 
         $(function(){
-
-            // hide repeat form
-            $("#cancel_repeat").click(function(){
-                $("#repeat_header").hide(350);
-                $("#re_from_content_p").hide(350);
-                $("#content_divider").hide(350);
-            });
         
             var csrftoken = "{{ csrf_token() }}";
             $.ajaxSetup({
@@ -24,10 +17,12 @@
                 }
             });
 
-            $("#share").click(function(){
+            $("#repeat_blog").click(function(){
 
                 alert($("#re_from").val());
                 alert($("#re_member_id").val());
+
+                var not_me = "{{ not_me }}";
 
                 var re_from_id = $("#re_from").val();
                 var origin_post_type = $("#origin_post_type_"+re_from_id).val();
@@ -42,6 +37,7 @@
                         "post_type": $("#post_type").val()
                     })
                 };
+
                 
                 $.ajax({
                     url:"/post",
@@ -51,67 +47,74 @@
                         alert('提交失败,请重试!');
                     },
                     success: function(results){
-                        // alert(results);
+
+                        $('#myModal').modal('hide');
+
+                        alert(results);
                         var blog = jQuery.parseJSON(results); 
                         // alert(blog.content);
+                        if (not_me == null || not_me == "") {
+                            var post_style = 'bg-primary';
+                            var repeat_content = blog.content;
+                            if(blog.post_type == 'REPEAT') {
+                                post_style = 'bg-yellow';
+                                if(origin_post_type == "REPEAT") {
+                                    //repeat_content = blog.content + "//" +@被转发的用户名 +$("#repeat_content_"+re_from_id).html();
+                                    var re_member_link = "<a href='/space/"+re_member_personality_url+"' name=''>@"+re_member_fullname+"</a> :";
+                                    repeat_content = blog.content + " //" + re_member_link + $("#repeat_content_"+re_from_id).html();                           
+                                } else if(origin_post_type == "NORMAL") {
+                                    var re_member_link = "<a href='/space/"+re_member_personality_url+"' name=''>@"+re_member_fullname+"</a> :";
+                                    var normal_exist_pic = $("#normal_exist_pic_"+re_from_id).val();
+                                    var normal_pic_path = $("#normal_pic_path_"+re_from_id).val();
+                                    
+                                    var pic_link = "";
+                                    if (typeof(normal_exist_pic)!="undefined" && normal_exist_pic != "") {
+                                        pic_link = "<a href='" + normal_pic_path + "' name=''>查看图片</a>";
+                                    }
+                                    repeat_content = blog.content + " //" + re_member_link + $("#repeat_content_"+re_from_id).html() + pic_link;
+                                } 
+                            } else if(blog.post_type == 'REPLAY') {
+                                post_style = 'bg-black';
+                            } else {
+                                post_style = 'bg-primary';
+                            }
 
-                        var post_style = 'bg-primary';
-                        var repeat_content = blog.content;
-                        if(blog.post_type == 'REPEAT') {
-                            post_style = 'bg-red';
-                            if(origin_post_type == "REPEAT") {
-                                //repeat_content = blog.content + "//" +@被转发的用户名 +$("#repeat_content_"+re_from_id).html();
-                                var re_member_link = "<a href='/space/"+re_member_personality_url+"' name=''>@"+re_member_fullname+"</a> :";
-                                repeat_content = blog.content + " //" + re_member_link + $("#repeat_content_"+re_from_id).html();                           
-                            } else if(origin_post_type == "NORMAL") {
-                                var re_member_link = "<a href='/space/"+re_member_personality_url+"' name=''>@"+re_member_fullname+"</a> :";
-                                var normal_exist_pic = $("#normal_exist_pic_"+re_from_id).val();
-                                var normal_pic_path = $("#normal_pic_path_"+re_from_id).val();
-                                
-                                var pic_link = "";
-                                if (typeof(normal_exist_pic)!="undefined" && normal_exist_pic != "") {
-                                    pic_link = "<a href='" + normal_pic_path + "' name=''>查看图片</a>";
-                                }
-                                repeat_content = blog.content + " //" + re_member_link + $("#repeat_content_"+re_from_id).html() + pic_link;
-                            } 
-                        } else if(blog.post_type == 'REPLAY') {
-                            post_style = 'bg-black';
-                        } else {
-                            post_style = 'bg-primary';
-                        }
-
-                        var image_block = ''
-                        if (blog.exist_pic != 0) {
-                            image_block = '<p><a href="#" name="a"><img src="' + blog.pic_path + '"></a></p>'
-                        }
+                            var image_block = ''
+                            if (blog.exist_pic != 0) {
+                                image_block = '<p><a href="#" name="a"><img src="' + blog.pic_path + '"></a></p>'
+                            }
 
 
 
-                        time_line = 
-                        '<div class="tl-row">' +
-                            '<div class="tl-item float-right">' +
-                                '<div class="tl-icon ' + post_style + '">' +
-                                    '<img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="" />' +
-                                '</div>' +
-                                '<div class="popover right">' +
-                                    '<div class="arrow"></div>' +
-                                    '<div class="popover-content">' +
-                                        '<p class="tl-content">' + repeat_content + '</p>' +
-                                        image_block +
-                                        '<div class="tl-time">' +
-                                            '<i class="glyph-icon icon-clock-o"></i> ' + blog.create_time +
-                                            '  通过 ' + blog.via +
+                            time_line = 
+                            '<div class="tl-row">' +
+                                '<div class="tl-item float-right">' +
+                                    '<div class="tl-icon ' + post_style + '">' +
+                                        '<img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="" />' +
+                                    '</div>' +
+                                    '<div class="popover right">' +
+                                        '<div class="arrow"></div>' +
+                                        '<div class="popover-content">' +
+                                            '<p class="tl-content">' + repeat_content + '</p>' +
+                                            image_block +
+                                            '<div class="tl-time">' +
+                                                '<i class="glyph-icon icon-clock-o"></i> ' + blog.create_time +
+                                                '  通过 ' + blog.via +
+                                            '</div>' +
                                         '</div>' +
                                     '</div>' +
                                 '</div>' +
-                            '</div>' +
-                        '</div>'
-                        $("#ajax_tl_row").html(time_line);
-                        $("#content").val('');
+                            '</div>'
+                            $("#ajax_tl_row").html(time_line);
 
-                        $("#repeat_header").hide();
-                        $("#re_from_content_p").hide();
-                        $("#content_divider").hide();
+                        }
+                        
+
+                        // $("#content").val('');
+
+                        // $("#repeat_header").hide();
+                        // $("#re_from_content_p").hide();
+                        // $("#content_divider").hide();
                     }
                 });
             });
@@ -167,14 +170,16 @@
             alert(blog_id+ fullname + p_url);
             var pic_path = arguments[6] || "=";
             alert(content +"-"+ re_member_id +"-"+ exist_pic + "=" +pic_path)
+
+            $('#myModal').modal('show');
             
-            $("#content")[0].focus();
-            // $("#content").text("hehe");
+            // $("#content")[0].focus();
+            // // $("#content").text("hehe");
             $("#re_from").val(blog_id);
             $("#re_member_id").val(re_member_id);
             $("#post_type").val("REPEAT");
 
-            var repeat_content = "<a href='/space/" + p_url + "' name=''>@" + fullname + "</a> : " + content;
+            var repeat_content = "//<a href='/space/" + p_url + "' name=''>@" + fullname + "</a> : " + content;
             var repeat_pic = "";
             if (exist_pic != 0) {
                 repeat_pic = "<p>" +
@@ -185,13 +190,13 @@
                 $("#re_from_content_p").html(repeat_content);
             }
 
-            $("#repeat_header").show(350);
-            $("#re_from_content_p").show(350);
-            $("#content_divider").show(350);
-            $("#content").attr("placeholder", "转发理由");
-            $("#all_content").click(function(){
-                location.href ="/blog_detail";
-            });
+            // $("#repeat_header").show(350);
+            // $("#re_from_content_p").show(350);
+            // $("#content_divider").show(350);
+            // $("#content").attr("placeholder", "转发理由");
+            // $("#all_content").click(function(){
+            //     location.href ="/blog_detail";
+            // });
         }
 
         function delpost(blog_id) {
@@ -336,13 +341,41 @@
 {% endblock %}
 
 {% block content %}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">转发</h4>
+            </div>
+            <div class="modal-body">
+                <p id="re_from_content_p" style="margin-bottom:5px;"></p>
+                <!-- <div id="content_divider" class="divider"></div> -->
+                <p>
+                    <textarea id="content" name="content" class="form-control textarea-no-resize" rows="4" style="padding:10px;margin:0px;" placeholder="转发理由"></textarea>
+                    <!-- <div class="character-remaining clear input-description">135 characters left</div> -->
+                    <input type="hidden" id="re_from" name="re_from" value="0">
+                    <input type="hidden" id="re_member_id" name="re_member_id" value="0">
+                    <input type="hidden" id="post_type" name="post_type" value="REPEAT">
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="repeat_blog" type="button" class="btn btn-primary">发送</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="col-md-8">
 
     <div class="panel">
         <div class="panel-body">
             <h3 class="title-hero">
-                最新动态
+                <a data-toggle="modal" data-target="#myModal">最新动态</a>
             </h3>
+
             <div class="example-box-wrapper">
                 <div class="timeline-box timeline-box-left">
                     <div id="ajax_tl_row"></div>
@@ -360,7 +393,7 @@
                                         <input type="hidden" id="origin_post_type_{{ blog.get('blog').id }}" name="origin_post_type_{{ blog.get('blog').id }}" value="{{blog.get('blog').post_type}}">
                                         <img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="" />
                                     </div>
-                                <div class="popover right">
+                                <div class="popover right" style="z-index:20;">
                                     <div class="arrow"></div>
                                     <div id="blog_detail_{{ blog.get('blog').id }}" class="popover-content">
                                         <!-- <div class="tl-label bs-label bg-yellow" style="float:right;">
@@ -439,10 +472,12 @@
                                                     <input type="hidden" id="re_member_fullname_{{ blog.get('blog').id }}" name="re_member_fullname_{{ blog.get('blog').id }}" value="{{ blog.get('blog_member').fullname}}">
                                                     <input type="hidden" id="re_member_personality_url_{{ blog.get('blog').id }}" name="re_member_personality_url_{{ blog.get('blog').id }}" value="{{ blog.get('blog_member').personality_url}}">
                                                 </span>
-                                                <span class="operate_content">
-                                                    <i class="glyph-icon icon-remove"></i> 
-                                                    <a id="del_blog_{{ blog.get('blog').id }}" onclick="delpost({{ blog.get('blog').id }});" style="cursor:pointer;">删除</a> 
-                                                </span>
+                                                {% if not not_me %}
+                                                    <span class="operate_content">
+                                                        <i class="glyph-icon icon-remove"></i> 
+                                                        <a id="del_blog_{{ blog.get('blog').id }}" onclick="delpost({{ blog.get('blog').id }});" style="cursor:pointer;">删除</a> 
+                                                    </span>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>

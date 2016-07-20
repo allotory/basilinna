@@ -6572,7 +6572,7 @@ button.close {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1060;
+    z-index: 1040;
     display: none;
     max-width: 516px;
     padding: 1px;
@@ -27023,7 +27023,7 @@ div.DTCR_pointer {
 .dropdown-menu, .minicolors-panel, .popover, .ui-datepicker, .ui-dialog,
     .ui-menu {
     position: absolute;
-    z-index: 1050 !important;
+    /*z-index: 1050 !important;*/
     top: 105%;
     left: 0;
     display: none;
