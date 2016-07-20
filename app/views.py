@@ -160,8 +160,11 @@ def index():
         following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
         fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
 
+        # blog count 
+        blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
+
         return render_template('index.html', member=m, blog_list=blog_info_list, 
-            following_count=following_count, fans_count=fans_count)
+            following_count=following_count, fans_count=fans_count, blog_count = blog_count)
 
     return redirect(url_for('login', info='访问当前内容，请先登录'))
 
@@ -256,8 +259,11 @@ def space(url=None):
                 following_count = models.Relation.query.filter(models.Relation.member_id == selected_member.id).count()
                 fans_count = models.Relation.query.filter(models.Relation.followee_id == selected_member.id).count()
 
+                # blog count 
+                blog_count = models.Blog.query.filter(models.Blog.member_id == selected_member.id).count()
+                
                 return render_template('space.html', member=selected_member, blog_list=blog_info_list, 
-                    following_count=following_count, fans_count=fans_count, not_me=True)
+                    following_count=following_count, fans_count=fans_count, not_me=True, blog_count=blog_count)
             else :
                 # my space
                 blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
@@ -303,8 +309,11 @@ def space(url=None):
                 following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
                 fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
 
+                # blog count 
+                blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
+                
                 return render_template('space.html', member=m, blog_list=blog_info_list, 
-                    following_count=following_count, fans_count=fans_count)
+                    following_count=following_count, fans_count=fans_count, blog_count = blog_count)
         else:
             # my space
             blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
@@ -350,8 +359,11 @@ def space(url=None):
             following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
             fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
 
+            # blog count 
+            blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
+
             return render_template('space.html', member=m, blog_list=blog_info_list, 
-                following_count=following_count, fans_count=fans_count)
+                following_count=following_count, fans_count=fans_count, blog_count = blog_count)
 
         return redirect(url_for('error'))
     else:
@@ -463,7 +475,7 @@ def collections():
             collect_member = None
             if b.member_id != m.id:
                 # not mine
-                collect_member = modles.Member.query.filter_by(id=b.member_id).first()
+                collect_member = models.Member.query.filter_by(id=b.member_id).first()
             else:
                 collect_member = m
             blog_dict = dict(blog=b, collect_member=collect_member)
