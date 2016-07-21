@@ -163,8 +163,17 @@ def index():
         # blog count 
         blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
 
+        # friends list
+        followees = models.Relation.query.filter(models.Relation.member_id == m.id).limit(8).all()
+        followee_list = []
+        if followees :
+            for followee in followees:
+                followee_info = models.Member.query.filter(models.Member.id == followee.followee_id).first()
+                followee_list.append(followee_info)
+
         return render_template('index.html', member=m, blog_list=blog_info_list, 
-            following_count=following_count, fans_count=fans_count, blog_count = blog_count)
+            following_count=following_count, fans_count=fans_count, 
+            blog_count = blog_count, followee_list=followee_list)
 
     return redirect(url_for('login', info='访问当前内容，请先登录'))
 

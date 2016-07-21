@@ -342,7 +342,7 @@
     </div>
     <div class="content-box mrg15B">
         <h3 class="content-box-header clearfix">
-            Friends online
+            我关注的人
             <div class="font-size-11 float-right">
                 <a href="#" title="">
                     <i class="glyph-icon mrg5R opacity-hover icon-plus"></i>
@@ -353,7 +353,7 @@
             </div>
         </h3>
         <div class="content-box-wrapper text-center clearfix">
-            <div class="status-badge mrg10A">
+            <!-- <div class="status-badge mrg10A">
                 <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
                 <div class="small-badge bg-red"></div>
             </div>
@@ -364,19 +364,25 @@
             <div class="status-badge mrg10A">
                 <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
                 <div class="small-badge bg-red"></div>
-            </div>
-            <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg"  alt="" />
-                <div class="small-badge bg-green"></div>
-            </div>
-            <div class="status-badge mrg10A">
+            </div> -->
+            {% if followee_list %}
+                {% for followee in followee_list %}
+                <div class="status-badge mrg10A">
+                    <img class="img-circle" width="40" src="{{ followee.avatar_path }}"  alt="{{ followee.fullname }}" title="{{ followee.fullname }}"/>
+                    <div class="small-badge bg-green"></div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>还没有朋友哦</p>
+            {% endif %}
+            <!-- <div class="status-badge mrg10A">
                 <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
                 <div class="small-badge bg-orange"></div>
             </div>
             <div class="status-badge mrg10A">
                 <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
                 <div class="small-badge bg-red"></div>
-            </div>
+            </div> -->
         </div>
     </div>
 
