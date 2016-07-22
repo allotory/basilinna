@@ -347,24 +347,9 @@
                 <a href="#" title="">
                     <i class="glyph-icon mrg5R opacity-hover icon-plus"></i>
                 </a>
-                <a href="#" title="">
-                    <i class="glyph-icon opacity-hover icon-cog"></i>
-                </a>
             </div>
         </h3>
         <div class="content-box-wrapper text-center clearfix">
-            <!-- <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
-                <div class="small-badge bg-red"></div>
-            </div>
-            <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg"  alt="" />
-                <div class="small-badge bg-orange"></div>
-            </div>
-            <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
-                <div class="small-badge bg-red"></div>
-            </div> -->
             {% if followee_list %}
                 {% for followee in followee_list %}
                 <div class="status-badge mrg10A">
@@ -375,14 +360,6 @@
             {% else %}
                 <p>还没有朋友哦</p>
             {% endif %}
-            <!-- <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
-                <div class="small-badge bg-orange"></div>
-            </div>
-            <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
-                <div class="small-badge bg-red"></div>
-            </div> -->
         </div>
     </div>
 
@@ -497,7 +474,7 @@
                                             <script type="text/javascript">
                                                 $(function(){
                                                     // inital hide
-                                                    $("#blog_operate_{{ blog.get('blog').id }}").hide();
+                                                    // $("#blog_operate_{{ blog.get('blog').id }}").hide();
 
                                                     // hover
                                                     $("#blog_detail_{{ blog.get('blog').id }}").hover(function(){
@@ -509,7 +486,7 @@
                                                 });
                                             </script>
 
-                                            <div id="blog_operate_{{ blog.get('blog').id }}" class="blog_operate"> 
+                                            <div id="blog_operate_{{ blog.get('blog').id }}" class="blog_operate" style="display:none;"> 
                                                 <input id="collect_flag_{{ blog.get('blog').id }}" type="hidden" value="{{ blog.get('collection') }}">
                                                 
                                                 <span class="operate_content">

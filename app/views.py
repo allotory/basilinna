@@ -614,6 +614,90 @@ def delpost():
         return redirect(url_for('error'))
 
 
+# explore
+@app.route('/explore', methods = ['GET', 'POST'])
+def explore():
+    if request.method == 'GET':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('error'))
+
+            # blog detail
+            blog_list = models.Blog.query.order_by(models.Blog.id.desc()).all()
+
+            blog_info_list = []
+
+            # blog collected
+            for blog in blog_list:
+                # collection
+                c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog.id)).first()
+                if c is None:
+                    blog_dict = dict(blog=blog, collection='uncollect', blog_member=m)
+                else:
+                    blog_dict = dict(blog=blog, collection='collecting', blog_member=m)
+
+                # is me
+                blog_author = models.Member.query.filter_by(id=blog.member_id).first()
+                if blog_author.id == m.id:
+                    blog_dict['is_me'] = True
+
+
+                # a blog repeat list
+                re_list = []
+
+                if blog.post_type == 'REPEAT':
+                    re_from = None
+                    re_member_id = None
+                    
+                    re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
+                    re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
+                    re_list.append(dict(blog=re_blog, blog_member=re_member))
+
+                    re_from = re_blog.re_from    
+                    re_member_id = re_blog.re_member_id
+
+                    # exist reblog
+                    while re_from :
+                        re_blog_t = models.Blog.query.filter_by(id=re_from).first()
+                        re_member_t = models.Member.query.filter_by(id=re_member_id).first()
+                        re_list.append(dict(blog=re_blog_t, blog_member=re_member_t))
+                        
+                        re_from = re_blog_t.re_from
+                        re_member_id = re_blog_t.re_member_id
+
+                    blog_dict['re_list'] = re_list
+
+                blog_info_list.append(blog_dict)
+
+            # # follow detail
+            # following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
+            # fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
+
+            # # blog count 
+            # blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
+
+            # # friends list
+            # followees = models.Relation.query.filter(models.Relation.member_id == m.id).limit(8).all()
+            # followee_list = []
+            # if followees :
+            #     for followee in followees:
+            #         followee_info = models.Member.query.filter(models.Member.id == followee.followee_id).first()
+            #         followee_list.append(followee_info)
+
+            # return render_template('index.html', member=m, blog_list=blog_info_list, 
+            #     following_count=following_count, fans_count=fans_count, 
+            #     blog_count = blog_count, followee_list=followee_list)
+            return render_template('explore.html', member=m, blog_list=blog_info_list)
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    elif request.method == 'POST':
+        pass
+    else:
+        return redirect(url_for('error'))
+
+
 # private message
 @app.route('/messages', methods = ['GET', 'POST'])
 def messages():
@@ -624,15 +708,6 @@ def messages():
     else:
         return redirect(url_for('error'))
 
-# explore
-@app.route('/explore', methods = ['GET', 'POST'])
-def explore():
-    if request.method == 'GET':
-        return render_template('explore.html')
-    elif request.method == 'POST':
-        pass
-    else:
-        return redirect(url_for('error'))
 
 # search
 @app.route('/search', methods = ['GET', 'POST'])
