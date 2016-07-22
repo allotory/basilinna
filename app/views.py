@@ -671,25 +671,37 @@ def explore():
 
                 blog_info_list.append(blog_dict)
 
-            # # follow detail
-            # following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
-            # fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
-
-            # # blog count 
-            # blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
-
-            # # friends list
-            # followees = models.Relation.query.filter(models.Relation.member_id == m.id).limit(8).all()
-            # followee_list = []
-            # if followees :
-            #     for followee in followees:
-            #         followee_info = models.Member.query.filter(models.Member.id == followee.followee_id).first()
-            #         followee_list.append(followee_info)
-
-            # return render_template('index.html', member=m, blog_list=blog_info_list, 
-            #     following_count=following_count, fans_count=fans_count, 
-            #     blog_count = blog_count, followee_list=followee_list)
             return render_template('explore.html', member=m, blog_list=blog_info_list)
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    elif request.method == 'POST':
+        pass
+    else:
+        return redirect(url_for('error'))
+
+
+# get private message receiver
+@app.route('/receiver', methods = ['GET', 'POST'])
+def receiver():
+    if request.method == 'GET':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('error'))
+
+            # friends list
+            followees = models.Relation.query.filter(models.Relation.member_id == m.id).all()
+            followee_list = []
+            if followees :
+                for followee in followees:
+                    followee_info = models.Member.query.filter(models.Member.id == followee.followee_id).first()
+                    
+                    member_dict = dict(id=followee_info.id, fullname=followee_info.fullname,
+                        personality_url=followee_info.personality_url)
+                    followee_list.append(member_dict)
+
+            return json.dumps(followee_list)
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     elif request.method == 'POST':
