@@ -26,13 +26,52 @@
                     //alert(results);
                     var receivers = jQuery.parseJSON(results); 
 
-                    var selObj = $("#receiver");
+                    var selObj = $("#receiver_id");
                     for (var i = 0; i < receivers.length; i++) {
                         selObj.append("<option value='"+receivers[i].id+"'>"+receivers[i].fullname +" ("+receivers[i].personality_url+")"+"</option>");
                     }
                     
                 }
             });
+
+
+            $("#send_msg").click(function(){
+                alert($("#receiver_id").val());
+                alert($("#msg_content").val());
+                alert($("#msg_type").val());
+                alert($("#re_msg_id").val());
+
+                var data = {
+                    data: JSON.stringify({
+                        "receiver_id": $("#receiver_id").val(),
+                        "msg_content": $("#msg_content").val(),
+                        "msg_type": $("#msg_type").val(),
+                        "re_msg_id": $("#re_msg_id").val()
+                    })
+                };
+
+                $.ajax({
+                url:"/sender",
+                type: "POST",
+                data: data,
+                error: function(){
+                    alert('发送消息失败,请重试!');
+                },
+                success: function(results){
+                    alert(results);
+                    // var receivers = jQuery.parseJSON(results); 
+
+                    // var selObj = $("#receiver_id");
+                    // for (var i = 0; i < receivers.length; i++) {
+                    //     selObj.append("<option value='"+receivers[i].id+"'>"+receivers[i].fullname +" ("+receivers[i].personality_url+")"+"</option>");
+                    // }
+                    
+                }
+            });
+                
+            });
+
+
         });
 
     </script>
@@ -207,21 +246,23 @@
 
     <div class="content-box bg-white post-box">
 
-        <form name="post_form" action="/post" method="POST">
+        <form name="post_form" action="" method="POST">
+            <input type="hidden" id="msg_type" name="msg_type" value="NORMAL">
+            <input type="hidden" id="re_msg_id" name="re_msg_id" value="0">
 
-            <div id="re_from_content" class="content-box-wrapper bg-default">
+            <div id="re_content" class="content-box-wrapper bg-default">
                 <p>
-                    <textarea id="content" name="content" class="textarea-no-resize" style="padding:0px;" placeholder="和我聊聊天吧"></textarea>
+                    <textarea id="msg_content" name="msg_content" class="textarea-no-resize" style="padding:0px;" placeholder="和我聊聊天吧"></textarea>
                 </p>
             </div>
                 
             <div class="button-pane">
                 <div class="col-sm-6">
-                    <select id="receiver" class="form-control">
+                    <select id="receiver_id" class="form-control">
                         <option value="0">选择收信人</option>
                     </select>
                 </div>
-                <a id="share" class="btn btn-md btn-post float-right btn-success" title="">
+                <a id="send_msg" class="btn btn-md btn-post float-right btn-success" title="">
                     Send
                 </a>
             </div>
@@ -243,14 +284,35 @@
                         send
                     </h3>
                     <div class="example-box-wrapper">
+
                         <form class="form-horizontal bordered-row">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"></label>
-                                <div class="col-sm-6">
-                                    目前还没有私信。
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-6">
+                                目前还没有私信。
+                            </div>
+                        </div>
+                        </form>
+                        <div class="content-box">
+                            <div class="content-box-wrapper" style="padding:10px;">
+                                <a href="/~vW36HOjXC8Y" title="obinphy" style="float:left;margin:5px;">
+                                    <img class="img-circle" width="40" src="http://avatar.fanfou.com/s0/00/00/00.jpg"/>
+                                </a>
+                                来自：<a href="">@obinphy</a>
+                                <p class="tl-content"  style="min-height:25px;margin-left:50px;">
+                                    测试，a
+                                </p>
+                                <div class="tl-time" style="margin-left:50px;margin-top:5px;">
+                                    <i class="glyph-icon icon-clock-o"></i> 2016-07-12 11:27:53 
+                                    via Web 
+                                </div>
+                                <div class="alert alert-info" style="margin-left:50px;margin-top:5px;">
+                                    <p>回复内容：Information message box using the <code>.alert-info</code> color scheme. <a href="#" title="Link">Link</a></p>
                                 </div>
                             </div>
-                        </form>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

@@ -188,12 +188,13 @@ class Message_log(db.Model):
     sender_isdel = db.Column(db.SmallInteger, nullable = False)
     receiver_isdel = db.Column(db.SmallInteger, nullable = False)
     is_read = db.Column(db.SmallInteger, nullable = False)
+    re_msg_id = db.Column(db.Integer, db.ForeignKey('message_text.id'))
 
-    def __init__(self, sender_id, reciever_id, text_id,
+    def __init__(self, sender_id, receiver_id, text_id,
             send_time, read_time, message_type, sender_isdel,
-            receiver_isdel, is_read):
+            receiver_isdel, is_read, re_msg_id):
         self.sender_id = sender_id
-        self.reciever_id = receiver_id
+        self.receiver_id = receiver_id
         self.text_id = text_id
         self.send_time = send_time
         self.read_time = read_time
@@ -201,6 +202,7 @@ class Message_log(db.Model):
         self.sender_isdel = sender_isdel
         self.receiver_isdel = receiver_isdel
         self.is_read = is_read
+        self.re_msg_id = re_msg_id
 
 
 # 兴趣爱好表

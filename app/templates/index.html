@@ -436,9 +436,7 @@
                                 <div class="popover right">
                                     <div class="arrow"></div>
                                     <div id="blog_detail_{{ blog.get('blog').id }}" class="popover-content">
-                                        <!-- <div class="tl-label bs-label bg-yellow" style="float:right;">
-                                            <a href="" style="color:white;"><i class="glyph-icon icon-star"></i></a>
-                                        </div> -->
+                                        
                                         {% if blog.get('blog').post_type == 'NORMAL' %}
                                             <p class="tl-content" id="repeat_content_{{ blog.get('blog').id }}">
                                                 {{ blog.get('blog').content }}
@@ -473,9 +471,6 @@
 
                                             <script type="text/javascript">
                                                 $(function(){
-                                                    // inital hide
-                                                    // $("#blog_operate_{{ blog.get('blog').id }}").hide();
-
                                                     // hover
                                                     $("#blog_detail_{{ blog.get('blog').id }}").hover(function(){
                                                         $("#blog_operate_{{ blog.get('blog').id }}").show();

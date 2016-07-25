@@ -121,10 +121,11 @@ CREATE TABLE IF NOT EXISTS message_log (
     text_id int(11) NOT NULL,                   /* 消息内容ID */
     send_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, /* 发送时间  设置时间时不需要更新*/
     read_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, /* 阅读时间 */
-    message_type varchar(64) NOT NULL,          /* 消息类型 AtYouMsg / PrivateMsg */
+    message_type varchar(64) NOT NULL,          /* 消息类型 NORMAL / REPLAY */
     sender_isdel smallint NOT NULL,             /* 发送用户是否删除 0:否 ，1：是 */
     receiver_isdel smallint NOT NULL,           /* 接收用户是否删除 0:否 ，1：是 */
     is_read smallint NOT NULL,                  /* 是否已读 0:否 ，1：是  */
+    re_msg_id int(11) DEFAULT NULL,
     PRIMARY KEY (id)
 );
 

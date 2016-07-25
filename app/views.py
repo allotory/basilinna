@@ -710,6 +710,47 @@ def receiver():
         return redirect(url_for('error'))
 
 
+# send message
+@app.route('/sender', methods = ['GET', 'POST'])
+def sender():
+    if request.method == 'POST':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('error'))
+
+            # get message info
+            data = json.loads(request.form.get('data'))
+            receiver_id = data['receiver_id']
+            msg_content = data['msg_content']
+            msg_type = data['msg_type']
+            re_msg_id = data['re_msg_id']
+
+            if msg_type == 'NORMAL':
+                # add private message text
+                message_txt = models.Message_text(content=msg_content, message_name='')
+                db_service.db_insert(message_txt)
+                db_service.db_commit()
+
+                # add message log
+                message_log = models.Message_log(sender_id=m.id, receiver_id=receiver_id,
+                    text_id=message_txt.id, send_time=str(datetime.now()), read_time=str(datetime.now()),
+                    message_type=msg_type, sender_isdel=0, receiver_isdel=0, is_read=0, re_msg_id=re_msg_id)
+                db_service.db_insert(message_log)
+                db_service.db_commit()
+
+                return 'sendsuccess'
+
+            elif msg_type == 'REPLAY':
+                pass
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    elif request.method == 'GET':
+        pass
+    else:
+        return redirect(url_for('error'))
+
 # private message
 @app.route('/messages', methods = ['GET', 'POST'])
 def messages():
