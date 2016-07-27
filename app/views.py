@@ -740,7 +740,13 @@ def sender():
                 db_service.db_insert(message_log)
                 db_service.db_commit()
 
-                return 'sendsuccess'
+                # return reciever info and send time
+                receiver_info = models.Member.query.filter_by(id=receiver_id).first()
+
+                normal_msg = dict(p_url=receiver_info.personality_url, rfullname=receiver_info.fullname, 
+                    ravatar_path=receiver_info.avatar_path, send_time=str(datetime.now()))
+
+                return json.dumps(normal_msg)
 
             elif msg_type == 'REPLAY':
                 pass

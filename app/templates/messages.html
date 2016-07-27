@@ -36,10 +36,10 @@
 
 
             $("#send_msg").click(function(){
-                alert($("#receiver_id").val());
-                alert($("#msg_content").val());
-                alert($("#msg_type").val());
-                alert($("#re_msg_id").val());
+                // alert($("#receiver_id").val());
+                // alert($("#msg_content").val());
+                // alert($("#msg_type").val());
+                // alert($("#re_msg_id").val());
 
                 var data = {
                     data: JSON.stringify({
@@ -58,21 +58,58 @@
                     alert('发送消息失败,请重试!');
                 },
                 success: function(results){
-                    alert(results);
-                    // var receivers = jQuery.parseJSON(results); 
+                    // alert(results);
+                    var msg_info = jQuery.parseJSON(results); 
 
-                    // var selObj = $("#receiver_id");
-                    // for (var i = 0; i < receivers.length; i++) {
-                    //     selObj.append("<option value='"+receivers[i].id+"'>"+receivers[i].fullname +" ("+receivers[i].personality_url+")"+"</option>");
-                    // }
-                    
+                    $('#msgTabs a[href="#send"]').tab('show');
+
+                    var replay_box = "";
+
+                    if ($("#msg_type").val() == "REPLAY") {
+                        replay_box =
+                            '<div class="alert alert-info" style="margin-left:50px;margin-top:5px;">' +
+                                '<p>回复内容：Information message box using the <code>.alert-info</code> color scheme. <a href="#" title="Link">Link</a></p>' +
+                            '</div>';
+                    }
+
+                    msg_box = 
+                        '<div class="content-box">' +
+                            '<div class="content-box-wrapper" style="padding:10px;">' +
+                                '<a href="/space/'+ msg_info.p_url +'" title="'+ msg_info.rfullname +'" style="float:left;margin:5px;">' +
+                                    '<img class="img-circle" width="40" src="'+ msg_info.ravatar_path +'"/>' +
+                                '</a>' +
+                                '发给：<a href="/space/'+ msg_info.p_url +'">@'+ msg_info.rfullname +'</a>' +
+                                '<p class="tl-content"  style="min-height:25px;margin-left:50px;">' +
+                                    $("#msg_content").val() +
+                                '</p>' +
+                                '<div class="tl-time" style="margin-left:50px;margin-top:5px;">' +
+                                    '<i class="glyph-icon icon-clock-o"></i> ' +
+                                    msg_info.send_time
+                                '</div>' +
+                                replay_box +
+                            '</div>' +
+                        '</div>';
+
+                    $("#msg_box").html(msg_box);
+                    $("#msg_content").val('');
                 }
             });
                 
             });
 
+            $('#msgTabs a[href="#send"]').click(function (e) {
+                //e.preventDefault();
+                alert('haha');
+                $(this).tab('show');
+            });
 
         });
+
+
+        function ttab() {
+            
+            //$('#msgTabs a[href="#receive"]').tab('show');
+        }
 
     </script>
 {% endblock %}
@@ -185,7 +222,7 @@
                     <i class="glyph-icon icon-circle-o float-left font-orange"></i>
                     泡饭
                 </a>
-                <a href="#" class="list-group-item" title="">
+                <a href="#" onclick="ttab();" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-gray"></i>
                     泡饭
                 </a>
@@ -270,14 +307,35 @@
     </div>
 
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#send" aria-controls="send" role="tab" data-toggle="tab">我收到的私信</a></li>
-        <li role="presentation"><a href="#receive" aria-controls="receive" role="tab" data-toggle="tab">我发出的私信</a></li>
+    <ul id="msgTabs" class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#receive" aria-controls="receive" role="tab" data-toggle="tab">我收到的私信</a></li>
+        <li role="presentation"><a href="#send" aria-controls="send"  role="tab">我发出的私信</a></li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="send">
+
+        <div role="tabpanel" class="tab-pane active" id="receive">
+            <div class="panel">
+                <div class="panel-body">
+                    <h3 class="title-hero">
+                        recieve
+                    </h3>
+                    <div class="example-box-wrapper">
+                        <form class="form-horizontal bordered-row">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"></label>
+                                <div class="col-sm-6">
+                                    目前还没有私信。
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="send">
             <div class="panel">
                 <div class="panel-body">
                     <h3 class="title-hero">
@@ -285,14 +343,15 @@
                     </h3>
                     <div class="example-box-wrapper">
 
-                        <form class="form-horizontal bordered-row">
                         <div class="form-group">
                             <label class="col-sm-3 control-label"></label>
                             <div class="col-sm-6">
                                 目前还没有私信。
                             </div>
                         </div>
-                        </form>
+
+                        <div id="msg_box"></div>
+<!-- 
                         <div class="content-box">
                             <div class="content-box-wrapper" style="padding:10px;">
                                 <a href="/~vW36HOjXC8Y" title="obinphy" style="float:left;margin:5px;">
@@ -310,28 +369,9 @@
                                     <p>回复内容：Information message box using the <code>.alert-info</code> color scheme. <a href="#" title="Link">Link</a></p>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
 
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="receive">
-            <div class="panel">
-                <div class="panel-body">
-                    <h3 class="title-hero">
-                        recieve
-                    </h3>
-                    <div class="example-box-wrapper">
-                        <form class="form-horizontal bordered-row">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"></label>
-                                <div class="col-sm-6">
-                                    目前还没有私信。
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
