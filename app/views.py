@@ -743,7 +743,7 @@ def sender():
                 # return reciever info and send time
                 receiver_info = models.Member.query.filter_by(id=receiver_id).first()
 
-                normal_msg = dict(p_url=receiver_info.personality_url, rfullname=receiver_info.fullname, 
+                normal_msg = dict(msg_lid=message_log.id, p_url=receiver_info.personality_url, rfullname=receiver_info.fullname, 
                     ravatar_path=receiver_info.avatar_path, send_time=str(datetime.now()))
 
                 return json.dumps(normal_msg)
@@ -787,7 +787,7 @@ def sendlist():
                     re_msg_content = models.Message_text.query.filter(models.Message_text.id == re_msg.text_id).first()
 
                 # message dict
-                msg_dict = dict(mp_url=m.personality_url, mfullname=m.fullname, mavatar_path=m.avatar_path, 
+                msg_dict = dict(msg_lid=msg.id, mp_url=m.personality_url, mfullname=m.fullname, mavatar_path=m.avatar_path, 
                     content=message_text.content, p_url=receiver.personality_url, rfullname=receiver.fullname, 
                     send_time=str(msg.send_time), message_type=message_type, re_msg_content=re_msg_content)
 
@@ -829,7 +829,7 @@ def messages():
                     re_msg_content = models.Message_text.query.filter(models.Message_text.id == re_msg.text_id).first()
 
                 # message dict
-                msg_dict = dict(sp_url=sender.personality_url, sfullname=sender.fullname, savatar_path=sender.avatar_path, 
+                msg_dict = dict(msg_lid=msg.id, sp_url=sender.personality_url, sfullname=sender.fullname, savatar_path=sender.avatar_path, 
                     content=message_text.content, send_time=str(msg.send_time), 
                     message_type=message_type, re_msg_content=re_msg_content)
 

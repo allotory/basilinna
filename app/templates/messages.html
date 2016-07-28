@@ -67,13 +67,13 @@
 
                     if ($("#msg_type").val() == "REPLAY") {
                         replay_box =
-                            '<div class="alert alert-info" style="margin-left:50px;margin-top:5px;">' +
+                            '<div class="alert alert-info" style="margin-left:50px;margin-top:5px;margin-bottom:10px;">' +
                                 '<p>回复内容：Information message box using the <code>.alert-info</code> color scheme. <a href="#" title="Link">Link</a></p>' +
                             '</div>';
                     }
 
                     msg_box = 
-                        '<div class="content-box">' +
+                        '<div class="content-box" id="msg_info_'+ msg_info.msg_lid +'">' +
                             '<div class="content-box-wrapper" style="padding:10px;">' +
                                 '<a href="/space/'+ msg_info.p_url +'" title="'+ msg_info.rfullname +'" style="float:left;margin:5px;">' +
                                     '<img class="img-circle" width="40" src="'+ msg_info.ravatar_path +'"/>' +
@@ -82,11 +82,19 @@
                                 '<p class="tl-content"  style="min-height:25px;margin-left:50px;">' +
                                     $("#msg_content").val() +
                                 '</p>' +
+                                replay_box +
                                 '<div class="tl-time" style="margin-left:50px;margin-top:5px;">' +
                                     '<i class="glyph-icon icon-clock-o"></i> ' +
-                                    msg_info.send_time
+                                    msg_info.send_time +
+
+                                    '<div class="blog_operate">' +
+                                        '<span class="operate_content">' +
+                                            '<i class="glyph-icon icon-remove"></i> ' +
+                                                '<a id="" onclick="delmsg('+ msg_info.msg_lid +');" style="cursor:pointer;">删除</a> ' +
+                                        '</span>' +
+                                    '</div>' +
+
                                 '</div>' +
-                                replay_box +
                             '</div>' +
                         '</div>';
 
@@ -129,13 +137,13 @@
 
                                 if (msg_info_list[i].message_type == "REPLAY") {
                                     replay_box =
-                                        '<div class="alert alert-info" style="margin-left:50px;margin-top:5px;">' +
+                                        '<div class="alert alert-info" style="margin-left:50px;margin-top:5px;margin-bottom:10px;">' +
                                             '<p>回复内容：' + msg_info_list[i].re_msg_content + '</p>' +
                                         '</div>';
                                 }
 
                                 msg_box = 
-                                    '<div class="content-box">' +
+                                    '<div class="content-box" id="msg_info_'+ msg_info_list[i].msg_lid +'">' +
                                         '<div class="content-box-wrapper" style="padding:10px;">' +
                                             '<a href="/space/'+ msg_info_list[i].mp_url +'" title="'+ msg_info_list[i].mfullname +'" style="float:left;margin:5px;">' +
                                                 '<img class="img-circle" width="40" src="'+ msg_info_list[i].mavatar_path +'"/>' +
@@ -144,11 +152,19 @@
                                             '<p class="tl-content"  style="min-height:25px;margin-left:50px;">' +
                                                 msg_info_list[i].content +
                                             '</p>' +
+                                            replay_box +
                                             '<div class="tl-time" style="margin-left:50px;margin-top:5px;">' +
                                                 '<i class="glyph-icon icon-clock-o"></i> ' +
-                                                msg_info_list[i].send_time
+                                                msg_info_list[i].send_time +
+
+                                                '<div class="blog_operate">' +
+                                                    '<span class="operate_content">' +
+                                                        '<i class="glyph-icon icon-remove"></i> ' +
+                                                            '<a id="" onclick="delmsg('+ msg_info_list[i].msg_lid +');" style="cursor:pointer;">删除</a> ' +
+                                                    '</span>' +
+                                                '</div>' +
+
                                             '</div>' +
-                                            replay_box +
                                         '</div>' +
                                     '</div>';
 
@@ -165,8 +181,8 @@
         });
 
 
-        function ttab() {
-            
+        function delmsg(msg_id) {
+            alert(msg_id)
             //$('#msgTabs a[href="#receive"]').tab('show');
         }
 
@@ -382,7 +398,7 @@
                     </h3>
                     {% if msg_list %}
                         {% for msg in msg_list %}
-                            <div class="example-box-wrapper">
+                            <div class="example-box-wrapper" id="msg_info_{{ msg.msg_lid }}">
                                 <div class="content-box">
                                     <div class="content-box-wrapper" style="padding:10px;">
                                         <a href="/space/{{ msg.sp_url }}" title="{{ msg.sfullname }}" style="float:left;margin:5px;">
@@ -392,14 +408,24 @@
                                         <p class="tl-content"  style="min-height:25px;margin-left:50px;">
                                             {{ msg.content }}
                                         </p>
-                                        <div class="tl-time" style="margin-left:50px;margin-top:5px;">
-                                            <i class="glyph-icon icon-clock-o"></i> {{ msg.send_time }}
-                                        </div>
                                         {% if msg.message_type == 'REPLAY' %}
-                                        <div class="alert alert-info" style="margin-left:50px;margin-top:5px;">
+                                        <div class="alert alert-info" style="margin-left:50px;margin-top:5px;margin-bottom:10px;">
                                             <p>回复内容：{{ msg.re_msg_content }}</p>
                                         </div>
                                         {% endif %}
+                                        <div class="tl-time" style="margin-left:50px;margin-top:5px;">
+                                            <i class="glyph-icon icon-clock-o"></i> {{ msg.send_time }}
+                                            <div class="blog_operate">
+                                                <span class="operate_content">
+                                                    <i class="glyph-icon icon-share"></i> 
+                                                        <a id="" onclick="" style="cursor:pointer;">回复</a> 
+                                                </span>
+                                                <span class="operate_content">
+                                                    <i class="glyph-icon icon-remove"></i> 
+                                                        <a id="" onclick="delmsg({{ msg.msg_lid }});" style="cursor:pointer;">删除</a> 
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -430,8 +456,8 @@
 
                         <div id="msg_box"></div>
                         <div id="msg_box_list"></div>
-<!-- 
-                        <div class="content-box">
+
+                        <!-- <div class="content-box">
                             <div class="content-box-wrapper" style="padding:10px;">
                                 <a href="/~vW36HOjXC8Y" title="obinphy" style="float:left;margin:5px;">
                                     <img class="img-circle" width="40" src="http://avatar.fanfou.com/s0/00/00/00.jpg"/>
@@ -440,16 +466,25 @@
                                 <p class="tl-content"  style="min-height:25px;margin-left:50px;">
                                     测试，a
                                 </p>
+                                <div class="alert alert-info" style="margin-left:50px;margin-top:5px;margin-bottom:10px;">
+                                    <p>回复内容：Information message box using the <code>.alert-info</code> color scheme. <a href="#" title="Link">Link</a></p>
+                                </div>
                                 <div class="tl-time" style="margin-left:50px;margin-top:5px;">
                                     <i class="glyph-icon icon-clock-o"></i> 2016-07-12 11:27:53 
                                     via Web 
-                                </div>
-                                <div class="alert alert-info" style="margin-left:50px;margin-top:5px;">
-                                    <p>回复内容：Information message box using the <code>.alert-info</code> color scheme. <a href="#" title="Link">Link</a></p>
+                                    <div class="blog_operate">
+                                        <span class="operate_content">
+                                            <i class="glyph-icon icon-share"></i> 
+                                                <a id="" onclick="" style="cursor:pointer;">回复</a> 
+                                        </span>
+                                        <span class="operate_content">
+                                            <i class="glyph-icon icon-remove"></i> 
+                                                <a id="" onclick="" style="cursor:pointer;">删除</a> 
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div> -->
-
 
                     </div>
                 </div>
