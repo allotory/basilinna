@@ -757,13 +757,87 @@ def sender():
     else:
         return redirect(url_for('error'))
 
+
+# send message list
+@app.route('/sendlist', methods = ['GET'])
+def sendlist():
+    if request.method == 'GET':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('error'))
+
+            # message list
+            messages = models.Message_log.query.filter(models.Message_log.sender_id == m.id).order_by(models.Message_log.id.desc()).all()
+            msg_list = []
+            for msg in messages:
+                # message content
+                message_text = models.Message_text.query.filter(models.Message_text.id == msg.text_id).first()
+           
+                # receiver info
+                receiver = models.Member.query.filter_by(id=msg.receiver_id).first()
+
+                # message type
+                message_type = msg.message_type
+                re_msg_content = None
+                if message_type == 'REPLAY':
+                    # exist re_msg
+                    re_msg = models.Message_log.query.filter(models.Message_log.id == msg.re_msg_id).first()
+                    re_msg_content = models.Message_text.query.filter(models.Message_text.id == re_msg.text_id).first()
+
+                # message dict
+                msg_dict = dict(mp_url=m.personality_url, mfullname=m.fullname, mavatar_path=m.avatar_path, 
+                    content=message_text.content, p_url=receiver.personality_url, rfullname=receiver.fullname, 
+                    send_time=str(msg.send_time), message_type=message_type, re_msg_content=re_msg_content)
+
+                msg_list.append(msg_dict)
+            
+            return json.dumps(msg_list)
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    else:
+        return redirect(url_for('error'))
+
+
 # private message
 @app.route('/messages', methods = ['GET', 'POST'])
 def messages():
     if request.method == 'GET':
-        return render_template('messages.html')
-    elif request.method == 'POST':
-        pass
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('error'))
+
+            # message list
+            messages = models.Message_log.query.filter(models.Message_log.receiver_id == m.id).order_by(models.Message_log.id.desc()).all()
+            msg_list = []
+            for msg in messages:
+                # message content
+                message_text = models.Message_text.query.filter(models.Message_text.id == msg.text_id).first()
+           
+                # sender info
+                sender = models.Member.query.filter_by(id=msg.sender_id).first()
+
+                # message type
+                message_type = msg.message_type
+                re_msg_content = None
+                if message_type == 'REPLAY':
+                    # exist re_msg
+                    re_msg = models.Message_log.query.filter(models.Message_log.id == msg.re_msg_id).first()
+                    re_msg_content = models.Message_text.query.filter(models.Message_text.id == re_msg.text_id).first()
+
+                # message dict
+                msg_dict = dict(sp_url=sender.personality_url, sfullname=sender.fullname, savatar_path=sender.avatar_path, 
+                    content=message_text.content, send_time=str(msg.send_time), 
+                    message_type=message_type, re_msg_content=re_msg_content)
+
+                msg_list.append(msg_dict)
+            
+            return render_template('messages.html', msg_list=msg_list)
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
         return redirect(url_for('error'))
 
