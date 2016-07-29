@@ -769,7 +769,7 @@ def sendlist():
                 redirect(url_for('error'))
 
             # message list
-            messages = models.Message_log.query.filter(models.Message_log.sender_id == m.id).order_by(models.Message_log.id.desc()).all()
+            messages = models.Message_log.query.filter(and_(models.Message_log.sender_id == m.id, models.Message_log.sender_isdel == 0)).order_by(models.Message_log.id.desc()).all()
             msg_list = []
             for msg in messages:
                 # message content
@@ -811,7 +811,7 @@ def messages():
                 redirect(url_for('error'))
 
             # message list
-            messages = models.Message_log.query.filter(models.Message_log.receiver_id == m.id).order_by(models.Message_log.id.desc()).all()
+            messages = models.Message_log.query.filter(and_(models.Message_log.receiver_id == m.id, models.Message_log.receiver_isdel == 0)).order_by(models.Message_log.id.desc()).all()
             msg_list = []
             for msg in messages:
                 # message content
