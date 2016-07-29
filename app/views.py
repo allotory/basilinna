@@ -842,6 +842,32 @@ def messages():
         return redirect(url_for('error'))
 
 
+# blog delete
+@app.route('/delmsg', methods = ['POST'])
+def delmsg():
+    if request.method == 'POST':
+        member_id = session['member_id']
+
+        # get blog id
+        data = json.loads(request.form.get('data'))
+        msg_id = data['msg_id']
+        del_type = data['del_type']
+
+        # delete msg
+        message = models.Message_log.query.filter(models.Message_log.id == msg_id).first()
+
+        if del_type == 1:
+            message.sender_isdel = 1
+        elif del_type == 2:
+            message.receiver_isdel = 1
+            
+        db_service.db_commit()
+
+        return 'delmsgsuccess'
+    else:
+        return redirect(url_for('error'))
+
+
 # search
 @app.route('/search', methods = ['GET', 'POST'])
 def search():

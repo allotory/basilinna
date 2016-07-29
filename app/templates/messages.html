@@ -90,7 +90,7 @@
                                     '<div class="blog_operate">' +
                                         '<span class="operate_content">' +
                                             '<i class="glyph-icon icon-remove"></i> ' +
-                                                '<a id="" onclick="delmsg('+ msg_info.msg_lid +');" style="cursor:pointer;">删除</a> ' +
+                                                '<a id="" onclick="delmsg('+ msg_info.msg_lid +', 1);" style="cursor:pointer;">删除</a> ' +
                                         '</span>' +
                                     '</div>' +
 
@@ -160,7 +160,7 @@
                                                 '<div class="blog_operate">' +
                                                     '<span class="operate_content">' +
                                                         '<i class="glyph-icon icon-remove"></i> ' +
-                                                            '<a id="" onclick="delmsg('+ msg_info_list[i].msg_lid +');" style="cursor:pointer;">删除</a> ' +
+                                                            '<a id="" onclick="delmsg('+ msg_info_list[i].msg_lid +', 1);" style="cursor:pointer;">删除</a> ' +
                                                     '</span>' +
                                                 '</div>' +
 
@@ -181,9 +181,29 @@
         });
 
 
-        function delmsg(msg_id) {
-            alert(msg_id)
-            //$('#msgTabs a[href="#receive"]').tab('show');
+        function delmsg(msg_id, del_type) {
+            alert(msg_id);
+            alert(del_type)
+            var data = {
+                data: JSON.stringify({
+                    "msg_id": msg_id, 
+                    "del_type": del_type
+                })
+            };
+            if(confirm("你确定删除这条消息吗？（不可恢复）")){
+                $.ajax({
+                    url:"/delmsg",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('删除失败,请稍后重试!');
+                    },
+                    success: function(results){
+                        alert(results);
+                        $("#msg_info_" + msg_id).remove();
+                    }
+                });
+            }
         }
 
     </script>
@@ -422,7 +442,7 @@
                                                 </span>
                                                 <span class="operate_content">
                                                     <i class="glyph-icon icon-remove"></i> 
-                                                        <a id="" onclick="delmsg({{ msg.msg_lid }});" style="cursor:pointer;">删除</a> 
+                                                        <a id="" onclick="delmsg({{ msg.msg_lid }}, 2);" style="cursor:pointer;">删除</a> 
                                                 </span>
                                             </div>
                                         </div>
