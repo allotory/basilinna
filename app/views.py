@@ -749,7 +749,25 @@ def sender():
                 return json.dumps(normal_msg)
 
             elif msg_type == 'REPLAY':
-                pass
+                # add private message text
+                message_txt = models.Message_text(content=msg_content, message_name='')
+                db_service.db_insert(message_txt)
+                db_service.db_commit()
+
+                # add message log
+                message_log = models.Message_log(sender_id=m.id, receiver_id=receiver_id,
+                    text_id=message_txt.id, send_time=str(datetime.now()), read_time=str(datetime.now()),
+                    message_type=msg_type, sender_isdel=0, receiver_isdel=0, is_read=0, re_msg_id=re_msg_id)
+                db_service.db_insert(message_log)
+                db_service.db_commit()
+
+                # return reciever info and send time
+                receiver_info = models.Member.query.filter_by(id=receiver_id).first()
+
+                replay_msg = dict(msg_lid=message_log.id, p_url=receiver_info.personality_url, rfullname=receiver_info.fullname, 
+                    ravatar_path=receiver_info.avatar_path, send_time=str(datetime.now()))
+
+                return json.dumps(replay_msg)
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     elif request.method == 'GET':
@@ -784,7 +802,8 @@ def sendlist():
                 if message_type == 'REPLAY':
                     # exist re_msg
                     re_msg = models.Message_log.query.filter(models.Message_log.id == msg.re_msg_id).first()
-                    re_msg_content = models.Message_text.query.filter(models.Message_text.id == re_msg.text_id).first()
+                    re_msg_text = models.Message_text.query.filter(models.Message_text.id == re_msg.text_id).first()
+                    re_msg_content = re_msg_text.content
 
                 # message dict
                 msg_dict = dict(msg_lid=msg.id, mp_url=m.personality_url, mfullname=m.fullname, mavatar_path=m.avatar_path, 
@@ -829,7 +848,7 @@ def messages():
                     re_msg_content = models.Message_text.query.filter(models.Message_text.id == re_msg.text_id).first()
 
                 # message dict
-                msg_dict = dict(msg_lid=msg.id, sp_url=sender.personality_url, sfullname=sender.fullname, savatar_path=sender.avatar_path, 
+                msg_dict = dict(msg_lid=msg.id, sender_id=sender.id, sp_url=sender.personality_url, sfullname=sender.fullname, savatar_path=sender.avatar_path, 
                     content=message_text.content, send_time=str(msg.send_time), 
                     message_type=message_type, re_msg_content=re_msg_content)
 

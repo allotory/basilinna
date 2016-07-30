@@ -101,7 +101,7 @@
                     $("#msg_box").append(msg_box);
                     $("#msg_content").val('');
                 }
-            });
+                });
                 
             });
 
@@ -178,6 +178,104 @@
                 });
             });
 
+
+            $("#replay_msg").click(function(){
+                // alert($("#receiver_id").val());
+                // alert($("#msg_content").val());
+                // alert($("#msg_type").val());
+                // alert($("#re_msg_id").val());
+
+                var data = {
+                    data: JSON.stringify({
+                        "receiver_id": $("#reer_id").val(),
+                        "msg_content": $("#replay_content").val(),
+                        "msg_type": "REPLAY",
+                        "re_msg_id": $("#rmsg_id").val()
+                    })
+                };
+
+                $.ajax({
+                    url:"/sender",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('发送消息失败,请重试!');
+                    },
+                    success: function(results){
+                        
+                        $('#myModal').modal('hide');
+
+                        $.ajax({
+                            url:"/sendlist",
+                            type: "GET",
+                            error: function(){
+                                alert('查询已发送消息失败,请重试!');
+                            },
+                            success: function(results){
+                                // alert(results);
+                                var msg_info_list = jQuery.parseJSON(results); 
+                                // alert(msg_info[0].content)
+
+                                if (msg_info_list.length == 0) {
+                                    msg_box = 
+                                        '<div class="form-group">' +
+                                            '<label class="col-sm-3 control-label"></label>' +
+                                            '<div class="col-sm-6">' +
+                                                '目前还没有发过私信。' +
+                                            '</div>' +
+                                        '</div>';
+                                    $("#msg_box_list").html(msg_box);
+                                } else {
+                                    for(var i = 0; i < msg_info_list.length; i++) {
+
+                                        var replay_box = "";
+
+                                        if (msg_info_list[i].message_type == "REPLAY") {
+                                            replay_box =
+                                                '<div class="alert alert-info" style="margin-left:50px;margin-top:5px;margin-bottom:10px;">' +
+                                                    '<p>回复内容：' + msg_info_list[i].re_msg_content + '</p>' +
+                                                '</div>';
+                                        }
+
+                                        msg_box = 
+                                            '<div class="content-box" id="msg_info_'+ msg_info_list[i].msg_lid +'">' +
+                                                '<div class="content-box-wrapper" style="padding:10px;">' +
+                                                    '<a href="/space/'+ msg_info_list[i].mp_url +'" title="'+ msg_info_list[i].mfullname +'" style="float:left;margin:5px;">' +
+                                                        '<img class="img-circle" width="40" src="'+ msg_info_list[i].mavatar_path +'"/>' +
+                                                    '</a>' +
+                                                    '发给：<a href="/space/'+ msg_info_list[i].p_url +'">@'+ msg_info_list[i].rfullname +'</a>' +
+                                                    '<p class="tl-content"  style="min-height:25px;margin-left:50px;">' +
+                                                        msg_info_list[i].content +
+                                                    '</p>' +
+                                                    replay_box +
+                                                    '<div class="tl-time" style="margin-left:50px;margin-top:5px;">' +
+                                                        '<i class="glyph-icon icon-clock-o"></i> ' +
+                                                        msg_info_list[i].send_time +
+
+                                                        '<div class="blog_operate">' +
+                                                            '<span class="operate_content">' +
+                                                                '<i class="glyph-icon icon-remove"></i> ' +
+                                                                    '<a id="" onclick="delmsg('+ msg_info_list[i].msg_lid +', 1);" style="cursor:pointer;">删除</a> ' +
+                                                            '</span>' +
+                                                        '</div>' +
+
+                                                    '</div>' +
+                                                '</div>' +
+                                            '</div>';
+
+                                        $("#msg_box_list").append(msg_box);
+
+                                    }    
+                                }
+
+                                $('#msgTabs a[href="#send"]').tab('show');
+                            }
+                        });
+                    }
+                });
+                
+            });
+
         });
 
 
@@ -204,6 +302,33 @@
                     }
                 });
             }
+        }
+
+        function replay(id, receiver_id, p_url, fullname, apath, content, sendtime) {
+
+            var box = 
+                '<div class="content-box">' +
+                    '<div class="content-box-wrapper" style="padding:10px;">' +
+                        '<a href="/space/'+p_url+'" title="'+ fullname +'" style="float:left;margin:5px;">' +
+                            '<img class="img-circle" width="40" src="'+ apath +'"/>' +
+                        '</a>' +
+                        '来自：<a href="/space/'+p_url+'">@'+ fullname +'</a>' +
+                        '<div class="alert alert-info" style="margin-left:50px;margin-top:5px;margin-bottom:10px;">' +
+                            '<p id="source_content">原文内容：'+ content +'</p>' +
+                        '</div>' +
+                        '<div class="tl-time" style="margin-left:50px;margin-top:5px;">' +
+                            '<i class="glyph-icon icon-clock-o"></i> ' +
+                            sendtime + 
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+            $("#modal_body").prepend(box);
+
+            $("#rmsg_id").val(id);
+            $("#reer_id").val(receiver_id);
+
+            $('#myModal').modal('show');
         }
 
     </script>
@@ -374,8 +499,31 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-md-8">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">回复</h4>
+            </div>
+            <div id="modal_body" class="modal-body">
 
+                <p id="re_from_content_p" style="margin-bottom:5px;"></p>
+                <p>
+                    <textarea id="replay_content" name="replay_content" class="form-control textarea-no-resize" rows="4" style="padding:10px;margin:0px;" placeholder="回复内容"></textarea>
+                    <input type="hidden" id="rmsg_id" name="rmsg_id" value="0">
+                    <input type="hidden" id="reer_id" name="reer_id" value="0">
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="replay_msg" type="button" class="btn btn-primary">回复</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-8">
     <div class="content-box bg-white post-box">
 
         <form name="post_form" action="" method="POST">
@@ -438,7 +586,7 @@
                                             <div class="blog_operate">
                                                 <span class="operate_content">
                                                     <i class="glyph-icon icon-share"></i> 
-                                                        <a id="" onclick="" style="cursor:pointer;">回复</a> 
+                                                        <a id="" onclick="replay({{ msg.msg_lid }}, {{msg.sender_id}}, '{{ msg.sp_url }}', '{{ msg.sfullname }}', '{{ msg.savatar_path }}', '{{ msg.content }}', '{{ msg.send_time }}');" style="cursor:pointer;">回复</a> 
                                                 </span>
                                                 <span class="operate_content">
                                                     <i class="glyph-icon icon-remove"></i> 
