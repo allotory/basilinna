@@ -158,10 +158,14 @@ def index():
 
         # follow detail
         following_count = models.Relation.query.filter(models.Relation.member_id == m.id).count()
+        session['following_count'] = following_count
+
         fans_count = models.Relation.query.filter(models.Relation.followee_id == m.id).count()
+        session['fans_count'] = fans_count
 
         # blog count 
         blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
+        session['blog_count'] = blog_count
 
         # friends list
         followees = models.Relation.query.filter(models.Relation.member_id == m.id).limit(8).all()
@@ -854,7 +858,9 @@ def messages():
 
                 msg_list.append(msg_dict)
             
-            return render_template('messages.html', msg_list=msg_list)
+            return render_template('messages.html', msg_list=msg_list, following_count=session.get('following_count'),
+                fans_count=session.get('fans_count'), blog_count=session.get('blog_count'),
+                fullname=m.fullname, avatar_path=m.avatar_path, autograph=m.autograph)
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:

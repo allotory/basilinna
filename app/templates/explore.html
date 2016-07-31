@@ -19,8 +19,8 @@
 
             $("#repeat_blog").click(function(){
 
-                alert($("#re_from").val());
-                alert($("#re_member_id").val());
+                // alert($("#re_from").val());
+                // alert($("#re_member_id").val());
 
                 var not_me = "{{ not_me }}";
 
@@ -50,7 +50,7 @@
 
                         $('#myModal').modal('hide');
 
-                        alert(results);
+                        // alert(results);
                         var blog = jQuery.parseJSON(results); 
                         // alert(blog.content);
                         if (not_me == null || not_me == "") {
