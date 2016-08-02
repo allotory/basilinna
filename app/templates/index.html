@@ -431,12 +431,20 @@
                                     <div class="tl-icon bg-black">
                                 {% endif %}
                                         <input type="hidden" id="origin_post_type_{{ blog.get('blog').id }}" name="origin_post_type_{{ blog.get('blog').id }}" value="{{blog.get('blog').post_type}}">
-                                        <img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="" />
+                                        <img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="{{ blog.get('blog_member').fullname }}" title="{{ blog.get('blog_member').fullname }}"/>
                                     </div>
                                 <div class="popover right">
                                     <div class="arrow"></div>
                                     <div id="blog_detail_{{ blog.get('blog').id }}" class="popover-content">
-                                        
+                                        {% if blog.get('blog').post_type == 'NORMAL' %}
+                                            <div class="tl-label bs-label bg-primary">
+                                        {% elif blog.get('blog').post_type == 'REPEAT' %}
+                                            <div class="tl-label bs-label bg-yellow">
+                                        {% elif blog.get('blog').post_type == 'REPLAY' %}
+                                            <div class="tl-label bs-label bg-black">
+                                        {% endif %}
+                                                <a href="/space/{{blog.get('blog_member').personality_url}}" style="color:white;">{{ blog.get('blog_member').fullname }}</a>
+                                            </div>
                                         {% if blog.get('blog').post_type == 'NORMAL' %}
                                             <p class="tl-content" id="repeat_content_{{ blog.get('blog').id }}">
                                                 {{ blog.get('blog').content }}

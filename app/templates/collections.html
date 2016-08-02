@@ -462,8 +462,8 @@
                                         {% elif blog.get('blog').post_type == 'REPLAY' %}
                                             <div class="tl-label bs-label bg-black">
                                         {% endif %}
-                                            <a href="/space/{{blog.get('collect_member').personality_url}}" style="color:white;">{{ blog.get('collect_member').fullname }}</a>
-                                        </div>
+                                                <a href="/space/{{blog.get('collect_member').personality_url}}" style="color:white;">{{ blog.get('collect_member').fullname }}</a>
+                                            </div>
                                         {% if blog.get('blog').post_type == 'NORMAL' %}
                                             <p class="tl-content" id="repeat_content_{{ blog.get('blog').id }}">
                                                 {{ blog.get('blog').content }}

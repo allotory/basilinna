@@ -116,18 +116,28 @@ def index():
         if m is None:
             redirect(url_for('error'))
 
+        # followee id list
+        followees = models.Relation.query.filter(models.Relation.member_id == m.id).all()
+        relation_list = [x.followee_id for x in followees]
+        relation_list.append(m.id)
+
         # blog detail
-        blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
+        blog_list = models.Blog.query.filter(models.Blog.member_id.in_(relation_list)).order_by(models.Blog.id.desc()).all()
 
         blog_info_list = []
 
         # blog collected
         for blog in blog_list:
+            # whether or not collected
             c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog.id)).first()
             if c is None:
-                blog_dict = dict(blog=blog, collection='uncollect', blog_member=m)
+                blog_dict = dict(blog=blog, collection='uncollect')
             else:
-                blog_dict = dict(blog=blog, collection='collecting', blog_member=m)
+                blog_dict = dict(blog=blog, collection='collecting')
+
+            # current blog author
+            blog_author = models.Member.query.filter_by(id=blog.member_id).first()
+            blog_dict['blog_member'] = blog_author
 
             # a blog repeat list
             re_list = []
