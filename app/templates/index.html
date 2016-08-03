@@ -217,6 +217,10 @@
 
         }
 
+        function upload_image(obj) {
+            alert(obj.value);
+        }
+
     </script>
 {% endblock %}
 
@@ -401,7 +405,8 @@
                 <a href="#" class="btn btn-md btn-link hover-white" title="">
                     <i class="glyph-icon icon-map-marker"></i>
                 </a>
-                <a href="#" class="btn btn-md btn-link hover-white" title="">
+                <input id="attach" type="file" name="attach" onChange="upload_image(this);" style="display:none"/>
+                <a onclick='javascript:document.getElementById("attach").click()' class="btn btn-md btn-link hover-white" title="上传图片">
                     <i class="glyph-icon icon-picture-o"></i>
                 </a>
                 <a id="share" class="btn btn-md btn-post float-right btn-success" title="">
@@ -416,6 +421,10 @@
             <h3 class="title-hero">
                 最新动态
             </h3>
+            <form action="/upload" method=post enctype=multipart/form-data>
+                <input type="file" name="file">
+                <input type="submit" value="Upload">
+            </form>
             <div class="example-box-wrapper">
                 <div class="timeline-box timeline-box-left">
                     <div id="ajax_tl_row"></div>

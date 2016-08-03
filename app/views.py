@@ -7,9 +7,10 @@ __author__ = 'Ellery'
 from flask import Flask, render_template, request, session, abort, redirect, url_for, make_response
 from sqlalchemy import and_, func
 from app import app, models, csrf
-from app.main import valid_account, encryption, invitation, db_service
+from app.main import valid_account, encryption, invitation, db_service, upload_file
 from datetime import datetime
-import json
+import json, os
+from werkzeug import secure_filename
 
 # register page
 @app.route('/signup', methods=['GET', 'POST'])
@@ -901,6 +902,17 @@ def delmsg():
         return 'delmsgsuccess'
     else:
         return redirect(url_for('error'))
+
+
+# upload image
+@app.route('/upload', methods = ['POST'])
+def upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and upload_file.allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config.get('UPLOAD_FOLDER'), filename))
+            return os.path.abspath(os.path.join(app.config.get('UPLOAD_FOLDER'), filename))
 
 
 # search
