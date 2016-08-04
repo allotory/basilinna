@@ -911,8 +911,14 @@ def upload():
         file = request.files['file']
         if file and upload_file.allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config.get('UPLOAD_FOLDER'), filename))
-            return filename
+            src_path = os.path.join(app.config.get('UPLOAD_FOLDER'), filename)
+
+            new_name = 'basilinna_' + upload_file.unique_name() + os.path.splitext(src_path)[1]
+            new_path = os.path.join(app.config.get('UPLOAD_FOLDER'), new_name)
+            
+            file.save(new_path)
+            
+            return new_name
 
 
 # delete image
