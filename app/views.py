@@ -912,7 +912,21 @@ def upload():
         if file and upload_file.allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config.get('UPLOAD_FOLDER'), filename))
-            return os.path.abspath(os.path.join(app.config.get('UPLOAD_FOLDER'), filename))
+            return filename
+
+
+# delete image
+@app.route('/delimage', methods = ['POST'])
+def delimage():
+    if request.method == 'POST':
+
+        # get filename
+        data = json.loads(request.form.get('data'))
+        filename = data['filename']
+
+        # remove file
+        os.remove(os.path.join(app.config.get('UPLOAD_FOLDER'), filename))
+        return 'removefilesuccess'
 
 
 # search

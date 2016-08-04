@@ -218,7 +218,50 @@
         }
 
         function upload_image(obj) {
-            alert(obj.value);
+            // alert(obj.value);
+            var form = new FormData(document.getElementById("post_form"));
+            $.ajax({
+                url: "/upload",
+                type: "post",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    // alert(data);
+                    // alert("upload success!");
+                    $("#image_name").html(data);
+                    $("#file_name").val(data)
+                    $("#del_img").show();
+                },
+                error:function(e){
+                    alert("upload error!");
+                }
+            });  
+        }
+
+        function del_image() {
+            filename = $("#file_name").val()
+
+            var data = {
+                data: JSON.stringify({
+                    "filename": filename
+                })
+            };
+
+            $.ajax({
+                url:"/delimage",
+                type: "POST",
+                data: data,
+                error: function(){
+                    alert('删除失败,请稍后重试!');
+                },
+                success: function(results){
+                    // alert(results);
+                    $("#image_name").html("");
+                    $("#del_img").hide();
+                }
+            });
+
         }
 
     </script>
@@ -375,7 +418,7 @@
 
     <div class="content-box bg-white post-box">
 
-        <form name="post_form" action="/post" method="POST">
+        <form id="post_form" name="post_form" action="/post" method="POST">
 
             <input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">
             <input id="re_from" name="re_from" type="hidden" value="0">
@@ -405,9 +448,14 @@
                 <a href="#" class="btn btn-md btn-link hover-white" title="">
                     <i class="glyph-icon icon-map-marker"></i>
                 </a>
-                <input id="attach" type="file" name="attach" onChange="upload_image(this);" style="display:none"/>
-                <a onclick='javascript:document.getElementById("attach").click()' class="btn btn-md btn-link hover-white" title="上传图片">
+                <input id="file" type="file" name="file" onChange="upload_image(this);" style="display:none"/>
+                <a onclick='javascript:document.getElementById("file").click()' class="btn btn-md btn-link hover-white" title="上传图片">
                     <i class="glyph-icon icon-picture-o"></i>
+                </a>
+                <span id="image_name"></span>
+                <input id="file_name" name="file_name" type="hidden" value="">
+                <a id="del_img" onclick="del_image()" class="btn btn-md btn-link hover-white" style="display:none;" title="删除图片">
+                    <i class="glyph-icon icon-remove"></i>
                 </a>
                 <a id="share" class="btn btn-md btn-post float-right btn-success" title="">
                     Share it!
@@ -421,10 +469,6 @@
             <h3 class="title-hero">
                 最新动态
             </h3>
-            <form action="/upload" method=post enctype=multipart/form-data>
-                <input type="file" name="file">
-                <input type="submit" value="Upload">
-            </form>
             <div class="example-box-wrapper">
                 <div class="timeline-box timeline-box-left">
                     <div id="ajax_tl_row"></div>
