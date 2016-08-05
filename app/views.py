@@ -136,6 +136,11 @@ def index():
             else:
                 blog_dict = dict(blog=blog, collection='collecting')
 
+            origin_pic_path = blog.pic_path
+            if blog.exist_pic != 0:
+                origin_pic_path = blog.pic_path.replace('_thumbnail', '')
+                blog_dict['origin_pic_path'] = origin_pic_path
+
             # current blog author
             blog_author = models.Member.query.filter_by(id=blog.member_id).first()
             blog_dict['blog_member'] = blog_author
@@ -224,9 +229,12 @@ def post():
     db_service.db_insert(b)
     db_service.db_commit()
 
+    origin_pic_path = os.path.join('../static/uploads', file_name)
+
     # build a blog dict for json
     blog_dict = dict(id=b.id, content=b.content, create_time=str(b.create_time),
-        post_type=b.post_type, exist_pic=b.exist_pic, pic_path=b.pic_path, via=b.via)
+        post_type=b.post_type, exist_pic=b.exist_pic, pic_path=b.pic_path,
+        origin_pic_path=origin_pic_path, via=b.via)
     temp = json.dumps(blog_dict)
 
     return temp

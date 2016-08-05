@@ -14,6 +14,11 @@
                 $("#re_from_content_p").hide(350);
                 $("#content_divider").hide(350);
             });
+
+            $('.image_popup_link').magnificPopup({
+                type: 'image'
+                // other options
+            });
         
             var csrftoken = "{{ csrf_token() }}";
             $.ajaxSetup({
@@ -84,10 +89,8 @@
 
                         var image_block = ''
                         if (blog.exist_pic != 0) {
-                            image_block = '<p><a href="#" name="a"><img src="' + blog.pic_path + '"></a></p>'
+                            image_block = '<p><a class="image_popup_link" href="'+blog.origin_pic_path+'"><img src="' + blog.pic_path + '"></a></p>'
                         }
-
-
 
                         time_line = 
                         '<div class="tl-row">' +
@@ -511,7 +514,9 @@
                                                 <p>
                                                     <input id="normal_exist_pic_{{ blog.get('blog').id }}" type="hidden" value="{{blog.get('blog').exist_pic}}">
                                                     <input id="normal_pic_path_{{ blog.get('blog').id }}" type="hidden" value="{{ blog.get('blog').pic_path }}">
-                                                    <a href="#" name="a"><img src="{{ blog.get('blog').pic_path }}"></a>
+                                                    <a class="image_popup_link" href="{{ blog.get('origin_pic_path') }}">
+                                                        <img src="{{ blog.get('blog').pic_path }}">
+                                                    </a>
                                                 </p>
                                             {% endif %}
                                         {% elif blog.get('blog').post_type == 'REPEAT' %}
