@@ -19,7 +19,7 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'migrations')
 
 HOST = 'http://localhost:5000/'
 
-UPLOAD_FOLDER = './uploads'
+UPLOAD_FOLDER = '.\\app\\static\\uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # 16M
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024

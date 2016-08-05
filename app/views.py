@@ -204,15 +204,22 @@ def post():
     re_from = int(data['re_from'])
     re_member_id = int(data['re_member_id'])
     post_type = data['post_type']
+    file_name = data['file_name']
 
     if re_from == 0:
         re_from = None
     if re_member_id == 0:
         re_member_id = None
 
+    exist_pic = 0
+    pic_path = None
+    if file_name and file_name != "":
+        exist_pic = 1
+        pic_path = os.path.join('../static/uploads', os.path.splitext(file_name)[0] + '_thumbnail' + os.path.splitext(file_name)[1])
+
     # insert blog
     b = models.Blog(content=content, create_time=str(datetime.now()),
-        post_type=post_type, via='Web', exist_pic=0, pic_path=None,
+        post_type=post_type, via='Web', exist_pic=exist_pic, pic_path=pic_path,
         location=None, member_id=member_id, re_from=re_from, re_member_id=re_member_id)
     db_service.db_insert(b)
     db_service.db_commit()
@@ -917,6 +924,9 @@ def upload():
             new_path = os.path.join(app.config.get('UPLOAD_FOLDER'), new_name)
             
             file.save(new_path)
+
+            # create thumbsnail
+            upload_file.image_thumbnail(new_name)
             
             return new_name
 

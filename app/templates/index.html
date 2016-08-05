@@ -33,13 +33,15 @@
                 var origin_post_type = $("#origin_post_type_"+re_from_id).val();
                 var re_member_fullname = $("#re_member_fullname_" +re_from_id).val();
                 var re_member_personality_url = $("#re_member_personality_url_" + re_from_id).val();
+                var file_name = $("#file_name").val();
 
                 var data = {
                     data: JSON.stringify({
                         "content": $("#content").val(),
                         "re_from": $("#re_from").val(),
                         "re_member_id": $("#re_member_id").val(),
-                        "post_type": $("#post_type").val()
+                        "post_type": $("#post_type").val(),
+                        "file_name": file_name
                     })
                 };
                 
@@ -108,6 +110,9 @@
                         '</div>'
                         $("#ajax_tl_row").html(time_line);
                         $("#content").val('');
+
+                        $("#image_name").html("");
+                        $("#del_img").hide();
 
                         $("#repeat_header").hide();
                         $("#re_from_content_p").hide();
