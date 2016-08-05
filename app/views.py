@@ -220,7 +220,8 @@ def post():
     pic_path = None
     if file_name and file_name != "":
         exist_pic = 1
-        pic_path = os.path.join('../static/uploads', os.path.splitext(file_name)[0] + '_thumbnail' + os.path.splitext(file_name)[1])
+        # pic_path = os.path.join('../static/uploads', (os.path.splitext(file_name)[0] + '_thumbnail' + os.path.splitext(file_name)[1]))
+        pic_path = '../static/uploads/' + os.path.splitext(file_name)[0] + '_thumbnail' + os.path.splitext(file_name)[1]
 
     # insert blog
     b = models.Blog(content=content, create_time=str(datetime.now()),
@@ -928,7 +929,7 @@ def upload():
             filename = secure_filename(file.filename)
             src_path = os.path.join(app.config.get('UPLOAD_FOLDER'), filename)
 
-            new_name = 'basilinna_' + upload_file.unique_name() + os.path.splitext(src_path)[1]
+            new_name = app.config.get('SITE_NAME') + '_' + upload_file.unique_name() + os.path.splitext(src_path)[1]
             new_path = os.path.join(app.config.get('UPLOAD_FOLDER'), new_name)
             
             file.save(new_path)
