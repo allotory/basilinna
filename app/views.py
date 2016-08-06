@@ -154,7 +154,11 @@ def index():
                 
                 re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
                 re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
-                re_list.append(dict(blog=re_blog, blog_member=re_member))
+                re_origin_pic_path = re_blog.pic_path
+                if re_blog.exist_pic != 0:
+                    re_origin_pic_path = re_blog.pic_path.replace('_thumbnail', '')
+
+                re_list.append(dict(blog=re_blog, blog_member=re_member, re_origin_pic_path=re_origin_pic_path))
 
                 re_from = re_blog.re_from    
                 re_member_id = re_blog.re_member_id
@@ -635,6 +639,11 @@ def delpost():
 
         # delete post
         b = models.Blog.query.filter_by(id=blog_id).first()
+
+        if b.exist_pic != 0:
+            filename = os.path.basename(b.pic_path)
+            upload_file.image_delete(filename)
+
         if b is None:
             redirect(url_for('error'))
         db_service.db_delete(b)

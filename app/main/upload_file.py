@@ -33,3 +33,9 @@ def image_thumbnail(filename):
 
     im.save(os.path.join(app.config.get('UPLOAD_FOLDER'), 
         os.path.splitext(filename)[0] + '_thumbnail' + os.path.splitext(filename)[1]))
+
+def image_delete(filename):
+    thumbnail_filepath = os.path.join(app.config.get('UPLOAD_FOLDER'), filename)
+    filepath = thumbnail_filepath.replace('_thumbnail', '')
+    os.remove(filepath)
+    os.remove(thumbnail_filepath)
