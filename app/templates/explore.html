@@ -34,7 +34,8 @@
                         "content": $("#content").val(),
                         "re_from": $("#re_from").val(),
                         "re_member_id": $("#re_member_id").val(),
-                        "post_type": $("#post_type").val()
+                        "post_type": $("#post_type").val(),
+                        "file_name": ''
                     })
                 };
 
@@ -69,7 +70,7 @@
                                     
                                     var pic_link = "";
                                     if (typeof(normal_exist_pic)!="undefined" && normal_exist_pic != "") {
-                                        pic_link = "<a href='" + normal_pic_path + "' name=''>查看图片</a>";
+                                        pic_link = "<a class='image_popup_link' href='" + normal_pic_path + "' name=''>查看图片</a>";
                                     }
                                     repeat_content = blog.content + " //" + re_member_link + $("#repeat_content_"+re_from_id).html() + pic_link;
                                 } 
@@ -81,7 +82,7 @@
 
                             var image_block = ''
                             if (blog.exist_pic != 0) {
-                                image_block = '<p><a href="#" name="a"><img src="' + blog.pic_path + '"></a></p>'
+                                image_block = '<p><a class="image_popup_link" href="'+blog.origin_pic_path+'"><img src="' + blog.pic_path + '"></a></p>'
                             }
 
                             time_line = 
@@ -158,9 +159,9 @@
         }
 
         function repeat(blog_id, content, re_member_id, 
-                exist_pic, fullname, p_url) {
+                exist_pic, fullname, p_url, repeat_type) {
             alert(blog_id+ fullname + p_url);
-            var pic_path = arguments[6] || "=";
+            var pic_path = arguments[7];
             alert(content +"-"+ re_member_id +"-"+ exist_pic + "=" +pic_path)
 
             $('#myModal').modal('show');
@@ -175,7 +176,7 @@
             var repeat_pic = "";
             if (exist_pic != 0) {
                 repeat_pic = "<p>" +
-                    "<a href='#' name='a'><img src='"+ pic_path +"'></a>" +
+                    "<a class='image_popup_link' href='#'><img src='"+ pic_path +"'></a>" +
                 "</p>";
                 $("#re_from_content_p").html(repeat_content + repeat_pic);
             } else {
@@ -349,9 +350,15 @@
                                 <div class="popover right" style="z-index:20;">
                                     <div class="arrow"></div>
                                     <div id="blog_detail_{{ blog.get('blog').id }}" class="popover-content">
-                                        <!-- <div class="tl-label bs-label bg-yellow" style="float:right;">
-                                            <a href="" style="color:white;"><i class="glyph-icon icon-star"></i></a>
-                                        </div> -->
+                                        {% if blog.get('blog').post_type == 'NORMAL' %}
+                                            <div class="tl-label bs-label bg-primary">
+                                        {% elif blog.get('blog').post_type == 'REPEAT' %}
+                                            <div class="tl-label bs-label bg-yellow">
+                                        {% elif blog.get('blog').post_type == 'REPLAY' %}
+                                            <div class="tl-label bs-label bg-black">
+                                        {% endif %}
+                                                <a href="/space/{{blog.get('blog_member').personality_url}}" style="color:white;">{{ blog.get('blog_member').fullname }}</a>
+                                            </div>
                                         {% if blog.get('blog').post_type == 'NORMAL' %}
                                             <p class="tl-content" id="repeat_content_{{ blog.get('blog').id }}">
                                                 {{ blog.get('blog').content }}
@@ -417,7 +424,7 @@
                                                     <i class="glyph-icon icon-share"></i> 
                                                     {% if blog.get('blog').exist_pic != 0 %}
                                                         <a id="blog_repeat_{{ blog.get('blog').id }}" 
-                                                            onclick="repeat({{ blog.get('blog').id }}, '{{ blog.get('blog').content }}', {{ blog.get('blog_member').id}}, {{blog.get('blog').exist_pic}}, '{{ blog.get('blog_member').fullname}}', '{{ blog.get('blog_member').personality_url}}', '{{blog.get('blog').post_type}}', '{{blog.get('blog').pic_path}}');" style="cursor:pointer;">转发</a> 
+                                                            onclick="repeat({{ blog.get('blog').id }}, '{{ blog.get('blog').content }}', {{ blog.get('blog_member').id}}, {{blog.get('blog').exist_pic}}, '{{ blog.get('blog_member').fullname}}', '{{ blog.get('blog_member').personality_url}}', '{{blog.get('blog').post_type}}', '{{ blog.get('blog').pic_path }}');" style="cursor:pointer;">转发</a> 
                                                     {% else %}
                                                         <a id="blog_repeat_{{ blog.get('blog').id }}" 
                                                             onclick="repeat({{ blog.get('blog').id }}, '{{ blog.get('blog').content }}', {{ blog.get('blog_member').id}}, {{blog.get('blog').exist_pic}}, '{{ blog.get('blog_member').fullname}}', '{{ blog.get('blog_member').personality_url}}', '{{blog.get('blog').post_type}}');" style="cursor:pointer;">转发</a> 

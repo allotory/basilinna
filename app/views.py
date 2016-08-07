@@ -674,12 +674,13 @@ def explore():
                 # collection
                 c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog.id)).first()
                 if c is None:
-                    blog_dict = dict(blog=blog, collection='uncollect', blog_member=m)
+                    blog_dict = dict(blog=blog, collection='uncollect')
                 else:
-                    blog_dict = dict(blog=blog, collection='collecting', blog_member=m)
+                    blog_dict = dict(blog=blog, collection='collecting')
 
-                # is me
+                # current blog author, is me?
                 blog_author = models.Member.query.filter_by(id=blog.member_id).first()
+                blog_dict['blog_member'] = blog_author
                 if blog_author.id == m.id:
                     blog_dict['is_me'] = True
 
