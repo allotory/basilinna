@@ -25,3 +25,6 @@ UPLOAD_FOLDER = '.\\app\\static\\uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # 16M
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+
+# pagination
+POSTS_PER_PAGE = 5

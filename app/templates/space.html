@@ -247,14 +247,14 @@
                         <h3 class="meta-heading">{{ member.fullname }}</h3>
                         <h4 class="meta-subheading">{{ member.autograph }}</h4>
                         {% else %}
-                        <img src="../static/image/avatar/avatar.png" alt="" class="meta-image img-bordered img-circle">
+                        <img src="{{ url_for('.static', filename='image/avatar/avatar.png')}}" alt="" class="meta-image img-bordered img-circle">
                         <h3 class="meta-heading">Error</h3>
                         <h4 class="meta-subheading">Error</h4>
                         {% endif %}
                     </div>
 
                 </div>
-                <img src="../static/image/blurred-bg-2.jpg" alt="">
+                <img src="{{ url_for('.static', filename='image/blurred-bg-2.jpg')}}" alt="">
 
             </div>
 
@@ -495,6 +495,32 @@
                 </div>
             </div>
         </div>
+
+        <nav>
+            <ul class="pager">
+                <li>
+                    {% if has_prev %}
+                        {% if url %}
+                            <a href="/space/{{url}}/{{ prev_num }}">Previous</a>
+                        {% else %}
+                            <a href="/space/{{ prev_num }}">Previous</a>
+                        {% endif %} 
+                    {% else %}
+                        <a class="disabled" href="">Previous</a>
+                    {% endif %}   
+                </li>
+                <li>
+                    {% if has_next %}
+                        {% if url %}
+                            <a href="/space/{{url}}/{{ next_num }}">Next</a></li>
+                        {% else %}
+                            <a href="/space/{{ next_num }}">Next</a></li>
+                        {% endif %} 
+                    {% else %}
+                        <a class="disabled" href="#">Next</a></li>
+                    {% endif %}    
+            </ul>
+        </nav>
     </div>
 </div>
 {% endblock %}

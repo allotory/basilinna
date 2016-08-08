@@ -598,6 +598,23 @@
                 </div>
             </div>
         </div>
+        <nav>
+            <ul class="pager">
+                <li>
+                    {% if has_prev %}
+                        <a href="/index/{{ prev_num }}">Previous</a>
+                    {% else %}
+                        <a class="disabled" href="">Previous</a>
+                    {% endif %}    
+                </li>
+                <li>
+                    {% if has_next %}
+                        <a href="/index/{{ next_num }}">Next</a></li>
+                    {% else %}
+                        <a class="disabled" href="#">Next</a></li>
+                    {% endif %}    
+            </ul>
+        </nav>
     </div>
 </div>
 {% endblock %}

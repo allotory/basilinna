@@ -108,9 +108,10 @@ def login(info=None):
 
 
 # index page
-@app.route('/', methods=['GET'])
-@app.route('/index', methods=['GET'])
-def index():
+@app.route('/', methods = ['GET'])
+@app.route('/index', methods = ['GET'])
+@app.route('/index/<int:page>', methods = ['GET', 'POST'])
+def index(page = 1):
     if 'member_id' in session:
         member_id = session['member_id']
         m = models.Member.query.filter_by(id=member_id).first()
@@ -123,7 +124,14 @@ def index():
         relation_list.append(m.id)
 
         # blog detail
-        blog_list = models.Blog.query.filter(models.Blog.member_id.in_(relation_list)).order_by(models.Blog.id.desc()).all()
+        blog_list_paginate = models.Blog.query.filter(models.Blog.member_id.in_(relation_list)).order_by(models.Blog.id.desc()).paginate(page, app.config.get('POSTS_PER_PAGE'), True)
+        blog_list = blog_list_paginate.items
+
+        # paginate
+        has_prev = blog_list_paginate.has_prev
+        has_next = blog_list_paginate.has_next
+        prev_num = blog_list_paginate.prev_num
+        next_num = blog_list_paginate.next_num
 
         blog_info_list = []
 
@@ -197,7 +205,8 @@ def index():
 
         return render_template('index.html', member=m, blog_list=blog_info_list, 
             following_count=following_count, fans_count=fans_count, 
-            blog_count = blog_count, followee_list=followee_list)
+            blog_count = blog_count, followee_list=followee_list, has_prev=has_prev,
+            has_next=has_next, prev_num=prev_num, next_num=next_num)
 
     return redirect(url_for('login', info='访问当前内容，请先登录'))
 
@@ -248,7 +257,9 @@ def post():
 # space page
 @app.route('/space', methods = ['GET'])
 @app.route('/space/<url>', methods = ['GET'])
-def space(url=None):
+@app.route('/space/<int:page>', methods = ['GET', 'POST'])
+@app.route('/space/<url>/<int:page>', methods = ['GET', 'POST'])
+def space(url = None, page = 1):
     if request.method == 'GET':
         # current member
         member_id = session['member_id']
@@ -260,7 +271,14 @@ def space(url=None):
             if url != m.personality_url:
                 # selected member space
                 selected_member = models.Member.query.filter_by(personality_url=url).first()
-                blog_list = models.Blog.query.filter_by(member_id=selected_member.id).order_by(models.Blog.id.desc()).all()
+                blog_list_paginate = models.Blog.query.filter_by(member_id=selected_member.id).order_by(models.Blog.id.desc()).paginate(page, app.config.get('POSTS_PER_PAGE'), True)
+                blog_list = blog_list_paginate.items
+
+                # paginate
+                has_prev = blog_list_paginate.has_prev
+                has_next = blog_list_paginate.has_next
+                prev_num = blog_list_paginate.prev_num
+                next_num = blog_list_paginate.next_num
 
                 blog_info_list = []
 
@@ -307,11 +325,19 @@ def space(url=None):
                 blog_count = models.Blog.query.filter(models.Blog.member_id == selected_member.id).count()
                 
                 return render_template('space.html', member=selected_member, blog_list=blog_info_list, 
-                    following_count=following_count, fans_count=fans_count, not_me=True, blog_count=blog_count)
+                    following_count=following_count, fans_count=fans_count, not_me=True, blog_count=blog_count, 
+                    has_prev=has_prev, has_next=has_next, prev_num=prev_num, next_num=next_num, url=url)
             else :
                 # my space
-                blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
+                blog_list_paginate = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).paginate(page, app.config.get('POSTS_PER_PAGE'), True)
+                blog_list = blog_list_paginate.items
 
+                # paginate
+                has_prev = blog_list_paginate.has_prev
+                has_next = blog_list_paginate.has_next
+                prev_num = blog_list_paginate.prev_num
+                next_num = blog_list_paginate.next_num
+                
                 blog_info_list = []
 
                 # blog collected
@@ -357,10 +383,18 @@ def space(url=None):
                 blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
                 
                 return render_template('space.html', member=m, blog_list=blog_info_list, 
-                    following_count=following_count, fans_count=fans_count, blog_count = blog_count)
+                    following_count=following_count, fans_count=fans_count, blog_count = blog_count, 
+                    has_prev=has_prev, has_next=has_next, prev_num=prev_num, next_num=next_num, url=url)
         else:
             # my space
-            blog_list = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).all()
+            blog_list_paginate = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).paginate(page, app.config.get('POSTS_PER_PAGE'), True)
+            blog_list = blog_list_paginate.items
+
+            # paginate
+            has_prev = blog_list_paginate.has_prev
+            has_next = blog_list_paginate.has_next
+            prev_num = blog_list_paginate.prev_num
+            next_num = blog_list_paginate.next_num
 
             blog_info_list = []
 
@@ -407,7 +441,8 @@ def space(url=None):
             blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
 
             return render_template('space.html', member=m, blog_list=blog_info_list, 
-                following_count=following_count, fans_count=fans_count, blog_count = blog_count)
+                following_count=following_count, fans_count=fans_count, blog_count = blog_count, 
+                    has_prev=has_prev, has_next=has_next, prev_num=prev_num, next_num=next_num)
 
         return redirect(url_for('error'))
     else:
