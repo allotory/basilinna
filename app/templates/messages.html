@@ -76,7 +76,7 @@
                         '<div class="content-box" id="msg_info_'+ msg_info.msg_lid +'">' +
                             '<div class="content-box-wrapper" style="padding:10px;">' +
                                 '<a href="/space/'+ msg_info.p_url +'" title="'+ msg_info.rfullname +'" style="float:left;margin:5px;">' +
-                                    '<img class="img-circle" width="40" src="'+ msg_info.ravatar_path +'"/>' +
+                                    '<img class="img-circle" width="40" src="../static/'+msg_info.ravatar_path+'"/>' +
                                 '</a>' +
                                 '发给：<a href="/space/'+ msg_info.p_url +'">@'+ msg_info.rfullname +'</a>' +
                                 '<p class="tl-content"  style="min-height:25px;margin-left:50px;">' +
@@ -146,7 +146,7 @@
                                     '<div class="content-box" id="msg_info_'+ msg_info_list[i].msg_lid +'">' +
                                         '<div class="content-box-wrapper" style="padding:10px;">' +
                                             '<a href="/space/'+ msg_info_list[i].mp_url +'" title="'+ msg_info_list[i].mfullname +'" style="float:left;margin:5px;">' +
-                                                '<img class="img-circle" width="40" src="'+ msg_info_list[i].mavatar_path +'"/>' +
+                                                '<img class="img-circle" width="40" src="../static/'+ msg_info_list[i].mavatar_path +'"/>' +
                                             '</a>' +
                                             '发给：<a href="/space/'+ msg_info_list[i].p_url +'">@'+ msg_info_list[i].rfullname +'</a>' +
                                             '<p class="tl-content"  style="min-height:25px;margin-left:50px;">' +
@@ -241,7 +241,7 @@
                                             '<div class="content-box" id="msg_info_'+ msg_info_list[i].msg_lid +'">' +
                                                 '<div class="content-box-wrapper" style="padding:10px;">' +
                                                     '<a href="/space/'+ msg_info_list[i].mp_url +'" title="'+ msg_info_list[i].mfullname +'" style="float:left;margin:5px;">' +
-                                                        '<img class="img-circle" width="40" src="'+ msg_info_list[i].mavatar_path +'"/>' +
+                                                        '<img class="img-circle" width="40" src="../static/'+ msg_info_list[i].mavatar_path +'"/>' +
                                                     '</a>' +
                                                     '发给：<a href="/space/'+ msg_info_list[i].p_url +'">@'+ msg_info_list[i].rfullname +'</a>' +
                                                     '<p class="tl-content"  style="min-height:25px;margin-left:50px;">' +
@@ -310,7 +310,7 @@
                 '<div class="content-box">' +
                     '<div class="content-box-wrapper" style="padding:10px;">' +
                         '<a href="/space/'+p_url+'" title="'+ fullname +'" style="float:left;margin:5px;">' +
-                            '<img class="img-circle" width="40" src="'+ apath +'"/>' +
+                            '<img class="img-circle" width="40" src="../static/'+ apath +'"/>' +
                         '</a>' +
                         '来自：<a href="/space/'+p_url+'">@'+ fullname +'</a>' +
                         '<div class="alert alert-info" style="margin-left:50px;margin-top:5px;margin-bottom:10px;">' +
@@ -351,13 +351,13 @@
                 <div class="image-content font-white">
 
                     <div class="meta-box meta-box-bottom">
-                        <img src="{{ avatar_path }}" alt="" class="meta-image img-bordered img-circle">
+                        <img src="{{ url_for('.static', filename=avatar_path) }}" alt="" class="meta-image img-bordered img-circle">
                         <h3 class="meta-heading">{{fullname}}</h3>
                         <h4 class="meta-subheading">{{autograph}}</h4>
                     </div>
 
                 </div>
-                <img src="../static/image/blurred-bg-2.jpg" alt="">
+                <img src="{{ url_for('.static', filename='image/blurred-bg-2.jpg') }}" alt="">
 
             </div>
             <div class="panel-content pad15A bg-white radius-bottom-all-4">
@@ -524,7 +524,7 @@
                                 <div class="content-box">
                                     <div class="content-box-wrapper" style="padding:10px;">
                                         <a href="/space/{{ msg.sp_url }}" title="{{ msg.sfullname }}" style="float:left;margin:5px;">
-                                            <img class="img-circle" width="40" src="{{ msg.savatar_path }}"/>
+                                            <img class="img-circle" width="40" src="{{ url_for('.static', filename=msg.savatar_path) }}"/>
                                         </a>
                                         来自：<a href="/space/{{ msg.sp_url }}">@{{ msg.sfullname }}</a>
                                         <p class="tl-content"  style="min-height:25px;margin-left:50px;">

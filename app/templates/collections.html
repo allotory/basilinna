@@ -293,18 +293,18 @@
 
                     <div class="meta-box meta-box-bottom">
                         {% if member %}
-                        <img src="{{ member.avatar_path }}" alt="" class="meta-image img-bordered img-circle">
+                        <img src="{{ url_for('.static', filename=member.avatar_path) }}" alt="" class="meta-image img-bordered img-circle">
                         <h3 class="meta-heading">{{ member.fullname }}</h3>
                         <h4 class="meta-subheading">{{ member.autograph }}</h4>
                         {% else %}
-                        <img src="../static/image/avatar/avatar.png" alt="" class="meta-image img-bordered img-circle">
+                        <img src="{{ url_for('.static', filename='image/avatar/avatar.png') }}" alt="" class="meta-image img-bordered img-circle">
                         <h3 class="meta-heading">Error</h3>
                         <h4 class="meta-subheading">Error</h4>
                         {% endif %}
                     </div>
 
                 </div>
-                <img src="../static/image/blurred-bg-2.jpg" alt="">
+                <img src="{{ url_for('.static', filename='image/blurred-bg-2.jpg') }}" alt="">
 
             </div>
             <div class="panel-content pad15A bg-white radius-bottom-all-4">
@@ -409,27 +409,27 @@
         </h3>
         <div class="content-box-wrapper text-center clearfix">
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
+                <img class="img-circle" width="40" src="{{ url_for('.static', filename='image/testimonial1.jpg') }}" alt="" />
                 <div class="small-badge bg-red"></div>
             </div>
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg"  alt="" />
+                <img class="img-circle" width="40" src="{{ url_for('.static', filename='image/testimonial1.jpg') }}"  alt="" />
                 <div class="small-badge bg-orange"></div>
             </div>
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
+                <img class="img-circle" width="40" src="{{ url_for('.static', filename='image/testimonial1.jpg') }}" alt="" />
                 <div class="small-badge bg-red"></div>
             </div>
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg"  alt="" />
+                <img class="img-circle" width="40" src="{{ url_for('.static', filename='image/testimonial1.jpg') }}"  alt="" />
                 <div class="small-badge bg-green"></div>
             </div>
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
+                <img class="img-circle" width="40" src="{{ url_for('.static', filename='image/testimonial1.jpg') }}" alt="" />
                 <div class="small-badge bg-orange"></div>
             </div>
             <div class="status-badge mrg10A">
-                <img class="img-circle" width="40" src="../static/image/testimonial1.jpg" alt="" />
+                <img class="img-circle" width="40" src="{{ url_for('.static', filename='image/testimonial1.jpg') }}" alt="" />
                 <div class="small-badge bg-red"></div>
             </div>
         </div>
@@ -511,7 +511,7 @@
                                     <div class="tl-icon bg-black">
                                 {% endif %}
                                         <input type="hidden" id="origin_post_type_{{ blog.get('blog').id }}" name="origin_post_type_{{ blog.get('blog').id }}" value="{{blog.get('blog').post_type}}">
-                                        <img class="img-circle" width="30" src="{{ blog.get('collect_member').avatar_path }}" alt="{{ blog.get('collect_member').fullname }}" title="{{ blog.get('collect_member').fullname }}"/>
+                                        <img class="img-circle" width="30" src="{{ url_for('.static', filename=blog.get('collect_member').avatar_path) }}" alt="{{ blog.get('collect_member').fullname }}" title="{{ blog.get('collect_member').fullname }}"/>
                                     </div>
                                 <div class="popover right">
                                     <div class="arrow"></div>

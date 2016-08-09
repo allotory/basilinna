@@ -54,7 +54,7 @@ def signup():
             db_service.db_insert(u)
             db_service.db_commit()
             
-            avatar_path = '../static/image/avatar/avatar.png'
+            avatar_path = 'image/avatar/avatar.png'
             m = models.Member(fullname=nickname, gender=None, avatar_path=avatar_path,
                 location=None, hometown=None, description=None, autograph=None,
                 personality_url=invite_string, is_email_actived=None, user_id=u.id)

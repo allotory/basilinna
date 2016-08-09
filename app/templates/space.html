@@ -91,7 +91,7 @@
                             '<div class="tl-row">' +
                                 '<div class="tl-item float-right">' +
                                     '<div class="tl-icon ' + post_style + '">' +
-                                        '<img class="img-circle" width="30" src="{{ member.avatar_path }}" alt="" />' +
+                                        '<img class="img-circle" width="30" src="{{ url_for('.static', filename=member.avatar_path) }}" alt="" />' +
                                     '</div>' +
                                     '<div class="popover right">' +
                                         '<div class="arrow"></div>' +
@@ -243,7 +243,7 @@
 
                     <div class="meta-box meta-box-bottom">
                         {% if member %}
-                        <img src="{{ member.avatar_path }}" alt="" class="meta-image img-bordered img-circle">
+                        <img src="{{ url_for('.static', filename=member.avatar_path) }}" alt="" class="meta-image img-bordered img-circle">
                         <h3 class="meta-heading">{{ member.fullname }}</h3>
                         <h4 class="meta-subheading">{{ member.autograph }}</h4>
                         {% else %}
@@ -392,7 +392,7 @@
                                     <div class="tl-icon bg-black">
                                 {% endif %}
                                         <input type="hidden" id="origin_post_type_{{ blog.get('blog').id }}" name="origin_post_type_{{ blog.get('blog').id }}" value="{{blog.get('blog').post_type}}">
-                                        <img class="img-circle" width="30" src="{{ blog.get('blog_member').avatar_path }}" alt="{{ blog.get('blog_member').fullname }}" title="{{ blog.get('blog_member').fullname }}"/>
+                                        <img class="img-circle" width="30" src="{{ url_for('.static', filename=blog.get('blog_member').avatar_path) }}" alt="{{ blog.get('blog_member').fullname }}" title="{{ blog.get('blog_member').fullname }}"/>
                                     </div>
                                 <div class="popover right" style="z-index:20;">
                                     <div class="arrow"></div>
