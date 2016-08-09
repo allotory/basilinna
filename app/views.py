@@ -535,7 +535,9 @@ def uncollect():
 # blog collections
 @app.route('/collections', methods = ['GET'])
 @app.route('/collections/<url>', methods = ['GET'])
-def collections(url=None):
+@app.route('/collections/<int:page>', methods = ['GET', 'POST'])
+@app.route('/collections/<url>/<int:page>', methods = ['GET', 'POST'])
+def collections(url=None, page=1):
     if request.method == 'GET':
 
         member_id = session['member_id']
@@ -547,7 +549,15 @@ def collections(url=None):
             # selected collections
             # collections detail
             selected_member = models.Member.query.filter_by(personality_url=url).first()
-            collection_list = models.Collection.query.filter_by(member_id=selected_member.id).order_by(models.Collection.id.desc()).all()
+            collection_list_paginate = models.Collection.query.filter_by(member_id=selected_member.id).order_by(models.Collection.id.desc()).paginate(page, app.config.get('POSTS_PER_PAGE'), True)
+            collection_list = collection_list_paginate.items
+
+            # paginate
+            has_prev = collection_list_paginate.has_prev
+            has_next = collection_list_paginate.has_next
+            prev_num = collection_list_paginate.prev_num
+            next_num = collection_list_paginate.next_num
+
 
             blog_info_list = []
 
@@ -599,12 +609,20 @@ def collections(url=None):
             blog_count = models.Blog.query.filter(models.Blog.member_id == selected_member.id).count()
 
             return render_template('collections.html', member=selected_member, blog_list=blog_info_list, 
-                following_count=following_count, fans_count=fans_count, not_me=True, blog_count = blog_count)
+                following_count=following_count, fans_count=fans_count, not_me=True, blog_count = blog_count,
+                has_prev=has_prev, has_next=has_next, prev_num=prev_num, next_num=next_num, url=url)
     
         else:
             # my collections
             # collections detail
-            collection_list = models.Collection.query.filter_by(member_id=member_id).order_by(models.Collection.id.desc()).all()
+            collection_list_paginate = models.Collection.query.filter_by(member_id=member_id).order_by(models.Collection.id.desc()).paginate(page, app.config.get('POSTS_PER_PAGE'), True)
+            collection_list = collection_list_paginate.items
+
+            # paginate
+            has_prev = collection_list_paginate.has_prev
+            has_next = collection_list_paginate.has_next
+            prev_num = collection_list_paginate.prev_num
+            next_num = collection_list_paginate.next_num
 
             blog_info_list = []
 
@@ -656,7 +674,8 @@ def collections(url=None):
             blog_count = models.Blog.query.filter(models.Blog.member_id == m.id).count()
 
             return render_template('collections.html', member=m, blog_list=blog_info_list, 
-                following_count=following_count, fans_count=fans_count, blog_count = blog_count)
+                following_count=following_count, fans_count=fans_count, blog_count = blog_count,
+                has_prev=has_prev, has_next=has_next, prev_num=prev_num, next_num=next_num, url=url)
     
     elif request.method == 'POST':
         return 'hah'

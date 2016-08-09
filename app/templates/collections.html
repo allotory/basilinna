@@ -618,6 +618,31 @@
                 </div>
             </div>
         </div>
+        <nav>
+            <ul class="pager">
+                <li>
+                    {% if has_prev %}
+                        {% if url %}
+                            <a href="/collections/{{url}}/{{ prev_num }}">Previous</a>
+                        {% else %}
+                            <a href="/collections/{{ prev_num }}">Previous</a>
+                        {% endif %} 
+                    {% else %}
+                        <a class="disabled" href="">Previous</a>
+                    {% endif %}   
+                </li>
+                <li>
+                    {% if has_next %}
+                        {% if url %}
+                            <a href="/collections/{{url}}/{{ next_num }}">Next</a></li>
+                        {% else %}
+                            <a href="/collections/{{ next_num }}">Next</a></li>
+                        {% endif %} 
+                    {% else %}
+                        <a class="disabled" href="#">Next</a></li>
+                    {% endif %}    
+            </ul>
+        </nav>
     </div>
 </div>
 {% endblock %}
