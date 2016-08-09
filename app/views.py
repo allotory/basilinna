@@ -710,7 +710,8 @@ def delpost():
 
 # explore
 @app.route('/explore', methods = ['GET', 'POST'])
-def explore():
+@app.route('/explore/<int:page>', methods = ['GET', 'POST'])
+def explore(page=1):
     if request.method == 'GET':
         if 'member_id' in session:
             member_id = session['member_id']
@@ -719,7 +720,15 @@ def explore():
                 redirect(url_for('error'))
 
             # blog detail
-            blog_list = models.Blog.query.order_by(models.Blog.id.desc()).all()
+            blog_list_paginate = models.Blog.query.order_by(models.Blog.id.desc()).paginate(page, app.config.get('POSTS_PER_PAGE'), True)
+
+            blog_list = blog_list_paginate.items
+
+            # paginate
+            has_prev = blog_list_paginate.has_prev
+            has_next = blog_list_paginate.has_next
+            prev_num = blog_list_paginate.prev_num
+            next_num = blog_list_paginate.next_num
 
             blog_info_list = []
 
@@ -766,7 +775,8 @@ def explore():
 
                 blog_info_list.append(blog_dict)
 
-            return render_template('explore.html', member=m, blog_list=blog_info_list)
+            return render_template('explore.html', member=m, blog_list=blog_info_list, has_prev=has_prev,
+                has_next=has_next, prev_num=prev_num, next_num=next_num)
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     elif request.method == 'POST':
