@@ -77,7 +77,7 @@
                                 
                                 var pic_link = "";
                                 if (typeof(normal_exist_pic)!="undefined" && normal_exist_pic != "") {
-                                    pic_link = "<a class='image_popup_link' href='" + normal_pic_path + "' name=''>查看图片</a>";
+                                    pic_link = "<a class='image_popup_link' href='../static/" + normal_pic_path + "' name=''>查看图片</a>";
                                 }
                                 repeat_content = blog.content + " //" + re_member_link + $("#repeat_content_"+re_from_id).html() + pic_link;
                             } 
@@ -89,7 +89,7 @@
 
                         var image_block = ''
                         if (blog.exist_pic != 0) {
-                            image_block = '<p><a class="image_popup_link" href="'+blog.origin_pic_path+'"><img src="' + blog.pic_path + '"></a></p>'
+                            image_block = '<p><a class="image_popup_link" href="../static/'+blog.origin_pic_path+'"><img src="../static/' + blog.pic_path + '"></a></p>'
                         }
 
                         time_line = 
@@ -186,7 +186,7 @@
             var repeat_pic = "";
             if (exist_pic != 0) {
                 repeat_pic = "<p>" +
-                    "<a class='image_popup_link' href='"+ pic_path +"'><img src='"+ pic_path +"'></a>" +
+                    "<a class='image_popup_link' href='../static/"+ pic_path +"'><img src='../static/"+ pic_path +"'></a>" +
                 "</p>";
                 $("#re_from_content_p").html(repeat_content + repeat_pic);
             } else {
@@ -514,8 +514,8 @@
                                                 <p>
                                                     <input id="normal_exist_pic_{{ blog.get('blog').id }}" type="hidden" value="{{blog.get('blog').exist_pic}}">
                                                     <input id="normal_pic_path_{{ blog.get('blog').id }}" type="hidden" value="{{ blog.get('blog').pic_path }}">
-                                                    <a class="image_popup_link" href="{{ blog.get('origin_pic_path') }}">
-                                                        <img src="{{ blog.get('blog').pic_path }}">
+                                                    <a class="image_popup_link" href="{{ url_for('.static', filename=blog.get('origin_pic_path')) }}">
+                                                        <img src="{{url_for('.static', filename=blog.get('blog').pic_path)}}">
                                                     </a>
                                                 </p>
                                             {% endif %}
@@ -525,13 +525,13 @@
                                                 {{ blog.get('blog').content }}
 
                                                 {% if blog.get('blog').exist_pic != 0 %}
-                                                    <a class="image_popup_link" href="{{ blog.get('origin_pic_path') }}">查看图片</a>
+                                                    <a class="image_popup_link" href="{{ url_for('.static', filename=blog.get('origin_pic_path')) }}">查看图片</a>
                                                 {% endif %}
 
                                                 {% for re_dict in blog.get('re_list') %}
                                                     //<a href="/space/{{re_dict.get('blog_member').personality_url}}" name=''>@{{re_dict.get('blog_member').fullname}}</a> : {{re_dict.get('blog').content}}
                                                     {% if re_dict.get('blog').exist_pic != 0 %}
-                                                        <a class="image_popup_link" href="{{ re_dict.get('re_origin_pic_path') }}">查看图片</a>
+                                                        <a class="image_popup_link" href="{{ url_for('.static', filename=re_dict.get('re_origin_pic_path')) }}">查看图片</a>
                                                     {% endif %}
                                                 {% endfor %}
                                             </p>

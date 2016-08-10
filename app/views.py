@@ -234,7 +234,7 @@ def post():
     if file_name and file_name != "":
         exist_pic = 1
         # pic_path = os.path.join('../static/uploads', (os.path.splitext(file_name)[0] + '_thumbnail' + os.path.splitext(file_name)[1]))
-        pic_path = '../static/uploads/' + os.path.splitext(file_name)[0] + '_thumbnail' + os.path.splitext(file_name)[1]
+        pic_path = 'uploads/' + os.path.splitext(file_name)[0] + '_thumbnail' + os.path.splitext(file_name)[1]
 
     # insert blog
     b = models.Blog(content=content, create_time=str(datetime.now()),
@@ -243,7 +243,7 @@ def post():
     db_service.db_insert(b)
     db_service.db_commit()
 
-    origin_pic_path = os.path.join('../static/uploads', file_name)
+    origin_pic_path = os.path.join('uploads', file_name)
 
     # build a blog dict for json
     blog_dict = dict(id=b.id, content=b.content, create_time=str(b.create_time),
