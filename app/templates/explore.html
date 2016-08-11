@@ -17,6 +17,11 @@
                 }
             });
 
+            $('.image_popup_link').magnificPopup({
+                type: 'image'
+                // other options
+            });
+
             $("#repeat_blog").click(function(){
 
                 // alert($("#re_from").val());
@@ -367,7 +372,7 @@
                                                 <p>
                                                     <input id="normal_exist_pic_{{ blog.get('blog').id }}" type="hidden" value="{{blog.get('blog').exist_pic}}">
                                                     <input id="normal_pic_path_{{ blog.get('blog').id }}" type="hidden" value="{{ blog.get('blog').pic_path }}">
-                                                    <a class="image_popup_link" href="{{url_for('.static', filename=blog.get('blog').pic_path)}}">
+                                                    <a class="image_popup_link" href="{{url_for('.static', filename=blog.get('origin_pic_path'))}}">
                                                         <img src="{{url_for('.static', filename=blog.get('blog').pic_path)}}">
                                                     </a>
                                                 </p>
@@ -378,13 +383,13 @@
                                                 {{ blog.get('blog').content }}
 
                                                 {% if blog.get('blog').exist_pic != 0 %}
-                                                    <a href="{{url_for('.static', filename=blog.get('blog').pic_path)}}">查看图片</a>
+                                                    <a class="image_popup_link" href="{{url_for('.static', filename=blog.get('origin_pic_path'))}}">查看图片</a>
                                                 {% endif %}
 
                                                 {% for re_dict in blog.get('re_list') %}
                                                     //<a href="/space/{{re_dict.get('blog_member').personality_url}}" name=''>@{{re_dict.get('blog_member').fullname}}</a> : {{re_dict.get('blog').content}}
                                                     {% if re_dict.get('blog').exist_pic != 0 %}
-                                                        <a href="{{url_for('.static', filename=re_dict.get('blog').pic_path)}}">查看图片</a>
+                                                        <a class="image_popup_link" href="{{url_for('.static', filename=re_dict.get('re_origin_pic_path'))}}">查看图片</a>
                                                     {% endif %}
                                                 {% endfor %}
                                             </p>

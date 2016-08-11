@@ -16,6 +16,11 @@
                 }
             });
 
+            $('.image_popup_link').magnificPopup({
+                type: 'image'
+                // other options
+            });
+
             $.ajax({
                 url:"/receiver",
                 type: "GET",

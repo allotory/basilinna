@@ -290,6 +290,11 @@ def space(url = None, page = 1):
                     else:
                         blog_dict = dict(blog=blog, collection='collecting', blog_member=selected_member)
 
+                    origin_pic_path = blog.pic_path
+                    if blog.exist_pic != 0:
+                        origin_pic_path = blog.pic_path.replace('_thumbnail', '')
+                        blog_dict['origin_pic_path'] = origin_pic_path
+
                     # a blog repeat list
                     re_list = []
 
@@ -299,7 +304,10 @@ def space(url = None, page = 1):
                         
                         re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
                         re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
-                        re_list.append(dict(blog=re_blog, blog_member=re_member))
+                        re_origin_pic_path = re_blog.pic_path
+                        if re_blog.exist_pic != 0:
+                            re_origin_pic_path = re_blog.pic_path.replace('_thumbnail', '')
+                        re_list.append(dict(blog=re_blog, blog_member=re_member, re_origin_pic_path=re_origin_pic_path))
 
                         re_from = re_blog.re_from    
                         re_member_id = re_blog.re_member_id
@@ -348,6 +356,11 @@ def space(url = None, page = 1):
                     else:
                         blog_dict = dict(blog=blog, collection='collecting', blog_member=m)
 
+                    origin_pic_path = blog.pic_path
+                    if blog.exist_pic != 0:
+                        origin_pic_path = blog.pic_path.replace('_thumbnail', '')
+                        blog_dict['origin_pic_path'] = origin_pic_path
+
                     # a blog repeat list
                     re_list = []
 
@@ -357,7 +370,10 @@ def space(url = None, page = 1):
                         
                         re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
                         re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
-                        re_list.append(dict(blog=re_blog, blog_member=re_member))
+                        re_origin_pic_path = re_blog.pic_path
+                        if re_blog.exist_pic != 0:
+                            re_origin_pic_path = re_blog.pic_path.replace('_thumbnail', '')
+                        re_list.append(dict(blog=re_blog, blog_member=re_member, re_origin_pic_path=re_origin_pic_path))
 
                         re_from = re_blog.re_from    
                         re_member_id = re_blog.re_member_id
@@ -406,6 +422,11 @@ def space(url = None, page = 1):
                 else:
                     blog_dict = dict(blog=blog, collection='collecting', blog_member=m)
 
+                origin_pic_path = blog.pic_path
+                if blog.exist_pic != 0:
+                    origin_pic_path = blog.pic_path.replace('_thumbnail', '')
+                    blog_dict['origin_pic_path'] = origin_pic_path
+
                 # a blog repeat list
                 re_list = []
 
@@ -415,7 +436,10 @@ def space(url = None, page = 1):
                     
                     re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
                     re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
-                    re_list.append(dict(blog=re_blog, blog_member=re_member))
+                    re_origin_pic_path = re_blog.pic_path
+                    if re_blog.exist_pic != 0:
+                        re_origin_pic_path = re_blog.pic_path.replace('_thumbnail', '')
+                    re_list.append(dict(blog=re_blog, blog_member=re_member, re_origin_pic_path=re_origin_pic_path))
 
                     re_from = re_blog.re_from    
                     re_member_id = re_blog.re_member_id
@@ -574,6 +598,11 @@ def collections(url=None, page=1):
                     collect_member = m
                 blog_dict = dict(blog=blog, collection='collecting', collect_member=collect_member)
 
+                origin_pic_path = blog.pic_path
+                if blog.exist_pic != 0:
+                    origin_pic_path = blog.pic_path.replace('_thumbnail', '')
+                    blog_dict['origin_pic_path'] = origin_pic_path
+
                 # a blog repeat list
                 re_list = []
 
@@ -583,7 +612,10 @@ def collections(url=None, page=1):
                     
                     re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
                     re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
-                    re_list.append(dict(blog=re_blog, blog_member=re_member))
+                    re_origin_pic_path = re_blog.pic_path
+                    if re_blog.exist_pic != 0:
+                        re_origin_pic_path = re_blog.pic_path.replace('_thumbnail', '')
+                    re_list.append(dict(blog=re_blog, blog_member=re_member, re_origin_pic_path=re_origin_pic_path))
 
                     re_from = re_blog.re_from    
                     re_member_id = re_blog.re_member_id
@@ -639,6 +671,11 @@ def collections(url=None, page=1):
                     collect_member = m
                 blog_dict = dict(blog=blog, collection='collecting', collect_member=collect_member)
 
+                origin_pic_path = blog.pic_path
+                if blog.exist_pic != 0:
+                    origin_pic_path = blog.pic_path.replace('_thumbnail', '')
+                    blog_dict['origin_pic_path'] = origin_pic_path
+
                 # a blog repeat list
                 re_list = []
 
@@ -648,7 +685,10 @@ def collections(url=None, page=1):
                     
                     re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
                     re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
-                    re_list.append(dict(blog=re_blog, blog_member=re_member))
+                    re_origin_pic_path = re_blog.pic_path
+                    if re_blog.exist_pic != 0:
+                        re_origin_pic_path = re_blog.pic_path.replace('_thumbnail', '')
+                    re_list.append(dict(blog=re_blog, blog_member=re_member, re_origin_pic_path=re_origin_pic_path))
 
                     re_from = re_blog.re_from    
                     re_member_id = re_blog.re_member_id
@@ -741,6 +781,11 @@ def explore(page=1):
                 else:
                     blog_dict = dict(blog=blog, collection='collecting')
 
+                origin_pic_path = blog.pic_path
+                if blog.exist_pic != 0:
+                    origin_pic_path = blog.pic_path.replace('_thumbnail', '')
+                    blog_dict['origin_pic_path'] = origin_pic_path
+
                 # current blog author, is me?
                 blog_author = models.Member.query.filter_by(id=blog.member_id).first()
                 blog_dict['blog_member'] = blog_author
@@ -757,7 +802,10 @@ def explore(page=1):
                     
                     re_blog = models.Blog.query.filter_by(id=blog.re_from).first()
                     re_member = models.Member.query.filter_by(id=blog.re_member_id).first()
-                    re_list.append(dict(blog=re_blog, blog_member=re_member))
+                    re_origin_pic_path = re_blog.pic_path
+                    if re_blog.exist_pic != 0:
+                        re_origin_pic_path = re_blog.pic_path.replace('_thumbnail', '')
+                    re_list.append(dict(blog=re_blog, blog_member=re_member, re_origin_pic_path=re_origin_pic_path))
 
                     re_from = re_blog.re_from    
                     re_member_id = re_blog.re_member_id
