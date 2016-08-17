@@ -102,3 +102,71 @@ function validateLogin() {
     }
     return true;
 }
+
+// 校验设置用户昵称
+function check_fullname(id, name) {
+
+    var fullname = document.getElementById(id).value.trim();
+
+    if(fullname == '') {
+        fullname = name;
+    }
+    // alert(obj.value);
+    var name_len = fullname.length;
+    if((name_len >= 4) && (name_len <= 12)) {
+        return true;
+    }
+    return false;
+}
+
+// 校验个性域名
+function check_purl(id, purl) {
+
+    var personal_url = document.getElementById(id).value.trim();
+
+    if (personal_url == '') {
+        personal_url = purl;
+    }
+    var reg = /^[a-zA-Z_][a-zA-Z0-9_]{5,19}$/;
+    if (!reg.test(personal_url)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// 校验年份
+function check_year(id) {
+    var year = document.getElementById(id).value.trim();
+
+    if (year == '') {
+        year = 0;
+        return true;
+    } else {
+
+        y = parseInt(year)
+
+        if (y >= 1900 && y <= 2016) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+// 个人信息提交校验
+function validateInfo(fullname, purl) {
+
+    var a = document.getElementById("month").value.trim();
+
+    alert(a);
+
+    return false;
+
+    // var isFullnameChecked = validate(check_fullname('fullname', fullname), 'validate_error', 'error_msg', '不超过 4 - 12 个字符，请勿使用特殊字符');
+    // var isPersonalUrl = validate(check_purl('personality_url', purl), 'validate_error', 'error_msg', '不超过 6 - 20 个字符，请勿使用特殊字符');
+    // if(!(isFullnameChecked && isPersonalUrl)) {
+    //     return false;
+    // }
+    // return true;
+}

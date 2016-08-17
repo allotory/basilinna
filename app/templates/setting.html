@@ -71,10 +71,11 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet" type="text/css" href="../static/style/admin-all-demo.css" tppabs="https://agileui.com/demo/monarch/assets-minified/admin-all-demo.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='style/admin-all-demo.css')}}">
 
-    <script type="text/javascript" src="../static/js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('.static', filename='js/jquery-1.11.2.min.js')}}"></script>
+    <script src="{{ url_for('.static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{ url_for('.static', filename='js/basilinna.js')}}"></script>
 
     <!-- jquery cities -->
     <script src="{{ url_for('.static', filename='plugin/jquery_cities/jquery.cities.js')}}"></script>
@@ -164,131 +165,168 @@
                                                     设定个人信息
                                                 </h3>
                                                 <div class="example-box-wrapper">
-                                                    <form class="form-horizontal bordered-row">
+
+                                                    <div id="validate_error" class="alert alert-danger" style="display:none;">
+                                                        <p id="error_msg">error_message</p>
+                                                    </div>
+
+                                                    <form action="" method="POST" class="form-horizontal bordered-row">
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">昵称</label>
                                                             <div class="col-sm-6">
-                                                                <input type="text" class="form-control" id="" placeholder="Example placeholder...">
+                                                                <input type="text" class="form-control" id="fullname" name="fullname" 
+                                                                    value="{{member.fullname}}" onfocus="if(this.value=='{{member.fullname}}'){this.value=''}" 
+                                                                    onblur="validate(check_fullname('fullname', '{{member.fullname}}'), 'validate_error', 'error_msg', '不超过 4 - 12 个字符，请勿使用特殊字符');" placeholder="{{member.fullname}}">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">个性域名</label>
                                                             <div class="col-sm-6">
-                                                                <input type="text" class="form-control" id="" placeholder="Example placeholder...">
+                                                                <input type="text" class="form-control" id="personality_url" name="personality_url"
+                                                                    value="{{member.personality_url}}" onfocus="if(this.value=='{{member.personality_url}}'){this.value=''}" 
+                                                                    onblur="validate(check_purl('personality_url', '{{member.personality_url}}'), 'validate_error', 'error_msg', '不超过 6 - 20 个字符，请勿使用特殊字符');" placeholder="{{member.personality_url}}">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">性别</label>
-                                                            <div class="col-sm-6">
-                                                                <select class="form-control">
-                                                                    <option>男</option>
-                                                                    <option>女</option>
+                                                            <div class="col-sm-2">
+                                                                <select id="gender" name="gender" class="form-control">
+                                                                    <option value="0">- 请选择 -</option>
+                                                                    <option value="1">男</option>
+                                                                    <option value="2">女</option>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">生日</label>
                                                             <div class="col-sm-2">
-                                                                <input type="text" class="form-control" id="" placeholder="年">
+                                                                <input type="text" class="form-control" id="year" name="year" 
+                                                                    onfocus="if(this.value=='0'){this.value=''}"
+                                                                    onblur="validate(check_year('year'), 'validate_error', 'error_msg', '年份应介于 1900 - 2016 之间');"
+                                                                    value="0" placeholder="年">
                                                             </div>
                                                             <div class="col-sm-2">
-                                                                <select class="form-control">
-                                                                    <option>1</option>
-                                                                    <option>2</option>
-                                                                    <option>3</option>
-                                                                    <option>4</option>
-                                                                    <option>5</option>
-                                                                    <option>6</option>
-                                                                    <option>7</option>
-                                                                    <option>8</option>
-                                                                    <option>9</option>
-                                                                    <option>10</option>
-                                                                    <option>11</option>
-                                                                    <option>12</option>
+                                                                <select id="month" name="month" class="form-control">
+                                                                    <option value="0">月</option>
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                    <option value="5">5</option>
+                                                                    <option value="6">6</option>
+                                                                    <option value="7">7</option>
+                                                                    <option value="8">8</option>
+                                                                    <option value="9">9</option>
+                                                                    <option value="10">10</option>
+                                                                    <option value="11">11</option>
+                                                                    <option value="12">12</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-sm-2">
-                                                                <select class="form-control">
-                                                                    <option>1</option>
-                                                                    <option>2</option>
-                                                                    <option>3</option>
-                                                                    <option>4</option>
-                                                                    <option>5</option>
-                                                                    <option>6</option>
-                                                                    <option>7</option>
-                                                                    <option>8</option>
-                                                                    <option>9</option>
-                                                                    <option>10</option>
-                                                                    <option>11</option>
-                                                                    <option>12</option>
-                                                                    <option>13</option>
-                                                                    <option>14</option>
-                                                                    <option>15</option>
-                                                                    <option>16</option>
-                                                                    <option>17</option>
-                                                                    <option>18</option>
-                                                                    <option>19</option>
-                                                                    <option>20</option>
-                                                                    <option>21</option>
-                                                                    <option>22</option>
-                                                                    <option>23</option>
-                                                                    <option>24</option>
-                                                                    <option>25</option>
-                                                                    <option>26</option>
-                                                                    <option>27</option>
-                                                                    <option>28</option>
-                                                                    <option>29</option>
-                                                                    <option>30</option>
-                                                                    <option>31</option>
+                                                                <select id="day" name="day" class="form-control">
+                                                                    <option value="0">日</option>
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                    <option value="5">5</option>
+                                                                    <option value="6">6</option>
+                                                                    <option value="7">7</option>
+                                                                    <option value="8">8</option>
+                                                                    <option value="9">9</option>
+                                                                    <option value="10">10</option>
+                                                                    <option value="11">11</option>
+                                                                    <option value="12">12</option>
+                                                                    <option value="13">13</option>
+                                                                    <option value="14">14</option>
+                                                                    <option value="15">15</option>
+                                                                    <option value="16">16</option>
+                                                                    <option value="17">17</option>
+                                                                    <option value="18">18</option>
+                                                                    <option value="19">19</option>
+                                                                    <option value="20">20</option>
+                                                                    <option value="21">21</option>
+                                                                    <option value="22">22</option>
+                                                                    <option value="23">23</option>
+                                                                    <option value="24">24</option>
+                                                                    <option value="25">25</option>
+                                                                    <option value="26">26</option>
+                                                                    <option value="27">27</option>
+                                                                    <option value="28">28</option>
+                                                                    <option value="29">29</option>
+                                                                    <option value="30">30</option>
+                                                                    <option value="31">31</option>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div id="location" class="form-group">
                                                             <label class="col-sm-3 control-label">所在地</label>
                                                             <div class="col-sm-2">
-                                                                <select name="province" class="form-control">
-                                                                    <option> - 请选择 - </option>
-                                                                </select>
+                                                                <select id="location_province" name="location_province" class="form-control"></select>
                                                             </div>
                                                             <div class="col-sm-2">
-                                                                <select name="city" class="form-control">
-                                                                    <option> - 请选择 - </option>
-                                                                </select>
+                                                                <select id="location_city" name="location_city" class="form-control"></select>
                                                             </div>
                                                             <div class="col-sm-2">
-                                                                <select name="area" class="form-control">
-                                                                    <option> - 请选择 - </option>
-                                                                </select>
+                                                                <select id="location_area" name="location_area" class="form-control"></select>
                                                             </div>
                                                         </div>
                                                         <script type="text/javascript">
-                                                            $('#location').citys({province:'福建',city:'厦门',area:'思明'});
+                                                            $('#location').citys({
+                                                                provinceField: 'location_province',
+                                                                cityField: 'location_city',
+                                                                areaField: 'location_area',
+                                                                required:false,
+                                                                nodata:'disabled',
+                                                                onChange:function(data){
+                                                                    // var text = data['direct']?'(直辖市)':'';
+                                                                    // $('#place').text('当前选中地区：'+data['province']+text+' '+data['city']+' '+data['area']);
+                                                                }
+                                                            });
+                                                            // $('#location').citys({province:'福建',city:'厦门',area:'思明'});
                                                         </script>
-                                                        <div class="form-group">
+                                                        <div id="hometown" class="form-group">
                                                             <label class="col-sm-3 control-label">家乡</label>
-                                                            <div class="col-sm-6">
-                                                                <select class="form-control">
-                                                                    <option>男</option>
-                                                                    <option>女</option>
-                                                                </select>
+                                                            <div class="col-sm-2">
+                                                                <select id="hometown_province" name="hometown_province" class="form-control"></select>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <select id="hometown_city" name="hometown_city" class="form-control"></select>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <select id="hometown_area" name="hometown_area" class="form-control"></select>
                                                             </div>
                                                         </div>
+                                                        <script type="text/javascript">
+                                                            $('#hometown').citys({
+                                                                provinceField: 'hometown_province',
+                                                                cityField: 'hometown_city',
+                                                                areaField: 'hometown_area',
+                                                                required:false,
+                                                                nodata:'disabled',
+                                                                onChange:function(data){
+                                                                    // var text = data['direct']?'(直辖市)':'';
+                                                                    // $('#place').text('当前选中地区：'+data['province']+text+' '+data['city']+' '+data['area']);
+                                                                }
+                                                            });
+                                                            //$('#hometown').citys({hometown_province:'福建',hometown_city:'厦门',hometown_area:'思明'});
+                                                        </script>
                                                         <div class="form-group">
-                                                            <label class="col-sm-3 control-label">个人网址</label>
+                                                            <label class="col-sm-3 control-label">个性签名</label>
                                                             <div class="col-sm-6">
-                                                                <input type="text" class="form-control" id="" placeholder="(你可以把网站添加到你的博客)">
+                                                                <input type="text" id="autograph" name="autograph" class="form-control" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">自述</label>
                                                             <div class="col-sm-6">
-                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                                <textarea name="description" id="description" class="form-control"></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-6">
-                                                                <a href="#" class="btn btn-primary" title="">保存</a>
+                                                                <button  onclick="return validateInfo('{{member.fullname}}', '{{member.personality_url}}');" class="btn btn-primary" title="">保存</button>
                                                             </div>
                                                         </div>
                                                     </form>

@@ -1076,6 +1076,25 @@ def delimage():
         return 'removefilesuccess'
 
 
+# setting
+@app.route('/setting', methods = ['GET', 'POST'])
+def setting():
+    if request.method == 'GET':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('error'))
+            
+            return render_template('setting.html', member=m)
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    elif request.method == 'POST':
+        pass
+    else:
+        return redirect(url_for('error'))
+
+
 # search
 @app.route('/search', methods = ['GET', 'POST'])
 def search():
@@ -1086,15 +1105,6 @@ def search():
     else:
         return redirect(url_for('error'))
 
-# setting
-@app.route('/setting', methods = ['GET', 'POST'])
-def setting():
-    if request.method == 'GET':
-        return render_template('setting.html')
-    elif request.method == 'POST':
-        pass
-    else:
-        return redirect(url_for('error'))
 
 # logout
 @app.route('/logout', methods = ['GET'])
@@ -1102,18 +1112,22 @@ def logout():
     session.pop('user_id', None)
     return redirect(url_for('login', info='注销成功，请重新登录'))
 
+
 # error
 @app.route('/error', methods = ['GET'])
 def sys_error():
     return render_template('error_sys.html')
 
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error_404.html'), 404
 
+
 @app.errorhandler(500)
 def server_syntax_error(error):
     return render_template('error_500.html'), 500
+
 
 @csrf.error_handler
 def csrf_error(reason):
