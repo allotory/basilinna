@@ -1088,8 +1088,10 @@ def setting():
             m = models.Member.query.filter_by(id=member_id).first()
             if m is None:
                 redirect(url_for('error'))
+
+            h = models.Hobby.query.filter_by(member_id=m.id).first()
             
-            return render_template('setting.html', member=m)
+            return render_template('setting.html', member=m, hobby=h)
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
@@ -1106,51 +1108,73 @@ def setting_info():
             if m is None:
                 redirect(url_for('error'))
         
-        fullname = request.form.get('fullname')
-        personality_url = request.form.get('personality_url')
-        gender = request.form.get('gender')
-        year = request.form.get('year')
-        month = request.form.get('month')
-        day = request.form.get('day')
-        location_province = request.form.get('location_province')
-        location_city = request.form.get('location_city')
-        location_area = request.form.get('location_area')
-        hometown_province = request.form.get('hometown_province')
-        hometown_city = request.form.get('hometown_city')
-        hometown_area = request.form.get('hometown_area')
-        autograph =  request.form.get('autograph')
-        description = request.form.get('description')
+            fullname = request.form.get('fullname')
+            personality_url = request.form.get('personality_url')
+            gender = request.form.get('gender')
+            year = request.form.get('year')
+            month = request.form.get('month')
+            day = request.form.get('day')
+            location_province = request.form.get('location_province')
+            location_city = request.form.get('location_city')
+            location_area = request.form.get('location_area')
+            hometown_province = request.form.get('hometown_province')
+            hometown_city = request.form.get('hometown_city')
+            hometown_area = request.form.get('hometown_area')
+            autograph =  request.form.get('autograph')
+            description = request.form.get('description')
 
-        if year == '' or year == '0':
-            year = 0
-            month = 0
-            day = 0
+            if year == '' or year == '0':
+                year = 0
+                month = 0
+                day = 0
 
-        m.fullname = fullname
-        m.personality_url = personality_url
-        m.gender = gender
-        m.year = year
-        m.month = month
-        m.day = day
-        m.location_province = location_province
-        m.location_city = location_city
-        m.location_area = location_area
-        m.hometown_province = hometown_province
-        m.hometown_city = hometown_city
-        m.hometown_area = hometown_area
-        m.autograph = autograph
-        m.description = description
-        db_service.db_commit()
+            m.fullname = fullname
+            m.personality_url = personality_url
+            m.gender = gender
+            m.year = year
+            m.month = month
+            m.day = day
+            m.location_province = location_province
+            m.location_city = location_city
+            m.location_area = location_area
+            m.hometown_province = hometown_province
+            m.hometown_city = hometown_city
+            m.hometown_area = hometown_area
+            m.autograph = autograph
+            m.description = description
+            db_service.db_commit()
+            
+            return '更新信息成功'
         
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    else:
+        return redirect(url_for('error'))
 
-        # m = models.Member(fullname=fullname, gender=gender, avatar_path=avatar_path,
-        #         year=year, month=month, day=day,
-        #         location_province=location_province, location_city=location_city, location_area=location_area, 
-        #         hometown_province=hometown_province, hometown_city=hometown_city, hometown_area=hometown_area, 
-        #         description=description, autograph=autograph)
-        # db_service.db_commit()
 
-        return fullname + personality_url + gender + str(year) + str(month) + location_province + autograph
+# setting hobby
+@app.route('/setting_hobby', methods = ['POST'])
+def setting_hobby():
+    if request.method == 'POST':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('error'))
+
+            favor = request.form.get('favor')
+            music = request.form.get('music')
+            movie = request.form.get('movie')
+            book = request.form.get('book')
+            sport = request.form.get('sport')
+
+            h = models.Hobby(favor=favor, music=music, movie=movie, book=book,
+                sport=sport, member_id=m.id)
+            db_service.db_insert(h)
+            db_service.db_commit()
+        
+            return '更新爱好成功'
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
         return redirect(url_for('error'))
 

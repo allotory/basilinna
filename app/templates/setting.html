@@ -344,47 +344,43 @@
                                                     设定兴趣爱好
                                                 </h3>
                                                 <div class="example-box-wrapper">
-                                                    <form class="form-horizontal bordered-row">
+                                                    <form action="/setting_hobby" method="POST" class="form-horizontal bordered-row">
+
+                                                        <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">兴趣爱好</label>
                                                             <div class="col-sm-6">
-                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                                <textarea name="favor" id="favor" class="form-control">{{ hobby.favor }}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">喜欢的音乐</label>
                                                             <div class="col-sm-6">
-                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                                <textarea name="music" id="music" class="form-control">{{ hobby.music }}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">喜欢的电影</label>
                                                             <div class="col-sm-6">
-                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                                <textarea name="movie" id="movie" class="form-control">{{ hobby.movie }}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">喜欢的书</label>
                                                             <div class="col-sm-6">
-                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                                <textarea name="book" id="book" class="form-control">{{ hobby.book }}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">喜欢的运动</label>
                                                             <div class="col-sm-6">
-                                                                <textarea name="" id="" class="form-control"></textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">欣赏的人</label>
-                                                            <div class="col-sm-6">
-                                                                <textarea name="" id="" class="form-control"></textarea>
+                                                                <textarea name="sport" id="sport" class="form-control">{{ hobby.sport }}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-6">
-                                                                <a href="#" class="btn btn-primary" title="">保存</a>
+                                                                <button type="submit" class="btn btn-primary" title="">保存</button>
                                                             </div>
                                                         </div>
                                                     </form>
