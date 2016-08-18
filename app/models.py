@@ -45,8 +45,15 @@ class Member(db.Model):
     fullname = db.Column(db.String(64), nullable = False)
     gender = db.Column(db.Integer, nullable = False, server_default = '0')
     avatar_path = db.Column(db.String(256), server_default = '')
-    location = db.Column(db.String(128), server_default = '')
-    hometown = db.Column(db.String(128), server_default = '')
+    year = db.Column(db.String(16), server_default = '')
+    month = db.Column(db.String(16), server_default = '')
+    day = db.Column(db.String(16), server_default = '')
+    location_province = db.Column(db.String(64), server_default = '')
+    location_city = db.Column(db.String(64), server_default = '')
+    location_area = db.Column(db.String(64), server_default = '')
+    hometown_province = db.Column(db.String(64), server_default = '')
+    hometown_city = db.Column(db.String(64), server_default = '')
+    hometown_area = db.Column(db.String(64), server_default = '')
     description = db.Column(db.String(256), server_default = '')
     autograph = db.Column(db.String(128), server_default = '')
     personality_url = db.Column(db.String(64), server_default = '')
@@ -62,14 +69,23 @@ class Member(db.Model):
     # blocks = db.relationship('Block', backref='member',
     #             lazy='dynamic')
 
-    def __init__(self, fullname, gender, avatar_path, location, 
-                hometown, description, autograph, 
+    def __init__(self, fullname, gender, year, month, day, avatar_path, 
+                location_province, location_city, location_area, 
+                hometown_province, hometown_city, hometown_area, 
+                description, autograph, 
                 personality_url, is_email_actived, user_id):
         self.fullname = fullname
         self.gender = gender
+        self.year = year
+        self.month = month
+        self.day = day
         self.avatar_path = avatar_path
-        self.location = location
-        self.hometown = hometown
+        self.location_province = location_province
+        self.location_city = location_city
+        self.location_area = location_area
+        self.hometown_province = hometown_province
+        self.hometown_city = hometown_city
+        self.hometown_area = hometown_area
         self.description = description
         self.autograph = autograph
         self.personality_url = personality_url

@@ -99,7 +99,7 @@
                     province:function(){
                         $province.empty();
                         if(!options.required){
-                            $province.append('<option> - 请选择 - </options>');
+                            $province.append('<option value="0"> - 请选择 - </options>');
                             options.province = 0;
                         }
                         for(i in province){
@@ -113,7 +113,7 @@
                     city:function(){
                         $city.empty();
                         if(!options.required){
-                            $city.append('<option> - 请选择 - </options>');
+                            $city.append('<option value="0"> - 请选择 - </options>');
                         }
                         if(options.nodata=='disabled'){
                             $city.prop('disabled',$.isEmptyObject(city));
@@ -131,7 +131,7 @@
                     area:function(){
                         $area.empty();
                         if(!options.required){
-                            $area.append('<option> - 请选择 - </options>');
+                            $area.append('<option value="0"> - 请选择 - </options>');
                         }
                         if(options.nodata=='disabled'){
                             $area.prop('disabled',$.isEmptyObject(area));

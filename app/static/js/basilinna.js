@@ -109,9 +109,10 @@ function check_fullname(id, name) {
     var fullname = document.getElementById(id).value.trim();
 
     if(fullname == '') {
-        fullname = name;
+        $("#" + id).val(name);
     }
     // alert(obj.value);
+    fullname = document.getElementById(id).value.trim();
     var name_len = fullname.length;
     if((name_len >= 4) && (name_len <= 12)) {
         return true;
@@ -125,9 +126,11 @@ function check_purl(id, purl) {
     var personal_url = document.getElementById(id).value.trim();
 
     if (personal_url == '') {
-        personal_url = purl;
+        $("#" + id).val(purl);
+        // alert($("#" + id).val());
     }
-    var reg = /^[a-zA-Z_][a-zA-Z0-9_]{5,19}$/;
+    personal_url = document.getElementById(id).value.trim();
+    var reg = /^[a-zA-Z0-9_][a-zA-Z0-9_]{5,19}$/;
     if (!reg.test(personal_url)) {
         return false;
     } else {
@@ -136,11 +139,11 @@ function check_purl(id, purl) {
 }
 
 // 校验年份
-function check_year(id) {
+function check_year(id, year) {
     var year = document.getElementById(id).value.trim();
 
     if (year == '') {
-        year = 0;
+        year = year;
         return true;
     } else {
 
@@ -154,19 +157,30 @@ function check_year(id) {
     }
 }
 
-// 个人信息提交校验
-function validateInfo(fullname, purl) {
+// 校验签名
+function check_autograph(id, autograph) {
+    var autograph = document.getElementById(id).value.trim();
 
-    var a = document.getElementById("month").value.trim();
-
-    alert(a);
-
+    if(autograph == '') {
+        autograph = autograph;
+    }
+    // alert(obj.value);
+    var autograph_len = autograph.length;
+    if(autograph_len <= 128) {
+        return true;
+    }
     return false;
+}
 
-    // var isFullnameChecked = validate(check_fullname('fullname', fullname), 'validate_error', 'error_msg', '不超过 4 - 12 个字符，请勿使用特殊字符');
-    // var isPersonalUrl = validate(check_purl('personality_url', purl), 'validate_error', 'error_msg', '不超过 6 - 20 个字符，请勿使用特殊字符');
-    // if(!(isFullnameChecked && isPersonalUrl)) {
-    //     return false;
-    // }
-    // return true;
+// 个人信息提交校验
+function validateInfo(fullname, purl, year, autograph) {
+
+    var isFullnameChecked = validate(check_fullname('fullname', fullname), 'validate_error', 'error_msg', '不超过 4 - 12 个字符，请勿使用特殊字符');
+    var isPersonalUrl = validate(check_purl('personality_url', purl), 'validate_error', 'error_msg', '不超过 6 - 20 个字符，请勿使用特殊字符');
+    var isYear = validate(check_year('year', year), 'validate_error', 'error_msg', '年份应介于 1900 - 2016 之间');
+    var isAutograph = validate(check_autograph('autograph', autograph), 'validate_error', 'error_msg', '不超过 128 个字符，请勿使用特殊字符');
+    if(!(isFullnameChecked && isPersonalUrl && isYear && isAutograph)) {
+        return false;
+    }
+    return true;
 }

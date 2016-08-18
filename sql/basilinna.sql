@@ -31,12 +31,19 @@ CREATE TABLE IF NOT EXISTS member (
     fullname varchar(64) NOT NULL,                  /* 全名 */
     gender int(11) NOT NULL DEFAULT '0',            /* 性别  1:male , 2:female , 3: other */
     avatar_path varchar(256) DEFAULT NULL,          /* 头像路径 */
-    location varchar(128) DEFAULT NULL,             /* 居住位置 */
-    hometown varchar(128) DEFAULT NULL,             /* 家乡位置 */
+    year varchar(16) DEFAULT NULL,                  /* 年 */
+    month varchar(16) DEFAULT NULL,                 /* 月 */
+    day varchar(16) DEFAULT NULL,                   /* 日 */
+    location_province varchar(128) DEFAULT NULL,    /* 居住位置 */
+    location_city varchar(128) DEFAULT NULL,        /* 居住位置 */
+    location_area varchar(128) DEFAULT NULL,        /* 居住位置 */
+    hometown_province varchar(128) DEFAULT NULL,    /* 家乡位置 */
+    hometown_city varchar(128) DEFAULT NULL,        /* 家乡位置 */
+    hometown_area varchar(128) DEFAULT NULL,        /* 家乡位置 */
     description varchar(256) DEFAULT NULL,          /* 个人描述 */
     autograph varchar(128) DEFAULT NULL,            /* 签名 */
     personality_url varchar(64) DEFAULT NULL,       /* 个性网址 */
-    is_email_actived int(11) NOT NULL DEFAULT '0',    /* 邮箱是否激活 0：否， 1：是 */
+    is_email_actived int(11) NOT NULL DEFAULT '0',  /* 邮箱是否激活 0：否， 1：是 */
     user_id int NOT NULL DEFAULT '0',               /* 用户ID */
     PRIMARY KEY (id)
 );

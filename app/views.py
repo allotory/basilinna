@@ -54,9 +54,12 @@ def signup():
             db_service.db_insert(u)
             db_service.db_commit()
             
-            avatar_path = 'image/avatar/avatar.png'
+            avatar_path = 'image/avatar/avatar.jpg'
             m = models.Member(fullname=nickname, gender=None, avatar_path=avatar_path,
-                location=None, hometown=None, description=None, autograph=None,
+                year=None, month=None, day=None,
+                location_province=None, location_city=None, location_area=None, 
+                hometown_province=None, hometown_city=None, hometown_area=None, 
+                description=None, autograph=None,
                 personality_url=invite_string, is_email_actived=None, user_id=u.id)
             db_service.db_insert(m)
             db_service.db_commit()
@@ -1077,7 +1080,7 @@ def delimage():
 
 
 # setting
-@app.route('/setting', methods = ['GET', 'POST'])
+@app.route('/setting', methods = ['GET'])
 def setting():
     if request.method == 'GET':
         if 'member_id' in session:
@@ -1089,8 +1092,65 @@ def setting():
             return render_template('setting.html', member=m)
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
-    elif request.method == 'POST':
-        pass
+    else:
+        return redirect(url_for('error'))
+
+
+# setting info
+@app.route('/setting_info', methods = ['POST'])
+def setting_info():
+    if request.method == 'POST':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('error'))
+        
+        fullname = request.form.get('fullname')
+        personality_url = request.form.get('personality_url')
+        gender = request.form.get('gender')
+        year = request.form.get('year')
+        month = request.form.get('month')
+        day = request.form.get('day')
+        location_province = request.form.get('location_province')
+        location_city = request.form.get('location_city')
+        location_area = request.form.get('location_area')
+        hometown_province = request.form.get('hometown_province')
+        hometown_city = request.form.get('hometown_city')
+        hometown_area = request.form.get('hometown_area')
+        autograph =  request.form.get('autograph')
+        description = request.form.get('description')
+
+        if year == '' or year == '0':
+            year = 0
+            month = 0
+            day = 0
+
+        m.fullname = fullname
+        m.personality_url = personality_url
+        m.gender = gender
+        m.year = year
+        m.month = month
+        m.day = day
+        m.location_province = location_province
+        m.location_city = location_city
+        m.location_area = location_area
+        m.hometown_province = hometown_province
+        m.hometown_city = hometown_city
+        m.hometown_area = hometown_area
+        m.autograph = autograph
+        m.description = description
+        db_service.db_commit()
+        
+
+        # m = models.Member(fullname=fullname, gender=gender, avatar_path=avatar_path,
+        #         year=year, month=month, day=day,
+        #         location_province=location_province, location_city=location_city, location_area=location_area, 
+        #         hometown_province=hometown_province, hometown_city=hometown_city, hometown_area=hometown_area, 
+        #         description=description, autograph=autograph)
+        # db_service.db_commit()
+
+        return fullname + personality_url + gender + str(year) + str(month) + location_province + autograph
     else:
         return redirect(url_for('error'))
 

@@ -170,7 +170,8 @@
                                                         <p id="error_msg">error_message</p>
                                                     </div>
 
-                                                    <form action="" method="POST" class="form-horizontal bordered-row">
+                                                    <form action="/setting_info" method="POST" class="form-horizontal bordered-row">
+                                                        <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">昵称</label>
                                                             <div class="col-sm-6">
@@ -201,9 +202,9 @@
                                                             <label class="col-sm-3 control-label">生日</label>
                                                             <div class="col-sm-2">
                                                                 <input type="text" class="form-control" id="year" name="year" 
-                                                                    onfocus="if(this.value=='0'){this.value=''}"
-                                                                    onblur="validate(check_year('year'), 'validate_error', 'error_msg', '年份应介于 1900 - 2016 之间');"
-                                                                    value="0" placeholder="年">
+                                                                    onfocus="if(this.value=='{{member.year}}'){this.value=''}"
+                                                                    onblur="validate(check_year('year', '{{member.year}}'), 'validate_error', 'error_msg', '年份应介于 1900 - 2016 之间');"
+                                                                    value="{{member.year}}" placeholder="年">
                                                             </div>
                                                             <div class="col-sm-2">
                                                                 <select id="month" name="month" class="form-control">
@@ -314,19 +315,21 @@
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">个性签名</label>
                                                             <div class="col-sm-6">
-                                                                <input type="text" id="autograph" name="autograph" class="form-control" placeholder="">
+                                                                <input type="text" id="autograph" name="autograph" 
+                                                                    value="{{member.autograph}}" onfocus="if(this.value=='{{member.autograph}}'){this.value=''}" 
+                                                                    onblur="validate(check_autograph('autograph', '{{member.autograph}}'), 'validate_error', 'error_msg', '不超过 128 个字符，请勿使用特殊字符');" class="form-control" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">自述</label>
                                                             <div class="col-sm-6">
-                                                                <textarea name="description" id="description" class="form-control"></textarea>
+                                                                <textarea name="description" id="description" class="form-control">{{member.description}}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-6">
-                                                                <button  onclick="return validateInfo('{{member.fullname}}', '{{member.personality_url}}');" class="btn btn-primary" title="">保存</button>
+                                                                <button onclick="return validateInfo('{{member.fullname}}', '{{member.personality_url}}', '{{member.year}}', '{{member.autograph}}');" class="btn btn-primary" title="">保存</button>
                                                             </div>
                                                         </div>
                                                     </form>
