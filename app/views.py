@@ -1179,6 +1179,42 @@ def setting_hobby():
         return redirect(url_for('error'))
 
 
+# setting new password
+@app.route('/setting_newpass', methods = ['POST'])
+def setting_newpass():
+    if request.method == 'POST':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('error'))
+
+            # user info 
+            u = models.User.query.filter_by(id=m.user_id).first()
+            if u is None:
+                redirect(url_for('error'))
+
+            # form
+            src_pass = request.form.get('src_pass')
+            new_pass = request.form.get('new_pass')
+            confirm_pass = request.form.get('confirm_pass')
+
+            if new_pass != confirm_pass:
+                return '两次密码不一致'
+
+            src_pass_encrypt = encryption.encrypt_pass(src_pass, u.salt)
+            if src_pass_encrypt != u.password:
+                return '原密码错误'
+            else:
+                new_pass_encrypt = encryption.encrypt_pass(new_pass, u.salt)
+                u.password = new_pass_encrypt
+                db_service.db_commit()
+                return redirect(url_for('logout'))
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    else:
+        return redirect(url_for('error'))
+
 # search
 @app.route('/search', methods = ['GET', 'POST'])
 def search():
