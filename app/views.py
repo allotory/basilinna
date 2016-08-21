@@ -1144,7 +1144,8 @@ def setting_info():
             m.description = description
             db_service.db_commit()
             
-            return '更新信息成功'
+            # return '更新信息成功'
+            return redirect(url_for('info', infos='更新个人信息成功', url='setting'))
         
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
@@ -1172,7 +1173,8 @@ def setting_hobby():
             db_service.db_insert(h)
             db_service.db_commit()
         
-            return '更新爱好成功'
+            # return '更新爱好成功'
+            return redirect(url_for('info', infos='更新爱好成功', url='setting'))
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
@@ -1200,20 +1202,40 @@ def setting_newpass():
             confirm_pass = request.form.get('confirm_pass')
 
             if new_pass != confirm_pass:
-                return '两次密码不一致'
+                # return '两次密码不一致'
+                return redirect(url_for('info', infos='两次密码不一致', url='setting'))
 
             src_pass_encrypt = encryption.encrypt_pass(src_pass, u.salt)
             if src_pass_encrypt != u.password:
-                return '原密码错误'
+                # return '原密码错误'
+                return redirect(url_for('info', infos='原密码错误', url='setting'))
             else:
                 new_pass_encrypt = encryption.encrypt_pass(new_pass, u.salt)
                 u.password = new_pass_encrypt
                 db_service.db_commit()
-                return redirect(url_for('logout'))
+
+                # return redirect(url_for('logout'))
+                return redirect(url_for('info', infos='修改密码成功，请重新登录', url='logout'))
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
         return redirect(url_for('error'))
+
+@app.route('/test', methods=['GET'])
+def test():
+    return redirect(url_for('info', infos='访问成功', url='setting'))
+
+
+# info
+@app.route('/info', methods = ['GET', 'POST'])
+def info():
+    if request.method == 'GET':
+        infos = request.args.get('infos')
+        url = request.args.get('url')
+        return render_template('info.html', infos=infos, url=url)
+    else:
+        return redirect(url_for('error'))
+
 
 # search
 @app.route('/search', methods = ['GET', 'POST'])
