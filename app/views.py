@@ -119,7 +119,7 @@ def index(page = 1):
         member_id = session['member_id']
         m = models.Member.query.filter_by(id=member_id).first()
         if m is None:
-            redirect(url_for('error'))
+            redirect(url_for('sys_error'))
 
         # followee id list
         followees = models.Relation.query.filter(models.Relation.member_id == m.id).all()
@@ -268,7 +268,7 @@ def space(url = None, page = 1):
         member_id = session['member_id']
         m = models.Member.query.filter_by(id=member_id).first()
         if m is None:
-            redirect(url_for('error'))
+            redirect(url_for('sys_error'))
 
         if url:
             if url != m.personality_url:
@@ -471,9 +471,9 @@ def space(url = None, page = 1):
                 following_count=following_count, fans_count=fans_count, blog_count = blog_count, 
                     has_prev=has_prev, has_next=has_next, prev_num=prev_num, next_num=next_num)
 
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # follow people
@@ -493,7 +493,7 @@ def follow():
 
         return 'followsuccess'
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # unfollow people
@@ -509,13 +509,13 @@ def unfollow():
         # delete relation
         r = models.Relation.query.filter(and_(models.Relation.member_id==member_id, models.Relation.followee_id==followee_id)).first()
         if r is None:
-            redirect(url_for('error'))
+            redirect(url_for('sys_error'))
         db_service.db_delete(r)
         db_service.db_commit()
 
         return 'unfollowsuccess'
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # blog collect
@@ -535,7 +535,7 @@ def collect():
 
         return 'collectsuccess'
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # blog uncollect
@@ -551,13 +551,13 @@ def uncollect():
         # delete collection
         c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog_id)).first()
         if c is None:
-            redirect(url_for('error'))
+            redirect(url_for('sys_error'))
         db_service.db_delete(c)
         db_service.db_commit()
 
         return 'uncollectsuccess'
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 # blog collections
 @app.route('/collections', methods = ['GET'])
@@ -570,7 +570,7 @@ def collections(url=None, page=1):
         member_id = session['member_id']
         m = models.Member.query.filter_by(id=member_id).first()
         if m is None:
-            redirect(url_for('error'))
+            redirect(url_for('sys_error'))
 
         if url and url != m.personality_url:
             # selected collections
@@ -742,13 +742,13 @@ def delpost():
             upload_file.image_delete(filename)
 
         if b is None:
-            redirect(url_for('error'))
+            redirect(url_for('sys_error'))
         db_service.db_delete(b)
         db_service.db_commit()
 
         return 'delpostsuccess'
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # explore
@@ -760,7 +760,7 @@ def explore(page=1):
             member_id = session['member_id']
             m = models.Member.query.filter_by(id=member_id).first()
             if m is None:
-                redirect(url_for('error'))
+                redirect(url_for('sys_error'))
 
             # blog detail
             blog_list_paginate = models.Blog.query.order_by(models.Blog.id.desc()).paginate(page, app.config.get('POSTS_PER_PAGE'), True)
@@ -833,7 +833,7 @@ def explore(page=1):
     elif request.method == 'POST':
         pass
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # get private message receiver
@@ -844,7 +844,7 @@ def receiver():
             member_id = session['member_id']
             m = models.Member.query.filter_by(id=member_id).first()
             if m is None:
-                redirect(url_for('error'))
+                redirect(url_for('sys_error'))
 
             # friends list
             followees = models.Relation.query.filter(models.Relation.member_id == m.id).all()
@@ -863,7 +863,7 @@ def receiver():
     elif request.method == 'POST':
         pass
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # send message
@@ -874,7 +874,7 @@ def sender():
             member_id = session['member_id']
             m = models.Member.query.filter_by(id=member_id).first()
             if m is None:
-                redirect(url_for('error'))
+                redirect(url_for('sys_error'))
 
             # get message info
             data = json.loads(request.form.get('data'))
@@ -929,7 +929,7 @@ def sender():
     elif request.method == 'GET':
         pass
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # send message list
@@ -940,7 +940,7 @@ def sendlist():
             member_id = session['member_id']
             m = models.Member.query.filter_by(id=member_id).first()
             if m is None:
-                redirect(url_for('error'))
+                redirect(url_for('sys_error'))
 
             # message list
             messages = models.Message_log.query.filter(and_(models.Message_log.sender_id == m.id, models.Message_log.sender_isdel == 0)).order_by(models.Message_log.id.desc()).all()
@@ -972,7 +972,7 @@ def sendlist():
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # private message
@@ -983,7 +983,7 @@ def messages():
             member_id = session['member_id']
             m = models.Member.query.filter_by(id=member_id).first()
             if m is None:
-                redirect(url_for('error'))
+                redirect(url_for('sys_error'))
 
             # message list
             messages = models.Message_log.query.filter(and_(models.Message_log.receiver_id == m.id, models.Message_log.receiver_isdel == 0)).order_by(models.Message_log.id.desc()).all()
@@ -1016,7 +1016,7 @@ def messages():
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # blog delete
@@ -1042,7 +1042,7 @@ def delmsg():
 
         return 'delmsgsuccess'
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # upload image
@@ -1087,7 +1087,7 @@ def setting():
             member_id = session['member_id']
             m = models.Member.query.filter_by(id=member_id).first()
             if m is None:
-                redirect(url_for('error'))
+                redirect(url_for('sys_error'))
 
             h = models.Hobby.query.filter_by(member_id=m.id).first()
             
@@ -1095,7 +1095,7 @@ def setting():
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # setting info
@@ -1106,7 +1106,7 @@ def setting_info():
             member_id = session['member_id']
             m = models.Member.query.filter_by(id=member_id).first()
             if m is None:
-                redirect(url_for('error'))
+                redirect(url_for('sys_error'))
         
             fullname = request.form.get('fullname')
             personality_url = request.form.get('personality_url')
@@ -1149,7 +1149,7 @@ def setting_info():
         
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # setting hobby
@@ -1160,7 +1160,7 @@ def setting_hobby():
             member_id = session['member_id']
             m = models.Member.query.filter_by(id=member_id).first()
             if m is None:
-                redirect(url_for('error'))
+                redirect(url_for('sys_error'))
 
             favor = request.form.get('favor')
             music = request.form.get('music')
@@ -1178,7 +1178,7 @@ def setting_hobby():
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # setting new password
@@ -1189,12 +1189,12 @@ def setting_newpass():
             member_id = session['member_id']
             m = models.Member.query.filter_by(id=member_id).first()
             if m is None:
-                redirect(url_for('error'))
+                redirect(url_for('sys_error'))
 
             # user info 
             u = models.User.query.filter_by(id=m.user_id).first()
             if u is None:
-                redirect(url_for('error'))
+                redirect(url_for('sys_error'))
 
             # form
             src_pass = request.form.get('src_pass')
@@ -1219,11 +1219,7 @@ def setting_newpass():
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
-        return redirect(url_for('error'))
-
-@app.route('/test', methods=['GET'])
-def test():
-    return redirect(url_for('info', infos='访问成功', url='setting'))
+        return redirect(url_for('sys_error'))
 
 
 # info
@@ -1234,7 +1230,7 @@ def info():
         url = request.args.get('url')
         return render_template('info.html', infos=infos, url=url)
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # search
@@ -1245,7 +1241,7 @@ def search():
     elif request.method == 'POST':
         pass
     else:
-        return redirect(url_for('error'))
+        return redirect(url_for('sys_error'))
 
 
 # logout
@@ -1256,7 +1252,7 @@ def logout():
 
 
 # error
-@app.route('/error', methods = ['GET'])
+@app.route('/sys_error', methods = ['GET'])
 def sys_error():
     return render_template('error_sys.html')
 
