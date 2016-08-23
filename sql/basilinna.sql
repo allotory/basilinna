@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS privacy (
     allow_access int(11) NOT NULL DEFAULT '0',  /* 需要我批准才能查看我的消息 */
     allow_pm int(11) NOT NULL DEFAULT '0',      /* 只接收我关注的人发的私信 */
     allow_findme int(11) NOT NULL DEFAULT '0',  /* 知道我的 MSN/Gtalk/QQ 或 Email 也没法找到我 */
-    member_id int(11) NOT NULL,             /* 当前用户ID */
+    member_id int(11) NOT NULL,                 /* 当前用户ID */
     PRIMARY KEY (id)
 );
 

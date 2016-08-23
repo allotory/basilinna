@@ -478,25 +478,37 @@
                                                     隐私设定
                                                 </h3>
                                                 <div class="example-box-wrapper">
-                                                    <form class="form-horizontal bordered-row">
+                                                    <form action="/privacy" method="POST" class="form-horizontal bordered-row">
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-6">
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" value="">
+                                                                        {% if privacy.allow_access == 1 %}
+                                                                        <input name="allow_access" type="checkbox" value="1" checked>
+                                                                        {% else %}
+                                                                        <input name="allow_access" type="checkbox" value="1">
+                                                                        {% endif %}
                                                                         需要我批准才能查看我的消息
                                                                     </label>
                                                                 </div>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" value="">
+                                                                        {% if privacy.allow_pm == 1 %}
+                                                                        <input name="allow_pm" type="checkbox" value="1" checked>
+                                                                        {% else %}
+                                                                        <input name="allow_pm" type="checkbox" value="1">
+                                                                        {% endif %}
                                                                         只接收我关注的人发的私信
                                                                     </label>
                                                                 </div>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" value="">
+                                                                        {% if privacy.allow_findme == 1 %}
+                                                                        <input name="allow_findme" type="checkbox" value="1" checked>
+                                                                        {% else %}
+                                                                        <input name="allow_findme" type="checkbox" value="1">
+                                                                        {% endif %}
                                                                         知道我的 MSN/Gtalk/QQ 或 Email 也没法找到我
                                                                     </label>
                                                                 </div>
@@ -505,7 +517,7 @@
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-6">
-                                                                <a href="#" class="btn btn-primary" title="">保存</a>
+                                                                <button type="submit" class="btn btn-primary">保存</button>
                                                             </div>
                                                         </div>
                                                     </form>

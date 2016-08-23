@@ -1090,8 +1090,9 @@ def setting():
                 redirect(url_for('sys_error'))
 
             h = models.Hobby.query.filter_by(member_id=m.id).first()
+            p = models.Privacy.query.filter_by(member_id=m.id).first()
             
-            return render_template('setting.html', member=m, hobby=h)
+            return render_template('setting.html', member=m, hobby=h, privacy=p)
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
@@ -1220,6 +1221,48 @@ def setting_newpass():
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
         return redirect(url_for('sys_error'))
+
+
+# setting privacy
+@app.route('/privacy', methods = ['GET', 'POST'])
+def privacy():
+    if request.method == 'POST':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('sys_error'))
+
+            allow_access = request.form.get('allow_access')
+            allow_pm = request.form.get('allow_pm')
+            allow_findme = request.form.get('allow_findme')
+
+            if allow_access == None or allow_access == '':
+                allow_access = 0
+            else:
+                allow_access = 1
+
+            if allow_pm == None or allow_pm == '':
+                allow_pm = 0
+            else :
+                allow_pm = 1
+
+            if allow_findme == None or allow_findme == '':
+                allow_findme = 0
+            else:
+                allow_findme = 1
+
+            p = models.Privacy(allow_access=allow_access, allow_pm=allow_pm,
+                allow_findme=allow_findme, member_id=m.id)
+            db_service.db_insert(p)
+            db_service.db_commit()
+
+            return redirect(url_for('info', infos='修改隐私信息成功', url='setting'))
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    else:
+        return redirect(url_for('sys_error'))
+
 
 
 # info
