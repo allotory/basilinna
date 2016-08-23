@@ -532,43 +532,67 @@
                                                     通知设定
                                                 </h3>
                                                 <div class="example-box-wrapper">
-                                                    <form class="form-horizontal bordered-row">
+                                                    <form action="/emailme" method="POST" class="form-horizontal bordered-row">
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-6">
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" value="" checked="">
+                                                                        {% if emailme.allow_pri_msg == 1 %}
+                                                                        <input name="allow_pri_msg" type="checkbox" value="1" checked>
+                                                                        {% else %}
+                                                                        <input name="allow_pri_msg" type="checkbox" value="1">
+                                                                        {% endif %}
                                                                         当有新私信时，发 Email 通知我 (每天最多一封)
                                                                     </label>
                                                                 </div>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" value="" checked="">
+                                                                        {% if emailme.allow_follow_me == 1 %}
+                                                                        <input name="allow_follow_me" type="checkbox" value="1" checked>
+                                                                        {% else %}
+                                                                        <input name="allow_follow_me" type="checkbox" value="1">
+                                                                        {% endif %}
                                                                         当有人关注我时，发 Email 通知我
                                                                     </label>
                                                                 </div>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" value="" checked="">
+                                                                        {% if emailme.allow_new_trend == 1 %}
+                                                                        <input name="allow_new_trend" type="checkbox" value="1" checked>
+                                                                        {% else %}
+                                                                        <input name="allow_new_trend" type="checkbox" value="1">
+                                                                        {% endif %}
                                                                         当网站发布最新动态时，发 Email 通知我 (一个月最多一封)
                                                                     </label>
                                                                 </div>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" value="" checked="">
+                                                                        {% if  emailme.allow_follow_care == 1 %}
+                                                                        <input name="allow_follow_care" type="checkbox" value="1" checked>
+                                                                        {% else %}
+                                                                        <input name="allow_follow_care" type="checkbox" value="1">
+                                                                        {% endif %}
                                                                         我关注别人时通知关注我的人
                                                                     </label>
                                                                 </div>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" value="" checked="">
+                                                                        {% if emailme.allow_show_follow_msg == 1 %}
+                                                                        <input name="allow_show_follow_msg" type="checkbox" value="1" checked>
+                                                                        {% else %}
+                                                                        <input name="allow_show_follow_msg" type="checkbox" value="1">
+                                                                        {% endif %}
                                                                         在首页消息列表中显示关注消息
                                                                     </label>
                                                                 </div>
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input type="checkbox" value="" checked="">
+                                                                        {% if emailme.allow_illegal_login == 1 %}
+                                                                        <input name="allow_illegal_login" type="checkbox" value="1" checked>
+                                                                        {% else %}
+                                                                        <input name="allow_illegal_login" type="checkbox" value="1">
+                                                                        {% endif %}
                                                                         将非法登陆尝试通过私信发给我
                                                                     </label>
                                                                 </div>
@@ -577,7 +601,7 @@
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-6">
-                                                                <a href="#" class="btn btn-primary" title="">保存更改</a>
+                                                                <button type="submit" class="btn btn-primary" title="">保存更改</button>
                                                             </div>
                                                         </div>
                                                     </form>

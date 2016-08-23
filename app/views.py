@@ -1091,8 +1091,10 @@ def setting():
 
             h = models.Hobby.query.filter_by(member_id=m.id).first()
             p = models.Privacy.query.filter_by(member_id=m.id).first()
+            e = models.Emailme.query.filter_by(member_id=m.id).first()
             
-            return render_template('setting.html', member=m, hobby=h, privacy=p)
+            return render_template('setting.html', member=m, hobby=h,
+                privacy=p, emailme=e)
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:
@@ -1263,6 +1265,65 @@ def privacy():
     else:
         return redirect(url_for('sys_error'))
 
+
+# setting email info
+@app.route('/emailme', methods = ['GET', 'POST'])
+def emailme():
+    if request.method == 'POST':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('sys_error'))
+
+            allow_pri_msg = request.form.get('allow_pri_msg')
+            allow_follow_me = request.form.get('allow_follow_me')
+            allow_new_trend = request.form.get('allow_new_trend')
+            allow_follow_care = request.form.get('allow_follow_care')
+            allow_show_follow_msg = request.form.get('allow_show_follow_msg')
+            allow_illegal_login = request.form.get('allow_illegal_login')
+
+            if allow_pri_msg == None or allow_pri_msg == '':
+                allow_pri_msg = 0
+            else:
+                allow_pri_msg = 1
+
+            if allow_follow_me == None or allow_follow_me == '':
+                allow_follow_me = 0
+            else:
+                allow_follow_me = 1
+
+            if allow_new_trend == None or allow_new_trend == '':
+                allow_new_trend = 0
+            else:
+                allow_new_trend = 1
+
+            if allow_follow_care == None or allow_follow_care == '':
+                allow_follow_care = 0
+            else:
+                allow_follow_care = 1
+
+            if allow_show_follow_msg == None or allow_show_follow_msg == '':
+                allow_show_follow_msg = 0
+            else:
+                allow_show_follow_msg = 1
+
+            if allow_illegal_login == None or allow_illegal_login == '':
+                allow_illegal_login = 0
+            else:
+                allow_illegal_login = 1
+
+            e = models.Emailme(allow_pri_msg=allow_pri_msg, allow_follow_me=allow_follow_me,
+                allow_new_trend=allow_new_trend, allow_follow_care=allow_follow_care,
+                allow_show_follow_msg=allow_show_follow_msg, allow_illegal_login=allow_illegal_login, member_id=m.id)
+            db_service.db_insert(e)
+            db_service.db_commit()
+
+            return redirect(url_for('info', infos='修改邮件通知信息成功', url='setting'))
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    else:
+        return redirect(url_for('sys_error'))
 
 
 # info
