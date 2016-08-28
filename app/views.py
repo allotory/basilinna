@@ -1326,6 +1326,26 @@ def emailme():
         return redirect(url_for('sys_error'))
 
 
+# upload avatar
+@app.route('/upload_avatar', methods = ['POST'])
+def upload_avatar():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and upload_file.allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            src_path = os.path.join(app.config.get('UPLOAD_AVATAR_FOLDER'), filename)
+
+            new_name = app.config.get('SITE_NAME') + '_' + upload_file.unique_name() + os.path.splitext(src_path)[1]
+            new_path = os.path.join(app.config.get('UPLOAD_AVATAR_FOLDER'), new_name)
+            
+            file.save(new_path)
+
+            # create thumbsnail
+            # upload_file.image_thumbnail(new_name)
+            
+            return new_name
+
+
 # info
 @app.route('/info', methods = ['GET', 'POST'])
 def info():

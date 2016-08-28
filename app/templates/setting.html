@@ -93,7 +93,8 @@
         $('#target').Jcrop({
           onChange:   showCoords,
           onSelect:   showCoords,
-          onRelease:  clearCoords
+          onRelease:  clearCoords,
+          boxWidth: 890
         },function(){
           jcrop_api = this;
         });
@@ -126,6 +127,28 @@
       };
 
 
+    function upload_image(obj) {
+        // alert(obj.value);
+        var form = new FormData(document.getElementById("coords"));
+        alert(form.file)
+        $.ajax({
+            url: "/upload_avatar",
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                alert(data);
+                // alert("upload success!");
+                // $("#image_name").html(data);
+                // $("#file_name").val(data)
+                // $("#del_img").show();
+            },
+            error:function(e){
+                alert("upload avatar error!");
+            }
+        });  
+    }
 
     </script>
 
@@ -394,30 +417,35 @@
                                                     设定头像
                                                 </h3>
                                                 <div class="example-box-wrapper">
-                                                    <form id="coords" action="/setting_hobby" method="POST" class="form-horizontal bordered-row">
+                                                    <form id="coords" action="/cut_img" method="POST" class="form-horizontal bordered-row">
 
                                                         <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
                                                         
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
                                                                 <!-- This is the image we're attaching Jcrop to -->
-                                                                <img src="{{ url_for('.static', filename='image/blurred-bg-2.jpg') }}" id="target" alt="[Jcrop Example]"/>
+                                                                <img src="{{ url_for('.static', filename='image/blurred-bg-2.jpg') }}" 
+                                                                    id="target" alt="[Jcrop Example]"/>
                                                             </div>
-                                                        </div>
-
-                                                        <div class="inline-labels">
-                                                            <label>X1 <input type="text" size="4" id="x1" name="x1" /></label>
-                                                            <label>Y1 <input type="text" size="4" id="y1" name="y1" /></label>
-                                                            <label>X2 <input type="text" size="4" id="x2" name="x2" /></label>
-                                                            <label>Y2 <input type="text" size="4" id="y2" name="y2" /></label>
-                                                            <label>W <input type="text" size="4" id="w" name="w" /></label>
-                                                            <label>H <input type="text" size="4" id="h" name="h" /></label>
+                                                            <div class="inline-labels col-sm-9">
+                                                                <label>X1 <input type="text" size="4" id="x1" name="x1"/></label> ,
+                                                                <label>Y1 <input type="text" size="4" id="y1" name="y1"/></label> ,
+                                                                <label>X2 <input type="text" size="4" id="x2" name="x2"/></label> ,
+                                                                <label>Y2 <input type="text" size="4" id="y2" name="y2"/></label> ,
+                                                                <label>W <input type="text" size="4" id="w" name="w"/></label> ,
+                                                                <label>H <input type="text" size="4" id="h" name="h"/></label>
+                                                            </div>
                                                         </div>
                                                         
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label"></label>
-                                                            <div class="col-sm-6">
-                                                                <button type="submit" class="btn btn-primary" title="">保存</button>
+                                                            <div class="col-sm-offset-9">
+                                                                <input id="file" type="file" name="file" onChange="upload_image(this);" style="display:none"/>
+                                                                <a onclick='javascript:document.getElementById("file").click()' class="btn btn-primary" title="上传图片" style="margin-right:20px;">
+                                                                    选择图片
+                                                                </a>
+                </a>
+                                                                <button class="btn btn-primary" title="">保存</button>
                                                             </div>
                                                         </div>
                                                     </form>
