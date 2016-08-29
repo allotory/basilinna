@@ -293,11 +293,11 @@
 
                     <div class="meta-box meta-box-bottom">
                         {% if member %}
-                        <img src="{{ url_for('.static', filename=member.avatar_path) }}" alt="" class="meta-image img-bordered img-circle">
+                        <img src="{{ url_for('.static', filename=member.avatar_path) }}" style="width:90px;height:90px;" alt="" class="meta-image img-bordered img-circle">
                         <h3 class="meta-heading">{{ member.fullname }}</h3>
                         <h4 class="meta-subheading">{{ member.autograph }}</h4>
                         {% else %}
-                        <img src="{{ url_for('.static', filename=member.avatar_path) }}" alt="" class="meta-image img-bordered img-circle">
+                        <img src="{{ url_for('.static', filename=member.avatar_path) }}" style="width:90px;height:90px;" alt="" class="meta-image img-bordered img-circle">
                         <h3 class="meta-heading">Error</h3>
                         <h4 class="meta-subheading">Error</h4>
                         {% endif %}

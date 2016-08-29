@@ -91,9 +91,10 @@
         var jcrop_api;
 
         $('#target').Jcrop({
-          onChange:   showCoords,
-          onSelect:   showCoords,
-          onRelease:  clearCoords,
+          onChange: showCoords,
+          onSelect: showCoords,
+          onRelease: clearCoords,
+          aspectRatio: 1,
           boxWidth: 890
         },function(){
           jcrop_api = this;
@@ -130,7 +131,6 @@
     function upload_image(obj) {
         // alert(obj.value);
         var form = new FormData(document.getElementById("coords"));
-        alert(form.file)
         $.ajax({
             url: "/upload_avatar",
             type: "POST",
@@ -143,6 +143,19 @@
                 // $("#image_name").html(data);
                 // $("#file_name").val(data)
                 // $("#del_img").show();
+                $("#target").attr("src", "static/avatars/"+data); 
+
+                var jcrop_api;
+
+                $('#target').Jcrop({
+                  onChange: showCoords,
+                  onSelect: showCoords,
+                  onRelease: clearCoords,
+                  aspectRatio: 1,
+                  boxWidth: 890
+                },function(){
+                  jcrop_api = this;
+                });
             },
             error:function(e){
                 alert("upload avatar error!");
@@ -424,7 +437,7 @@
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
                                                                 <!-- This is the image we're attaching Jcrop to -->
-                                                                <img src="{{ url_for('.static', filename='image/blurred-bg-2.jpg') }}" 
+                                                                <img src="{{ url_for('.static', filename=member.avatar_path) }}" 
                                                                     id="target" alt="[Jcrop Example]"/>
                                                             </div>
                                                             <div class="inline-labels col-sm-9">
@@ -444,7 +457,6 @@
                                                                 <a onclick='javascript:document.getElementById("file").click()' class="btn btn-primary" title="上传图片" style="margin-right:20px;">
                                                                     选择图片
                                                                 </a>
-                </a>
                                                                 <button class="btn btn-primary" title="">保存</button>
                                                             </div>
                                                         </div>

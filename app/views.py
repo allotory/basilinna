@@ -1330,20 +1330,38 @@ def emailme():
 @app.route('/upload_avatar', methods = ['POST'])
 def upload_avatar():
     if request.method == 'POST':
-        file = request.files['file']
-        if file and upload_file.allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            src_path = os.path.join(app.config.get('UPLOAD_AVATAR_FOLDER'), filename)
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('sys_error'))
 
-            new_name = app.config.get('SITE_NAME') + '_' + upload_file.unique_name() + os.path.splitext(src_path)[1]
-            new_path = os.path.join(app.config.get('UPLOAD_AVATAR_FOLDER'), new_name)
-            
-            file.save(new_path)
+            file = request.files['file']
+            if file and upload_file.allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                src_path = os.path.join(app.config.get('UPLOAD_AVATAR_FOLDER'), filename)
 
-            # create thumbsnail
-            # upload_file.image_thumbnail(new_name)
+                new_name = app.config.get('SITE_NAME') + '_' + upload_file.unique_name() + os.path.splitext(src_path)[1]
+                new_path = os.path.join(app.config.get('UPLOAD_AVATAR_FOLDER'), new_name)
+                
+                file.save(new_path)
+
+                # delete origin image
+                if m.avatar_path != 'image/avatar/avatar.jpg':
+                    origin_image_name = os.path.basename(m.avatar_path) 
+                    os.remove(os.path.join(app.config.get('UPLOAD_AVATAR_FOLDER'), origin_image_name))
+
+                # update avatar_path
+                avatar_path = 'avatars/' + new_name
+
+                m.avatar_path = avatar_path
+                db_service.db_commit()
+
+                return new_name
             
-            return new_name
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    else:
+        return redirect(url_for('sys_error'))
 
 
 # info
