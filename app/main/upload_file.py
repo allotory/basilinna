@@ -39,3 +39,9 @@ def image_delete(filename):
     filepath = thumbnail_filepath.replace('_thumbnail', '')
     os.remove(filepath)
     os.remove(thumbnail_filepath)
+
+def cut_image(filename, box):
+    filepath = os.path.join(app.config.get('UPLOAD_AVATAR_FOLDER'), filename)
+    im = Image.open(filepath)
+    new_im = im.crop(box)
+    new_im.save(os.path.join(app.config.get('UPLOAD_AVATAR_FOLDER'), filename))

@@ -146,6 +146,10 @@
             });  
         }
 
+        function check_form() {
+            document.getElementById("coords").submit();
+        }
+
     </script>
 
 </head>
@@ -440,7 +444,7 @@
                                                                 <a onclick='javascript:document.getElementById("file").click()' class="btn btn-primary" title="上传图片" style="margin-right:20px;">
                                                                     选择图片
                                                                 </a>
-                                                                <button class="btn btn-primary" title="">保存</button>
+                                                                <a onclick="check_form();" class="btn btn-primary" title="">保存</a>
                                                             </div>
                                                         </div>
                                                     </form>

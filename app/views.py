@@ -1364,6 +1364,33 @@ def upload_avatar():
         return redirect(url_for('sys_error'))
 
 
+# cut avatar image
+@app.route('/cut_img', methods = ['POST'])
+def cut_img():
+    if request.method == 'POST':
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('sys_error'))
+
+            x1 = int(request.form.get('x1'))
+            y1 = int(request.form.get('y1'))
+            x2 = int(request.form.get('x2'))
+            y2 = int(request.form.get('y2'))
+
+            box = (x1, y1, x2, y2)
+
+            avatar_path = m.avatar_path
+            file_name = os.path.basename(avatar_path)
+            upload_file.cut_image(file_name, box)
+
+            return redirect(url_for('info', infos='修改头像成功', url='setting'))
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    else:
+        return redirect(url_for('sys_error'))
+
+
 # info
 @app.route('/info', methods = ['GET', 'POST'])
 def info():
