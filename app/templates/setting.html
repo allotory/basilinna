@@ -86,82 +86,65 @@
 
     <script type="text/javascript">
 
-      jQuery(function($){
-
         var jcrop_api;
 
-        $('#target').Jcrop({
-          onChange: showCoords,
-          onSelect: showCoords,
-          onRelease: clearCoords,
-          aspectRatio: 1,
-          boxWidth: 890
-        },function(){
-          jcrop_api = this;
+        jQuery(function($){
+
+
+            $('#target').Jcrop({
+                onChange: showCoords,
+                onSelect: showCoords,
+                onRelease: clearCoords,
+                aspectRatio: 1,
+                boxWidth: 890
+            },function(){
+                jcrop_api = this;
+            });
+
+            $('#coords').on('change','input',function(e){
+                var x1 = $('#x1').val(),
+                    x2 = $('#x2').val(),
+                    y1 = $('#y1').val(),
+                    y2 = $('#y2').val();
+                jcrop_api.setSelect([x1,y1,x2,y2]);
+            });
+
         });
 
-        $('#coords').on('change','input',function(e){
-          var x1 = $('#x1').val(),
-              x2 = $('#x2').val(),
-              y1 = $('#y1').val(),
-              y2 = $('#y2').val();
-          jcrop_api.setSelect([x1,y1,x2,y2]);
-        });
+        // Simple event handler, called from onChange and onSelect
+        // event handlers, as per the Jcrop invocation above
+        function showCoords(c) {
+            $('#x1').val(c.x);
+            $('#y1').val(c.y);
+            $('#x2').val(c.x2);
+            $('#y2').val(c.y2);
+            $('#w').val(c.w);
+            $('#h').val(c.h);
+        };
 
-      });
+        function clearCoords() {
+            $('#coords input').val('');
+        };
 
-      // Simple event handler, called from onChange and onSelect
-      // event handlers, as per the Jcrop invocation above
-      function showCoords(c)
-      {
-        $('#x1').val(c.x);
-        $('#y1').val(c.y);
-        $('#x2').val(c.x2);
-        $('#y2').val(c.y2);
-        $('#w').val(c.w);
-        $('#h').val(c.h);
-      };
-
-      function clearCoords()
-      {
-        $('#coords input').val('');
-      };
-
-
-    function upload_image(obj) {
-        // alert(obj.value);
-        var form = new FormData(document.getElementById("coords"));
-        $.ajax({
-            url: "/upload_avatar",
-            type: "POST",
-            data: form,
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                alert(data);
-                // alert("upload success!");
-                // $("#image_name").html(data);
-                // $("#file_name").val(data)
-                // $("#del_img").show();
-                $("#target").attr("src", "static/avatars/"+data); 
-
-                var jcrop_api;
-
-                $('#target').Jcrop({
-                  onChange: showCoords,
-                  onSelect: showCoords,
-                  onRelease: clearCoords,
-                  aspectRatio: 1,
-                  boxWidth: 890
-                },function(){
-                  jcrop_api = this;
-                });
-            },
-            error:function(e){
-                alert("upload avatar error!");
-            }
-        });  
-    }
+        function upload_image(obj) {
+            // alert(obj.value);
+            var form = new FormData(document.getElementById("coords"));
+            $.ajax({
+                url: "/upload_avatar",
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    alert(data);
+                    
+                    jcrop_api.setImage('static/avatars/' + data);
+                },
+                error:function(e){
+                    alert("upload avatar error!");
+                }
+            });  
+        }
 
     </script>
 
