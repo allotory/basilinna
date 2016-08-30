@@ -1401,6 +1401,16 @@ def info():
     else:
         return redirect(url_for('sys_error'))
 
+# photo
+@app.route('/photo', methods = ['GET', 'POST'])
+def photo():
+    if request.method == 'GET':
+        return render_template('photo.html')
+    elif request.method == 'POST':
+        pass
+    else:
+        return redirect(url_for('sys_error'))
+
 
 # search
 @app.route('/search', methods = ['GET', 'POST'])

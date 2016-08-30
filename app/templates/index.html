@@ -350,17 +350,39 @@
                     <i class="glyph-icon icon-circle-o float-left font-orange"></i>
                     收藏
                 </a>
-                <a href="#" class="list-group-item" title="">
+                <a href="/photo" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-gray"></i>
                     照片
                 </a>
             </div>
         </div>
     </div>
+    <div class="content-box mrg15B">
+        <h3 class="content-box-header clearfix">
+            我关注的人
+            <div class="font-size-11 float-right">
+                <a href="#" title="">
+                    <i class="glyph-icon mrg5R opacity-hover icon-plus"></i>
+                </a>
+            </div>
+        </h3>
+        <div class="content-box-wrapper text-center clearfix">
+            {% if followee_list %}
+                {% for followee in followee_list %}
+                <div class="status-badge mrg10A">
+                    <img class="img-circle" width="40" src="{{ url_for('.static', filename=followee.avatar_path) }}"  alt="{{ followee.fullname }}" title="{{ followee.fullname }}"/>
+                    <div class="small-badge bg-green"></div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>还没有朋友哦</p>
+            {% endif %}
+        </div>
+    </div>
     <div class="content-box  mrg15B">
         <h3 class="content-box-header clearfix">
             热门话题
-            <small>(Available options)</small>
+            <small></small>
             <div class="font-size-11 float-right">
                 <a href="#" title="">
                     <i class="glyph-icon mrg5R opacity-hover icon-plus"></i>
@@ -393,28 +415,6 @@
                     泡饭
                 </a>
             </div>
-        </div>
-    </div>
-    <div class="content-box mrg15B">
-        <h3 class="content-box-header clearfix">
-            我关注的人
-            <div class="font-size-11 float-right">
-                <a href="#" title="">
-                    <i class="glyph-icon mrg5R opacity-hover icon-plus"></i>
-                </a>
-            </div>
-        </h3>
-        <div class="content-box-wrapper text-center clearfix">
-            {% if followee_list %}
-                {% for followee in followee_list %}
-                <div class="status-badge mrg10A">
-                    <img class="img-circle" width="40" src="{{ url_for('.static', filename=followee.avatar_path) }}"  alt="{{ followee.fullname }}" title="{{ followee.fullname }}"/>
-                    <div class="small-badge bg-green"></div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p>还没有朋友哦</p>
-            {% endif %}
         </div>
     </div>
 
