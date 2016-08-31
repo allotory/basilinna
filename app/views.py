@@ -1403,9 +1403,49 @@ def info():
 
 # photo
 @app.route('/photo', methods = ['GET', 'POST'])
-def photo():
+@app.route('/photo/<int:page>', methods = ['GET', 'POST'])
+def photo(page = 1):
     if request.method == 'GET':
-        return render_template('photo.html')
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('sys_error'))
+
+            # exist image blog
+            blog_list_paginate = models.Blog.query.filter(and_(models.Blog.member_id==m.id, models.Blog.exist_pic==1)).order_by(models.Blog.id.desc()).paginate(page, app.config.get('POSTS_PER_PAGE'), True)
+            blog_list = blog_list_paginate.items
+
+            # paginate
+            has_prev = blog_list_paginate.has_prev
+            has_next = blog_list_paginate.has_next
+            prev_num = blog_list_paginate.prev_num
+            next_num = blog_list_paginate.next_num
+
+            blog_info_list = []
+
+            for blog in blog_list:
+
+                # original image
+                origin_pic_path = blog.pic_path
+                if blog.exist_pic != 0:
+                    origin_pic_path = blog.pic_path.replace('_thumbnail', '')
+                    blog_dict = dict(origin_pic_path=origin_pic_path)
+                    blog_dict['blog_id'] = blog.id
+
+                # is collected
+                c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog.id)).first()
+                if c is None:
+                    blog_dict['collection'] = 'uncollect'
+                else:
+                    blog_dict['collection'] = 'collecting'
+
+                blog_info_list.append(blog_dict)
+
+            return render_template('photo.html', blog_info_list=blog_info_list, img_count=len(blog_info_list),
+                    has_prev=has_prev, has_next=has_next, prev_num=prev_num, next_num=next_num)
+            
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
     elif request.method == 'POST':
         pass
     else:

@@ -160,40 +160,56 @@
                             <div class="panel-body">
                                 <h3 class="title-hero">
                                     我的照片
-                                    <small>共 1 张 | <a href="/index">返回我的主页</a></small>
+                                    <small>共 {{ img_count }} 张 | <a href="/index">返回我的主页</a></small>
                                 </h3>
                                 <div class="example-box-wrapper">
                                     <div class="row">
                                         
+                                        {% if blog_info_list %}
+                                            {% for blog in blog_info_list %}
 
-
-                                        <div class="col-lg-3 col-md-4 col-sm-6">
-                                            <div class="thumbnail-box">
-                                                <!-- <a class="thumb-link" href="#" title=""></a> -->
-                                                <div class="thumb-content">
-                                                    <div class="center-vertical">
-                                                        <div class="center-content">
-                                                            <div class="thumb-btn animated bounceInDown">
-                                                                <a href="#" class="btn btn-md btn-round btn-success" title="收藏">
-                                                                    <i class="glyph-icon icon-star"></i>
-                                                                </a>
-                                                                <a href="#" class="btn btn-md btn-round btn-yellow" title="详细">
-                                                                    <i class="glyph-icon icon-share"></i> 
-                                                                </a>
-                                                                <a class="btn btn-md btn-round btn-purple image_popup_link" href="{{ url_for('.static', filename='image/blurred-bg-2.jpg') }}" title="放大">
-                                                                    <i class="glyph-icon icon-search"></i>
-                                                                </a>
-                                                                <a href="#" class="btn btn-md btn-round btn-danger" title="删除">
-                                                                    <i class="glyph-icon icon-remove"></i>
-                                                                </a>
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="thumbnail-box">
+                                                    <!-- <a class="thumb-link" href="#" title=""></a> -->
+                                                    <div class="thumb-content">
+                                                        <div class="center-vertical">
+                                                            <div class="center-content">
+                                                                <div class="thumb-btn animated bounceInDown">
+                                                                    {% if blog.get('collection') == 'uncollect' %}
+                                                                        <a href="#" class="btn btn-md btn-round btn-info" title="收藏">
+                                                                            <i class="glyph-icon icon-star"></i>
+                                                                        </a>
+                                                                    {% elif blog.get('collection') == 'collecting' %}
+                                                                        <a href="#" class="btn btn-md btn-round btn-info" title="取消收藏">
+                                                                            <i class="glyph-icon icon-star font-yellow"></i>
+                                                                        </a>
+                                                                    {% else %}
+                                                                        系统错误
+                                                                    {% endif %}
+                                                                    <a href="#" class="btn btn-md btn-round btn-yellow" title="详细">
+                                                                        <i class="glyph-icon icon-share"></i> 
+                                                                    </a>
+                                                                    <a class="btn btn-md btn-round btn-purple image_popup_link" href="{{ url_for('.static', filename=blog.get('origin_pic_path')) }}" title="原图">
+                                                                        <i class="glyph-icon icon-search"></i>
+                                                                    </a>
+                                                                    <a href="#" class="btn btn-md btn-round btn-danger" title="删除">
+                                                                        <i class="glyph-icon icon-remove"></i>
+                                                                    </a>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="thumb-overlay bg-primary"></div>
+                                                    <img src="{{ url_for('.static', filename=blog.get('origin_pic_path')) }}" alt="">
                                                 </div>
-                                                <div class="thumb-overlay bg-primary"></div>
-                                                <img src="{{ url_for('.static', filename='image/blurred-bg-2.jpg') }}" alt="">
                                             </div>
-                                        </div>
+
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                目前没有照片.
+                                            </div>
+                                        {% endif %}
                                         
                                         
                                         
