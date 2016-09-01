@@ -140,6 +140,29 @@
                 alert("收藏失败，请稍后重试。");
             }
         }
+
+        function delpost(blog_id) {
+            var data = {
+                data: JSON.stringify({
+                    "blog_id": blog_id
+                })
+            };
+            if(confirm("你确定删除这条消息吗？")){
+                $.ajax({
+                    url:"/delpost",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('删除失败,请稍后重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#photo_tl_"+blog_id).remove();
+                    }
+                });
+            }
+
+        }
     </script>
 
 </head>
@@ -215,9 +238,8 @@
                                         {% if blog_info_list %}
                                             {% for blog in blog_info_list %}
 
-                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                            <div id="photo_tl_{{ blog.get('blog_id') }}" class="col-lg-3 col-md-4 col-sm-6">
                                                 <div class="thumbnail-box">
-                                                    <!-- <a class="thumb-link" href="#" title=""></a> -->
                                                     <div class="thumb-content">
                                                         <div class="center-vertical">
                                                             <div class="center-content">
@@ -241,10 +263,13 @@
                                                                     <a href="#" class="btn btn-md btn-round btn-yellow" title="详细">
                                                                         <i class="glyph-icon icon-share"></i> 
                                                                     </a>
+
                                                                     <a class="btn btn-md btn-round btn-purple image_popup_link" href="{{ url_for('.static', filename=blog.get('origin_pic_path')) }}" title="原图">
                                                                         <i class="glyph-icon icon-search"></i>
                                                                     </a>
-                                                                    <a href="#" class="btn btn-md btn-round btn-danger" title="删除">
+
+                                                                    <a href="#" id="del_blog_{{ blog.get('blog_id') }}" onclick="delpost({{ blog.get('blog_id') }});"
+                                                                         class="btn btn-md btn-round btn-danger" title="删除">
                                                                         <i class="glyph-icon icon-remove"></i>
                                                                     </a>
                                                                 </div>
