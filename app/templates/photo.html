@@ -93,6 +93,53 @@
             });
 
         });
+
+        function collect(blog_id) {
+                
+            var link = $("#blog_icon_" + blog_id);
+            var collect_flag = $("#collect_flag_" + blog_id).val();
+
+            var data = {
+                data: JSON.stringify({
+                    "blog_id": blog_id
+                })
+            };
+
+            if (collect_flag == "uncollect") {
+                $.ajax({
+                    url:"/collect",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('提交失败,请重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#collect_flag_" + blog_id).val("collecting");
+                        
+                        link.attr("class", "glyph-icon icon-star font-yellow");
+                        link.attr("title", "取消收藏");
+                    }
+                });
+            } else if (collect_flag == "collecting") {
+                $.ajax({
+                    url:"/uncollect",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('提交失败,请重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#collect_flag_" + blog_id).val("uncollect");
+                        link.attr("class", "glyph-icon icon-star");
+                        link.attr("title", "收藏");
+                    }
+                });
+            } else {
+                alert("收藏失败，请稍后重试。");
+            }
+        }
     </script>
 
 </head>
@@ -175,17 +222,22 @@
                                                         <div class="center-vertical">
                                                             <div class="center-content">
                                                                 <div class="thumb-btn animated bounceInDown">
+
+                                                                    <input id="collect_flag_{{ blog.get('blog_id') }}" type="hidden" value="{{ blog.get('collection') }}">
                                                                     {% if blog.get('collection') == 'uncollect' %}
-                                                                        <a href="#" class="btn btn-md btn-round btn-info" title="收藏">
-                                                                            <i class="glyph-icon icon-star"></i>
+                                                                        <a href="#" class="btn btn-md btn-round btn-info" title="收藏"
+                                                                            id="blog_collect_{{ blog.get('blog_id') }}" onclick="collect({{ blog.get('blog_id') }});">
+                                                                            <i id="blog_icon_{{ blog.get('blog_id') }}" class="glyph-icon icon-star"></i>
                                                                         </a>
                                                                     {% elif blog.get('collection') == 'collecting' %}
-                                                                        <a href="#" class="btn btn-md btn-round btn-info" title="取消收藏">
-                                                                            <i class="glyph-icon icon-star font-yellow"></i>
+                                                                        <a href="#" class="btn btn-md btn-round btn-info" title="取消收藏"
+                                                                            id="blog_collect_{{ blog.get('blog_id') }}" onclick="collect({{ blog.get('blog_id') }});">
+                                                                            <i id="blog_icon_{{ blog.get('blog_id') }}" class="glyph-icon icon-star font-yellow"></i>
                                                                         </a>
                                                                     {% else %}
                                                                         系统错误
                                                                     {% endif %}
+
                                                                     <a href="#" class="btn btn-md btn-round btn-yellow" title="详细">
                                                                         <i class="glyph-icon icon-share"></i> 
                                                                     </a>
