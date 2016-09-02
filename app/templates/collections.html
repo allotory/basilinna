@@ -298,11 +298,11 @@
 
                     <div class="meta-box meta-box-bottom">
                         {% if member %}
-                        <img src="{{ url_for('.static', filename=member.avatar_path) }}" alt="" class="meta-image img-bordered img-circle">
+                        <img src="{{ url_for('.static', filename=member.avatar_path) }}" style="width:90px;height:90px;" alt="" class="meta-image img-bordered img-circle">
                         <h3 class="meta-heading">{{ member.fullname }}</h3>
                         <h4 class="meta-subheading">{{ member.autograph }}</h4>
                         {% else %}
-                        <img src="{{ url_for('.static', filename='image/avatar/avatar.png') }}" alt="" class="meta-image img-bordered img-circle">
+                        <img src="{{ url_for('.static', filename='image/avatar/avatar.png') }}" style="width:90px;height:90px;" alt="" class="meta-image img-bordered img-circle">
                         <h3 class="meta-heading">Error</h3>
                         <h4 class="meta-subheading">Error</h4>
                         {% endif %}
@@ -347,7 +347,7 @@
                     <i class="glyph-icon icon-circle-o float-left font-green"></i>
                     @提到我的(1)
                 </a>
-                <a href="#" class="list-group-item" title="">
+                <a href="/messages" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-blue"></i>
                     私信
                 </a>
@@ -355,7 +355,7 @@
                     <i class="glyph-icon icon-circle-o float-left font-orange"></i>
                     收藏
                 </a>
-                <a href="#" class="list-group-item" title="">
+                <a href="/photo" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-gray"></i>
                     照片
                 </a>

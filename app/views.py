@@ -1451,6 +1451,45 @@ def photo(page = 1):
     else:
         return redirect(url_for('sys_error'))
 
+# blog
+@app.route('/blog/<int:blog_id>', methods = ['GET', 'POST'])
+def blog(blog_id=None):
+    if request.method == 'GET':
+
+        if 'member_id' in session:
+            member_id = session['member_id']
+            m = models.Member.query.filter_by(id=member_id).first()
+            if m is None:
+                redirect(url_for('sys_error'))
+
+            if blog_id is None:
+                redirect(url_for('sys_error'))
+
+            blog = models.Blog.query.filter_by(id=blog_id).first()
+
+            # original image
+            origin_pic_path = blog.pic_path
+            if blog.exist_pic != 0:
+                origin_pic_path = blog.pic_path.replace('_thumbnail', '')
+
+            # is collected
+            collection = None
+            c = models.Collection.query.filter(and_(models.Collection.member_id==member_id, models.Collection.blog_id==blog.id)).first()
+            if c is None:
+                collection = 'uncollect'
+            else:
+                collection = 'collecting'
+
+
+            return render_template('blog.html', member=m, blog=blog, origin_pic_path=origin_pic_path,
+                collection=collection)
+
+        return redirect(url_for('login', info='访问当前内容，请先登录'))
+    elif request.method == 'POST':
+        pass
+    else:
+        return redirect(url_for('sys_error'))
+
 
 # search
 @app.route('/search', methods = ['GET', 'POST'])

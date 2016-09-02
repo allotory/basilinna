@@ -356,7 +356,7 @@
                 <div class="image-content font-white">
 
                     <div class="meta-box meta-box-bottom">
-                        <img src="{{ url_for('.static', filename=avatar_path) }}" alt="" class="meta-image img-bordered img-circle">
+                        <img src="{{ url_for('.static', filename=avatar_path) }}" style="width:90px;height:90px;" alt="" class="meta-image img-bordered img-circle">
                         <h3 class="meta-heading">{{fullname}}</h3>
                         <h4 class="meta-subheading">{{autograph}}</h4>
                     </div>
@@ -392,7 +392,7 @@
         
         <div class="content-box-wrapper nav-list clearfix">
             <div class="list-group" style="margin-top:10px;margin-bottom:10px">
-                <a href="#" class="list-group-item" title="">
+                <a href="/index" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-red"></i>
                     首页
                 </a>
@@ -400,15 +400,15 @@
                     <i class="glyph-icon icon-circle-o float-left font-green"></i>
                     @提到我的(1)
                 </a>
-                <a href="#" class="list-group-item active" title="">
+                <a href="/messages" class="list-group-item active" title="">
                     <i class="glyph-icon icon-circle-o float-left font-blue"></i>
                     私信
                 </a>
-                <a href="#" class="list-group-item" title="">
+                <a href="/collections/{{ member.personality_url }}" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-orange"></i>
                     收藏
                 </a>
-                <a href="#" class="list-group-item" title="">
+                <a href="/photo" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-gray"></i>
                     照片
                 </a>

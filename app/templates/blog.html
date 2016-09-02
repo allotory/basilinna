@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Blog{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <script type="text/javascript">
+
+        $(function(){
+        
+            var csrftoken = "{{ csrf_token() }}";
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+            $('.image_popup_link').magnificPopup({
+                type: 'image'
+                // other options
+            });
+        });
+
+        function collect(blog_id) {
+                
+            var link = $("#blog_collect_" + blog_id);
+            var collect_flag = $("#collect_flag_" + blog_id).val();
+
+            var data = {
+                data: JSON.stringify({
+                    "blog_id": blog_id
+                })
+            };
+
+            if (collect_flag == "uncollect") {
+                $.ajax({
+                    url:"/collect",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('提交失败,请重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#collect_flag_" + blog_id).val("collecting");
+                        link.html("取消收藏");
+                    }
+                });
+            } else if (collect_flag == "collecting") {
+                $.ajax({
+                    url:"/uncollect",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('提交失败,请重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#collect_flag_" + blog_id).val("uncollect");
+                        link.html("收藏");
+                    }
+                });
+            } else {
+                alert("收藏失败，请稍后重试。");
+            }
+        }
+
+        function delpost(blog_id) {
+            var data = {
+                data: JSON.stringify({
+                    "blog_id": blog_id
+                })
+            };
+            if(confirm("你确定删除这条消息吗？")){
+                $.ajax({
+                    url:"/delpost",
+                    type: "POST",
+                    data: data,
+                    error: function(){
+                        alert('删除失败,请稍后重试!');
+                    },
+                    success: function(results){
+                        // alert(results);
+                        $("#blog_tl_"+blog_id).remove();
+                    }
+                });
+            }
+
+        }
+    </script>
+{% endblock %}
+
+{% block header_nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block siderbar %}
+<div class="col-md-4">
+
+    <div class="content-box  mrg15B">
+        
+        <div class="content-box-wrapper nav-list clearfix">
+            <div class="list-group" style="margin-top:10px;margin-bottom:10px">
+                <a href="/messages" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-blue"></i>
+                    消息
+                </a>
+                <a href="/collections/{{ member.personality_url }}" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-orange"></i>
+                    收藏
+                </a>
+                <a href="/photo" class="list-group-item" title="">
+                    <i class="glyph-icon icon-circle-o float-left font-gray"></i>
+                    照片
+                </a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="col-md-8">
+
+    <div class="panel">
+        <div class="panel-body">
+            <h3 class="title-hero">
+                <a href="">我的照片</a>
+            </h3>
+
+            <div class="example-box-wrapper">
+                <div class="timeline-box timeline-box-left">
+                    <div id="ajax_tl_row"></div>
+                    {% if blog %}
+                        <div class="tl-row" id="blog_tl_{{ blog.id }}">
+                            <div class="tl-item float-right">
+                                {% if blog.post_type == 'NORMAL' %}
+                                    <div class="tl-icon bg-primary">
+                                {% elif blog.post_type == 'REPEAT' %}
+                                    <div class="tl-icon bg-yellow">
+                                {% elif blog.post_type == 'REPLAY' %}
+                                    <div class="tl-icon bg-black">
+                                {% endif %}
+                                        <input type="hidden" id="origin_post_type_{{ blog.id }}" name="origin_post_type_{{ blog.id }}" value="{{blog.post_type}}">
+                                        <img class="img-circle" width="30" src="{{ url_for('.static', filename=member.avatar_path) }}" alt="{{ member.fullname }}" title="{{ member.fullname }}"/>
+                                    </div>
+                                <div class="popover right" style="z-index:20;">
+                                    <div class="arrow"></div>
+                                    <div id="blog_detail_{{ blog.id }}" class="popover-content">
+                                        <!-- <div class="tl-label bs-label bg-yellow" style="float:right;">
+                                            <a href="" style="color:white;"><i class="glyph-icon icon-star"></i></a>
+                                        </div> -->
+                                        <p class="tl-content" id="repeat_content_{{ blog.id }}">
+                                            {{ blog.content }}
+                                        </p>
+                                        {% if blog.exist_pic != 0 %}
+                                            <p>
+                                                <input id="normal_exist_pic_{{ blog.id }}" type="hidden" value="{{blog.exist_pic}}">
+                                                <input id="normal_pic_path_{{ blog.id }}" type="hidden" value="{{ blog.pic_path }}">
+                                                <a class="image_popup_link" href="{{ url_for('.static', filename=origin_pic_path) }}">
+                                                    <img src="{{ url_for('.static', filename=blog.pic_path) }}">
+                                                </a>
+                                            </p>
+                                        {% endif %}
+                                        <div class="tl-time">
+                                            <i class="glyph-icon icon-clock-o"></i> {{ blog.create_time }} 
+                                            via {{ blog.via }}
+
+                                            <div id="blog_operate_{{ blog.id }}" class="blog_operate"> 
+                                                <input id="collect_flag_{{ blog.id }}" type="hidden" value="{{ collection }}">
+                                                
+                                                <span class="operate_content">
+                                                    <i class="glyph-icon icon-star"></i> 
+                                                    {% if collection == 'uncollect' %}
+                                                        <a id="blog_collect_{{ blog.id }}" onclick="collect({{ blog.id }});" style="cursor:pointer;">收藏</a> 
+                                                    {% elif collection == 'collecting' %}
+                                                        <a id="blog_collect_{{ blog.id }}" onclick="collect({{ blog.id }});" style="cursor:pointer;">取消收藏</a> 
+                                                    {% else %}
+                                                        系统错误
+                                                    {% endif %}
+                                                </span>
+
+                                                <span class="operate_content">
+                                                    <i class="glyph-icon icon-remove"></i> 
+                                                    <a id="del_blog_{{ blog.id }}" onclick="delpost({{ blog.id }});" style="cursor:pointer;">删除</a> 
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="tl-row">
+                            诶？出错咧~
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
