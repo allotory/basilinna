@@ -1012,7 +1012,7 @@ def messages():
             
             return render_template('messages.html', msg_list=msg_list, following_count=session.get('following_count'),
                 fans_count=session.get('fans_count'), blog_count=session.get('blog_count'),
-                fullname=m.fullname, avatar_path=m.avatar_path, autograph=m.autograph)
+                fullname=m.fullname, avatar_path=m.avatar_path, autograph=m.autograph, personality_url=m.personality_url)
 
         return redirect(url_for('login', info='访问当前内容，请先登录'))
     else:

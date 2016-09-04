@@ -150,6 +150,12 @@
             document.getElementById("coords").submit();
         }
 
+        $(window).load(function(){
+            setTimeout(function() {
+                $('#loading').fadeOut( 400, "linear" );
+            }, 300);
+        });
+
     </script>
 
 </head>
@@ -158,22 +164,22 @@
 <body>
     <div id="sb-site">
 
-        <!-- <div id="loading">
+        <div id="loading">
             <div class="spinner">
                 <div class="bounce1"></div>
                 <div class="bounce2"></div>
                 <div class="bounce3"></div>
             </div>
-        </div> -->
+        </div>
 
         <div id="page-wrapper">
             <div id="page-header" class="bg-gradient-9">
-                <div id="header-logo" class="logo-bg">
+                <!-- <div id="header-logo" class="logo-bg">
                     <a href="index.html" class="logo-content-big" title="MonarchUI">
                         Monarchsss <i>UI</i>
                         <span>The perfect solution for user interfaces</span>
                     </a>
-                </div>
+                </div> -->
                 <div id="header-nav-left">
                     <a href="">
                         <!-- <img src="image/slogan.png"> -->
