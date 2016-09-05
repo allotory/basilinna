@@ -125,6 +125,56 @@
                 });
             });
 
+            $("#follow").click(function(){
+ 
+                 var followee_id = "{{ member.id }}";
+                 var follow_flag = $("#follow_flag").val();
+
+                 if(follow_flag == "unfollowed") {
+                     var data = {
+                         data: JSON.stringify({
+                             "followee_id": followee_id
+                         })
+                     };
+                     
+                     $.ajax({
+                         url: "/follow",
+                         type: "POST",
+                         data: data,
+                         error: function(){
+                             alert('提交失败,请重试!');
+                         },
+                         success: function(results){
+                             // alert(results);
+                             $("#follow_flag").val("following");
+                             $("#follow_content").html("取消关注");
+                         }
+                     });
+                 } else if (follow_flag == "following") {
+                     var data = {
+                         data: JSON.stringify({
+                             "followee_id": followee_id
+                         })
+                     };
+                     
+                     $.ajax({
+                         url: "/unfollow",
+                         type: "POST",
+                         data: data,
+                         error: function(){
+                             alert('提交失败,请重试!');
+                         },
+                         success: function(results){
+                             // alert(results);
+                             $("#follow_flag").val("unfollowed");
+                             $("#follow_content").html("关注此人");
+                         }
+                     });
+                 } else {
+                     alert("follow error!")
+                 }
+             });
+
         });
 
         function collect(blog_id) {
@@ -227,6 +277,7 @@
             }
 
         }
+
     </script>
 {% endblock %}
 

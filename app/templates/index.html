@@ -396,23 +396,23 @@
             <div class="list-group">
                 <a href="#" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-red"></i>
-                    泡饭
+                    测试
                 </a>
                 <a href="#" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-green"></i>
-                    @泡饭
+                    @测试
                 </a>
                 <a href="#" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-blue"></i>
-                    泡饭
+                    测试
                 </a>
                 <a href="#" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-orange"></i>
-                    泡饭
+                    测试
                 </a>
                 <a href="#" class="list-group-item" title="">
                     <i class="glyph-icon icon-circle-o float-left font-gray"></i>
-                    泡饭
+                    测试
                 </a>
             </div>
         </div>
@@ -578,10 +578,12 @@
                                                     <input type="hidden" id="re_member_fullname_{{ blog.get('blog').id }}" name="re_member_fullname_{{ blog.get('blog').id }}" value="{{ blog.get('blog_member').fullname}}">
                                                     <input type="hidden" id="re_member_personality_url_{{ blog.get('blog').id }}" name="re_member_personality_url_{{ blog.get('blog').id }}" value="{{ blog.get('blog_member').personality_url}}">
                                                 </span>
-                                                <span class="operate_content">
+                                                {% if not blog.not_me %}
+                                                <span class="operate_content" id="{{ blog.not_me }}">
                                                     <i class="glyph-icon icon-remove"></i> 
                                                     <a id="del_blog_{{ blog.get('blog').id }}" onclick="delpost({{ blog.get('blog').id }});" style="cursor:pointer;">删除</a> 
                                                 </span>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>

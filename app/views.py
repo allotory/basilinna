@@ -156,6 +156,10 @@ def index(page = 1):
             blog_author = models.Member.query.filter_by(id=blog.member_id).first()
             blog_dict['blog_member'] = blog_author
 
+            blog_dict['not_me'] = False
+            if blog_author.id != m.id:
+                blog_dict['not_me'] = True
+
             # a blog repeat list
             re_list = []
 
@@ -207,7 +211,7 @@ def index(page = 1):
                 followee_list.append(followee_info)
 
         return render_template('index.html', member=m, blog_list=blog_info_list, 
-            following_count=following_count, fans_count=fans_count, 
+            following_count=following_count, fans_count=fans_count,
             blog_count = blog_count, followee_list=followee_list, has_prev=has_prev,
             has_next=has_next, prev_num=prev_num, next_num=next_num)
 
@@ -335,9 +339,21 @@ def space(url = None, page = 1):
                 # blog count 
                 blog_count = models.Blog.query.filter(models.Blog.member_id == selected_member.id).count()
                 
+                # following or not
+                r = models.Relation.query.filter(and_(models.Relation.member_id==m.id, models.Relation.followee_id==selected_member.id)).first()
+                not_myspace = None
+                follow = None
+                if r is None:
+                    not_myspace=True
+                    follow='unfollowed'
+                else:
+                    not_myspace=True
+                    follow='following'
+
                 return render_template('space.html', member=selected_member, blog_list=blog_info_list, 
                     following_count=following_count, fans_count=fans_count, not_me=True, blog_count=blog_count, 
-                    has_prev=has_prev, has_next=has_next, prev_num=prev_num, next_num=next_num, url=url)
+                    has_prev=has_prev, has_next=has_next, prev_num=prev_num, next_num=next_num, url=url,
+                    not_myspace=not_myspace, follow=follow)
             else :
                 # my space
                 blog_list_paginate = models.Blog.query.filter_by(member_id=member_id).order_by(models.Blog.id.desc()).paginate(page, app.config.get('POSTS_PER_PAGE'), True)
