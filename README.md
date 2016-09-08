@@ -1,7 +1,7 @@
 # basilinna
 This is a mini blog, based on Python Flask.
 
-1. Screenshot
+# Screenshot
 
     ![screenshot](./screenshot/screenshot1.PNG)
 
