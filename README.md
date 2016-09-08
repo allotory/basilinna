@@ -1,22 +1,22 @@
-# basilinna
+# Basilinna
 This is a mini blog, based on Python Flask.
 
 # Screenshot
 
-#### Index
+#### Index Page
 
 ![screenshot](./screenshot/screenshot1.PNG)
 
-#### Message
+#### Message Page
 
 ![screenshot](./screenshot/screenshot2.PNG)
 
-#### Repeat
+#### Repeat Page
 
 ![screenshot](./screenshot/screenshot3.PNG)
 
 
-#### Setting
+#### Setting Page
 
 ![screenshot](./screenshot/screenshot4.PNG)
 
