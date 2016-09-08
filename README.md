@@ -3,13 +3,22 @@ This is a mini blog, based on Python Flask.
 
 # Screenshot
 
-    ![screenshot](./screenshot/screenshot1.PNG)
+#### Index
 
-    ![screenshot](./screenshot/screenshot2.PNG)
+![screenshot](./screenshot/screenshot1.PNG)
 
-    ![screenshot](./screenshot/screenshot3.PNG)
+#### Message
 
-    ![screenshot](./screenshot/screenshot4.PNG)
+![screenshot](./screenshot/screenshot2.PNG)
+
+#### Repeat
+
+![screenshot](./screenshot/screenshot3.PNG)
+
+
+#### Setting
+
+![screenshot](./screenshot/screenshot4.PNG)
 
 # License
 
